@@ -4,13 +4,13 @@
 
 **Location:**
 
-| Present           | Absent with apologies | Absent without apologies |
-| ----------------- | --------------------- | ------------------------ |
-| Chen Kang Yang    |                       |                          |
-| Haeta Balfour Ash |                       |                          |
-| Hongjia Cai       |                       |                          |
-| Mariam Patel      |                       |                          |
-| Tharen Candi      |                       |                          |
+| Present            | Absent with apologies | Absent without apologies |
+| ------------------ | --------------------- | ------------------------ |
+| Chen Kang Yang     |                       |                          |
+| Haeata Balfour Ash |                       |                          |
+| Hongjia Cai        |                       |                          |
+| Mariam Patel       |                       |                          |
+| Tharen Candi       |                       |                          |
 
 ## Agendas
 
