@@ -1,0 +1,105 @@
+/* Source code by Chen Kang Yang */
+html {
+  background-color: #000000;
+  color: #ffffff;
+  font-family: "DejaVuSansMono", "Courier New", "monospace";
+  font-size: 10pt;
+}
+
+a:link {
+  color:#7affed;
+}
+a:visited {
+  color:#ff80a0;
+}
+
+body {
+  max-width: 1920px;
+  margin: auto;
+}
+
+code {
+  background-color: #424242;
+  font-family: "DejaVuSansMono", "monospace";
+  font-size: inherit;
+  padding: 0.3px 4px;
+  border-radius: 3px;
+}
+
+nav {
+  padding: 10px 20px;
+}
+
+button {
+  background-color: #000000;
+  border-color: #ffffff;
+  /* border: 10px; */
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 15px 15px;
+  color: #ffffff;
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* button:hover {
+  background-color: #000000;
+  border-color: #ffffff;
+} */
+
+button:active {
+  transform: translateY(2px);
+}
+
+#left_bar_button {
+  display: flex;
+  justify-content: center;
+}
+
+#logo_to_root {
+  max-height: 80px;
+}
+
+footer {
+  text-align: center;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 10px;
+}
+
+#left_bar {
+  margin: 25px;
+  max-width: 350px;
+  width: 25vw;
+  min-width: 200px;
+}
+
+#profile_picture {
+  width: 99.99%;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 50%;
+  max-width: 100%;
+}
+
+#my_name {
+  text-align: center;
+}
+
+.left_bar_icon {
+  border-radius: 2px;
+  max-height: 2em;
+  max-width: 4ch;
+  vertical-align: middle;
+}
+
+#main {
+  margin: 25px 20px;
+  min-width: 250px;
+  width: 60vw;
+  max-width: 1430px;
+}
