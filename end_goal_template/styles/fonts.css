@@ -1,0 +1,182 @@
+/* DejaVu font */
+/* DejaVuMathTeXGyre.ttf is not defined */
+/* Serif */
+@font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerif.ttf);
+    font-style: normal;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerif-Italic.ttf);
+    font-style: italic;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerif-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerif-BoldItalic.ttf);
+    font-style: italic;
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerifCondensed.ttf);
+    font-style: normal;
+    font-weight: normal;
+    font-stretch: condensed;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerifCondensed-Italic.ttf);
+    font-style: italic;
+    font-weight: normal;
+    font-stretch: condensed;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerifCondensed-BoldItalic.ttf);
+    font-style: italic;
+    font-weight: bold;
+    font-stretch: condensed;
+  }
+  @font-face {
+    font-family: DejaVuSerif;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-serif-fonts/DejaVuSerifCondensed-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+    font-stretch: condensed;
+  }
+  /* Sans */
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSans-ExtraLight.ttf);
+    font-style: normal;
+    font-weight: 200;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSans.ttf);
+    font-style: normal;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSans-Oblique.ttf);
+    font-style: oblique;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSans-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSans-BoldOblique.ttf);
+    font-style: oblique;
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSansCondensed.ttf);
+    font-style: normal;
+    font-weight: normal;
+    font-stretch: condensed;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSansCondensed-Oblique.ttf);
+    font-style: oblique;
+    font-weight: normal;
+    font-stretch: condensed;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSansCondensed-BoldOblique.ttf);
+    font-style: oblique;
+    font-weight: bold;
+    font-stretch: condensed;
+  }
+  @font-face {
+    font-family: DejaVuSans;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-fonts/DejaVuSansCondensed-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+    font-stretch: condensed;
+  }
+  /* monospace*/
+  @font-face {
+    font-family: DejaVuSansMono;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-mono-fonts/DejaVuSansMono.ttf);
+    font-style: normal;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: DejaVuSansMono;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-mono-fonts/DejaVuSansMono-Oblique.ttf);
+    font-style: oblique;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: DejaVuSansMono;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-mono-fonts/DejaVuSansMono-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: DejaVuSansMono;
+    font-display: swap;
+    src: url(fonts/dejavu/dejavu-sans-mono-fonts/DejaVuSansMono-BoldOblique.ttf);
+    font-style: oblique;
+    font-weight: bold;
+  }
+  /* Comfortaa font */
+  @font-face {
+    font-family: Comfortaa;
+    font-display: swap;
+    src: url(fonts/aajohan-comfortaa/Comfortaa-Regular.ttf);
+    font-style: normal;
+    font-weight: normal;
+  }
+  @font-face {
+    font-family: Comfortaa;
+    font-display: swap;
+    src: url(fonts/aajohan-comfortaa/Comfortaa-Bold.ttf);
+    font-style: normal;
+    font-weight: bold;
+  }
+  @font-face {
+    font-family: Comfortaa;
+    font-display: swap;
+    src: url(fonts/aajohan-comfortaa/Comfortaa-Light.ttf);
+    font-style: normal;
+    font-weight: 300;
+  }
