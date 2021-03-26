@@ -13,9 +13,13 @@ def serve_style(file):
 def serve_image(file):
     return static_file(file, root = "./images")
 
+@route("/<file:re:.*\.ico>")
+def reroute_favicon(file):
+    return static_file(file, "./images/favicons")
+
 
 @route("/files/<file:path>")
-def serve_satic_files(file):
+def serve_static_files(file):
     return static_file(file, root = "./files")
 
 
