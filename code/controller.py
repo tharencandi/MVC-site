@@ -118,3 +118,13 @@ def get_about():
    
 
 #-----------------------------------------------------------------------------
+
+@get("/content/<content_type>")
+def get_content(content_type):
+    """
+        serves a content page
+    """
+    return model.content(content_type)
+
+#-----------------------------------------------------------------------------
+
