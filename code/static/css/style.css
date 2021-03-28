@@ -58,6 +58,10 @@ a {
 	text-decoration: none;	
 }
 
+main {
+	margin-top: 80px;
+}
+
 div {
 	font-size: 20px
 	padding: 10px 10px;
@@ -82,6 +86,9 @@ h1 {
 .topnav {
   	background-color: #ffb4d3;
   	overflow: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
 }
 
 /* Style the links inside the navigation bar */
@@ -101,14 +108,13 @@ h1 {
   	z-index: 1;
   	top: 0;
   	left: 0;
-	border-right: 2px solid #4c668a; 
+	border-right: 1px solid #818181; 
   	overflow-x: hidden;
   	margin-top: 60px;
 }
 
 .sidenav a {
-	margin: 20px 10px;
-  	padding: 10px;
+  	padding: 20px 10px;
   	text-decoration: none;
   	font-size: 25px;
   	color: #4c668a;
@@ -116,7 +122,12 @@ h1 {
 }
 
 .sidenav a:hover {
-  	color: #4c668a;
+	background-color: #ebeef2;
+}
+
+.sidenav a.active {
+	background-color: #d9dfe7;
+	border-right: 6px inset #ffd8e8;
 }
 
 .main-content {
