@@ -39,7 +39,24 @@ img {
 #main {
     /* font-family: */
     text-align: center;
+    margin: 5px 10vmin;
     max-width: 1200px;
+    color: #042f6d;
+}
+
+#main h1 {
+    font-size: x-large;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+
+}
+
+#main h2 {
+    font-size: larger;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
 }
 
 #content_cards {
@@ -47,7 +64,6 @@ img {
     display: grid;
     list-style-type: none;
     grid-template-rows: repeat(5, 0.5fr);
-    margin: 0 10vmin;
     margin-left: auto;
     margin-right: auto;
     max-width: 720px;
@@ -61,8 +77,9 @@ img {
     margin-bottom: 15px;
     min-width: 150px;
     min-height: 150px;
-    overflow-wrap: break-word;
     box-shadow: 0px 5px 8px 0px #00000054;
+    overflow-wrap: break-word;
+    font-size: large;
     /* Animation */
     transition: 0.2s;
 }
