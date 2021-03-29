@@ -37,9 +37,10 @@ img {
 }
 
 #main {
+    all: initial;
     /* font-family: */
     text-align: center;
-    margin: 5px 10vmin;
+    margin: 80px auto;
     max-width: 1200px;
     color: #042f6d;
 }
@@ -85,6 +86,9 @@ img {
 }
 
 @media screen and (max-width: 600px) {
+    #main {
+        margin: 80px 10vmin;
+    }
     .card {
         grid-template-columns: 1fr;
     }
