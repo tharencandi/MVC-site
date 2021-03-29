@@ -62,7 +62,7 @@ main {
 	margin-top: 80px;
 }
 
-div {
+.content-section div {
 	font-size: 20px
 	padding: 10px 10px;
 	margin-bottom: 30px;
@@ -101,6 +101,10 @@ h1 {
   	font-size: 30px;
 }
 
+.nav-right {
+	float: right;
+}
+
 .sidenav {
   	height: 100%;
   	width: 160px;
@@ -136,7 +140,7 @@ h1 {
 }
 
 .content-section {
-	width: 60%;
+	width: 90%;
 }
 
 .code {
@@ -145,9 +149,22 @@ h1 {
 	background-color: #ebeef2;
 }
 
+.code-image {
+	display: block;
+	margin-right: auto;
+	margin-left: auto;
+	width: 40%;
+	margin-bottom: 20px;
+}
+
 footer {
 	background-color: #042f6d;
 	color: #ffb4d3;
 	text-decoration: none;
 	margin-top: auto;
+	height: 70px;
+}
+
+.footer-guard {
+	margin-bottom: 30px;
 }
