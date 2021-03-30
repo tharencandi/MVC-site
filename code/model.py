@@ -89,3 +89,8 @@ def about_garble():
     return garble[random.randint(0, len(garble) - 1)]
 
 #-----------------------------------------------------------------------------
+
+def content(type):
+    # add type information and any other template vars to page view function
+    return page_view("content")
+
