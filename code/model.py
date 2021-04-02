@@ -49,14 +49,10 @@ def login_check(username, password):
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
 
-    # By default assume good creds
-    login = True
-    
-    db.check_credentials(username, password)
+    login = db.check_credentials(username, password)
 
-    if db.check_credentials(username, password) == False:
+    if login == False:
         err_str = "Incorrect username/password"
-        login = False
         
     if login: 
         return page_view("success", name=username)
