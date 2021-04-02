@@ -10,7 +10,6 @@ import random
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
-page_temp = view.View(template_extension=".tpl")
 
 #-----------------------------------------------------------------------------
 # Index
@@ -91,8 +90,7 @@ def about_garble():
 
 #-----------------------------------------------------------------------------
 
-def content(type, section):
+def content(type):
     # add type information and any other template vars to page view function
-    path = "content/" + type +"/" + section
-    return page_temp(path)
+    return page_view("content")
 
