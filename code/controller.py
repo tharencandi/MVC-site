@@ -130,10 +130,10 @@ def post_signup():
     # Handle the form processing
     username = request.forms.get('username')
     password = request.forms.get('password')
-    print(username)
-    print(password)
-    # Call the appropriate method
-    return
+    confirm_password = request.forms.get('confirm_password')
+
+    return model.create_user(username=username, password=password, confirm_password=confirm_password)
+
 
 #-----------------------------------------------------------------------------
 

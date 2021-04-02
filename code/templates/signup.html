@@ -8,12 +8,16 @@
 Enter a username and password...
 </p>
 <p>
-<form action="/login" method="post" style="border:1px solid #ccc">
+<form action="/signup" method="post" style="border:1px solid #ccc">
     Username: <input name="username" placeholder="Enter Username" type="text" required/>
-</br>
+<br>
     Password: <input name="password" placeholder="Enter Password" type="password" required/>
-</br>
-    <input value="Sign Up" type="submit" />
+<br>
+    Confirm password: <input name="confirm_password" placeholder="Confirm Password" type="password" required/>
+<br>
+    <input value="Sign up" type="submit" />
+    <br>
+    <a href="/login">Sign in</a>
 </form>
 </p>
 </center>
