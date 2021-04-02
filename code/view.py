@@ -2,6 +2,7 @@
 # This class loads html files from the "template" directory and formats them using Python.
 # You can find a fuller explanation for this file in the README file
 #-----------------------------------------------------------------------------
+from bottle import template
 
 import string
 
@@ -31,7 +32,7 @@ class View():
         return self.load_and_render(*args, **kwargs)
 
 
-    def load_and_render(self, filename, header="header", tailer="tailer", **kwargs):
+    def load_and_render(self, filename, header="header", tailer="tailer", side_nav=None, **kwargs):
         ''' 
             Loads and renders templates
 
@@ -43,6 +44,15 @@ class View():
         body_template = self.load_template(filename)
         header_template = self.load_template(header)
         tailer_template = self.load_template(tailer)
+        if side_nav:
+            side_nav_template = self.load_template(side_nav)
+            rendered_template = self.render(
+                body_template=body_template, 
+                header_template=header_template, 
+                tailer_template=tailer_template, 
+                side_nav_template=side_nav_template
+                **kwargs)
+            return rendered_template
 
         rendered_template = self.render(
             body_template=body_template, 
