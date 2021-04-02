@@ -7,9 +7,11 @@
 '''
 import view
 import random
+from sql import SQLDatabase
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
+db = SQLDatabase("database.db")
 
 #-----------------------------------------------------------------------------
 # Index
@@ -47,21 +49,47 @@ def login_check(username, password):
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
 
-    # By default assume good creds
-    login = True
-    
-    if username != "admin": # Wrong Username
-        err_str = "Incorrect Username"
-        login = False
-    
-    if password != "password": # Wrong password
-        err_str = "Incorrect Password"
-        login = False
+    login = db.check_credentials(username, password)
+
+    if login == False:
+        err_str = "Incorrect username/password"
         
     if login: 
-        return page_view("valid", name=username)
+        return page_view("success", name=username)
     else:
-        return page_view("invalid", reason=err_str)
+        return page_view("error", reason=err_str)
+
+def signup_form():
+    '''
+        signup_form
+        Returns the view for the signup_form
+    '''
+    return page_view("signup")
+
+def create_user(username, password, confirm_password):
+    '''
+        User sign up logic
+        Returns success page if success,
+        error page if failed with reasons defined here or sql.
+    '''
+    if username == None or password == None or confirm_password == None:
+        return page_view("error", reason="Internal server error")
+    
+    if password != confirm_password:
+        return page_view("error", reason="Password does not match!")
+
+    result = db.add_user(username=username, password=password)
+    if result[0] == True:
+        return page_view("success", name=username)
+    else:
+        return page_view("error", reason=result[1])
+
+    
+
+def set_user_pass(username, password):
+    original_username = username
+    original_password = password
+    return
     
 #-----------------------------------------------------------------------------
 # About
