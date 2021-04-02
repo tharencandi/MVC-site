@@ -107,6 +107,36 @@ def post_login():
 
 #-----------------------------------------------------------------------------
 
+@get('/signup')
+def get_signup_controller():
+    '''
+        get_signup
+
+        Serves the sign up page
+    '''
+    return model.signup_form()
+
+
+
+@post('/signup')
+def post_signup():
+    '''
+        post_login
+
+        Handles login attempts
+        Expects a form containing 'username' and 'password' fields
+    '''
+
+    # Handle the form processing
+    username = request.forms.get('username')
+    password = request.forms.get('password')
+    print(username)
+    print(password)
+    # Call the appropriate method
+    return
+
+#-----------------------------------------------------------------------------
+
 @get('/about')
 def get_about():
     '''

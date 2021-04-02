@@ -62,6 +62,18 @@ def login_check(username, password):
         return page_view("valid", name=username)
     else:
         return page_view("invalid", reason=err_str)
+
+def signup_form():
+    '''
+        signup_form
+        Returns the view for the signup_form
+    '''
+    return page_view("signup")
+
+def set_user_pass(username, password):
+    original_username = username
+    original_password = password
+    return
     
 #-----------------------------------------------------------------------------
 # About
