@@ -1,0 +1,119 @@
+nav ul, footer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+nav li, footer li {
+    float: left;
+}
+
+nav li a, footer li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+nav li a:hover, footer li a:hover {
+    background-color: #111;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+    max-height: 45%;
+    max-width: 45%;
+}
+
+#main {
+    all: initial;
+    /* font-family: */
+    text-align: center;
+    margin: 80px auto;
+    max-width: 1200px;
+    color: #042f6d;
+}
+
+#main h1 {
+    font-size: x-large;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+
+}
+
+#main h2 {
+    font-size: larger;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 960px;
+}
+
+#content_cards {
+    all: initial;
+    display: grid;
+    list-style-type: none;
+    grid-template-rows: repeat(5, 0.5fr);
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 720px;
+}
+
+.card {
+    font-family: "verdana";
+    display:grid;
+    grid-template-columns: 2fr 5fr;
+    text-align: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    min-width: 150px;
+    min-height: 150px;
+    box-shadow: 0px 5px 8px 0px #00000054;
+    overflow-wrap: break-word;
+    font-size: large;
+    /* Animation */
+    transition: 0.2s;
+}
+
+@media screen and (max-width: 600px) {
+    #main {
+        margin: 80px 10vmin;
+    }
+    .card {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card:hover {
+    box-shadow: 0 10px 16px 0 #00000054;
+    transform: scale(1.05);
+}
+
+.card_link {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.card_title {
+    color: #ffb4d3;
+    background-color: #042f6d;
+    padding: 0px 15px;
+    overflow-wrap: break-word;
+}
+
+.card_content {
+    color: #042f6d;
+    background-color: #ffb4d3;
+    padding: 0px 15px;
+}
