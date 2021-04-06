@@ -90,7 +90,8 @@ def about_garble():
 
 #-----------------------------------------------------------------------------
 
-def content(type):
+def content(type, subtype):
     # add type information and any other template vars to page view function
-    return page_view("content")
+    path="content" + "/" + type + "/" + subtype
+    return page_view(path)
 

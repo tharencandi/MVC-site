@@ -119,12 +119,12 @@ def get_about():
 
 #-----------------------------------------------------------------------------
 
-@get("/content/<content_type>")
-def get_content(content_type):
+@get("/content/<content_type>/<subtype>")
+def get_content(content_type, subtype):
     """
         serves a content page
     """
-    return model.content(content_type)
+    return model.content(content_type, subtype)
 
 #-----------------------------------------------------------------------------
 
