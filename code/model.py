@@ -118,7 +118,8 @@ def about_garble():
 
 #-----------------------------------------------------------------------------
 
-def content(type):
+def content(cat, sub_cat):
     # add type information and any other template vars to page view function
-    return page_view("content")
+    path = "d_content/" + cat + "/" + sub_cat
 
+    return page_view(path)
