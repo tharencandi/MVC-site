@@ -23,6 +23,7 @@ nav li a:hover, footer li a:hover {
 }
 
 html, body {
+    font-family: sans-serif, Arial, Helvetica;
     height: 100%;
     margin: 0;
     padding: 0;
@@ -38,11 +39,12 @@ img {
 
 #main {
     all: initial;
-    /* font-family: */
     text-align: center;
     margin: 80px auto;
     max-width: 1200px;
     color: #042f6d;
+    font-family: sans-serif, Arial, Helvetica;
+
 }
 
 #main h1 {
@@ -68,6 +70,7 @@ img {
     margin-left: auto;
     margin-right: auto;
     max-width: 720px;
+    font-family: sans-serif, Arial, Helvetica;
 }
 
 .card {
