@@ -137,6 +137,7 @@ def post_signup():
 
 #-----------------------------------------------------------------------------
 
+
 @get('/about')
 def get_about():
     '''
@@ -149,6 +150,29 @@ def get_about():
 
 #-----------------------------------------------------------------------------
 
+@get ('/forum')
+def get_forum():
+    '''
+        get_forum
+
+        Serves the general forum page
+    '''
+    return model.forum_landing()
+
+#-----------------------------------------------------------------------------
+
+@get ('/forum_post')
+def get_post():
+    return model.forum_post()
+    
+#----------------------------------------------------------------------------- 
+@get("/content/<content_type>")
+def get_content(content_type):
+    """
+        serves a content page
+    """
+    return model.content(content_type)
+
 @get('/content/<cat>/<sub_cat>')
 def get_content(cat, sub_cat):
     """
@@ -157,18 +181,3 @@ def get_content(cat, sub_cat):
     return model.content(cat, sub_cat)
 #-----------------------------------------------------------------------------
 
-@get("/forum")
-def forum_landing():
-    """
-        serve forum landing
-    """
-    return model.forum_landing()
-
-#-----------------------------------------------------------------------------
-
-@get("/forum_post")
-def forum_post():
-    """
-        serve forum
-    """
-    return model.forum_post()
