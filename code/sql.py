@@ -24,10 +24,9 @@ class SQLDatabase():
         out = None
         for string in sql_string.split(";"):
             try:
-                self.cur.execute(string)
+                out = self.cur.execute(string)
             except:
                 pass
-        out = self.cur.fetchall()
         return out
 
     # Commit changes to the database
@@ -46,56 +45,115 @@ class SQLDatabase():
 
         # Create the users table
         self.execute("""CREATE TABLE Users(
-            Id INT,
+            id INT,
+
             username TEXT,
             password TEXT,
             admin INTEGER DEFAULT 0
         )""")
 
-        self.execute("""CREATE TABLE Posts(
-            Id INTEGER PRIMARY KEY AUTOINCREMENT,
-            author_id INTEGER NOT NULL,
-            title TEXT NOT NULL,
-            body TEXT NOT NULL,
-            FOREIGN KEY (author_Id) REFERENCES Users (Id)
-        )""")
-
         self.commit()
 
         # Add our admin user
-        self.add_user('admin', admin_password, admin=1)
+        self.add_user('admin', admin_password, is_admin=True)
 
     #-----------------------------------------------------------------------------
     # User handling
     #-----------------------------------------------------------------------------
 
+    def get_next_user_id(self):
+        '''Return the current max id + 1 in the database for new user creation'''
+        sql_cmd = "SELECT MAX(id) FROM Users"
+        max_id = self.execute(sql_cmd)
+        if max_id == None:
+            # Database has not been initialised
+            return 0
+        else:
+            max_id = max_id.fetchone()[0]
+            if max_id == None:
+                # No id in database
+                return 0
+        return max_id + 1
+
+    def check_user_exist(self, username):
+        '''Check if a username exist in database.'''
+        sql_cmd = f"SELECT username FROM Users WHERE username = '{username}'"
+        
+        cursor = self.execute(sql_cmd)
+
+        if cursor == None:
+            return False
+        result = cursor.fetchone()
+
+        if result == None:
+            return False
+        elif result[0] != username:
+            return False
+        return True
+
+    def check_id_exist(self, id):
+        '''Check if a username exist in database.'''
+        sql_cmd = f"SELECT id FROM Users WHERE id = {id}"
+        
+        cursor = self.execute(sql_cmd)
+
+        if cursor == None:
+            return False
+        result = cursor.fetchone()
+        if result == None:
+            return False
+        elif result[0] != id:
+            return False
+        return True
+
     # Add a user to the database
-    def add_user(self, username, password, admin=0):
+    def add_user(self, username, password, is_admin=False):
         sql_cmd = """
                 INSERT INTO Users
                 VALUES({id}, '{username}', '{password}', {admin})
             """
 
-        sql_cmd = sql_cmd.format(username=username, password=password, admin=admin)
+        msg = None
+        new_id = self.get_next_user_id()
+
+        if is_admin == True:
+            admin = 1
+        else:
+            admin = 0
+
+        if self.check_user_exist(username):
+            return (False, "User creation failed: Username exists.")
+        elif self.check_id_exist(new_id):
+            return (False, "User creation failed: ID exists.")
+
+        sql_cmd = sql_cmd.format(id=new_id, username=username, password=password, admin=admin)
 
         self.execute(sql_cmd)
         self.commit()
-        return True
+        return (True, msg)
 
     #-----------------------------------------------------------------------------
 
     # Check login credentials
     def check_credentials(self, username, password):
         sql_query = """
-                SELECT 1 
+                SELECT 1
                 FROM Users
                 WHERE username = '{username}' AND password = '{password}'
             """
-
         sql_query = sql_query.format(username=username, password=password)
 
+        result = self.execute(sql_query)
         # If our query returns
-        if self.cur.fetchone():
+        if result == None:
+            return False
+        if result.fetchone() != None:
             return True
         else:
             return False
+
+    def dump(self):
+        '''Dump database into sql command'''
+        with open('dump.sql', 'w') as f:
+            for line in self.conn.iterdump():
+                f.write('%s\n' % line)

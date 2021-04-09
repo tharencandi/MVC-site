@@ -42,8 +42,10 @@ def login_check(username, password):
     '''
         login_check
         Checks usernames and passwords
+
         :: username :: The username
         :: password :: The password
+        
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
 
@@ -100,7 +102,6 @@ def about():
     '''
     return page_view("about", garble=about_garble())
 
-
 def forum():
     '''
         forum
@@ -115,6 +116,7 @@ def forum():
 
 def post():
     return page_view("forum_post")
+
 # Returns a random string each time
 def about_garble():
     '''
@@ -131,7 +133,7 @@ def about_garble():
 
 #-----------------------------------------------------------------------------
 
-def content(type):
+def content(cat, sub_cat):
     # add type information and any other template vars to page view function
-    return page_view("content")
+    path = "d_content/" + cat + "/" + sub_cat
 

@@ -1,9 +1,3 @@
-
-
-
-
-
-
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -13,7 +7,6 @@ body {
 	color: #4c668a;
 	display:flex; 
 	flex-direction:column; 
-	font-family: "verdana";
 }
 
 nav div a {
@@ -35,10 +28,6 @@ h1 {
 	font-weight: 900;
 	font-size: 30px;
 	padding: 50px 0px;
-	font-family: "verdana";
-}
-h2 {
-	font-family: "verdana";
 }
 
 .subtitle {
@@ -48,7 +37,6 @@ h2 {
 	font-weight: 600;
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 20px;
-	font-family: "verdana";
 }
 
 .topnav {
@@ -122,4 +110,3 @@ footer {
 	position: relative;
 	z-index: 1;
 }
-

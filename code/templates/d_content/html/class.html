@@ -1,0 +1,46 @@
+<nav class="sidenav">
+	<a href="intro">Intro</a>
+	<a href="tags_elem">HTML Elements</a>
+	<a href="attr">HTML Attributes</a>
+	<a href="form">HTML Formatting</a>
+	<a class="active" href="class">Classes and ID</a>
+</nav>
+
+<main class='main-content'>
+	<h1>HTML Tags and Elements</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">HTML Classes</h3>
+
+		<p>The attribute class usually outlines the class name in a style sheet, but it can also be used with javascript to modify elements within that class. Elements can be classified as a class to have common characteristics, this in terms of HTML, could mean a common font and colour of text.
+ 
+The syntax for a class can be denoted as a (.) before the class name, then curly braces {}.
+ such as
+.city{
+}
+&lt;h2 class=&quot;city&quot;&gt;London&lt;/h2&gt;
+ 
+HTML elements can be associated with multiple classes, by a space to separate the class names.
+
+<div class="code">
+.city{
+}
+.main{
+}
+&lt;h2 class=&quot;city main&quot;&gt;London&lt;/h2&gt;
+</div>
+As stated above, these classes can be used in Javascript to perform tasks, which can be accessed with getElementswithClassName().
+</p>
+
+		<h3 class="subtitle">HTML ID's'</h3>
+<p>HTML consists of an id attribute that creates a unique id for each element where there shouldn&rsquo;t be more than one element of the same id in a document. This attribute is used to specify a specific style declaration on the style sheet to use on that element. This can also be used to access that element in Javascript to use.
+The syntax of an id is a hash followed by the name of the id such as (#myHeader).
+<div class="code">
+#myHeader {
+}
+&lt;h1 id=&quot;myHeader&quot;&gt;My Header&lt;/h1&gt;
+</div>
+ 
+As noticed above Ids and classes seem very similar in HTML&hellip;
+The main difference between an id and class is that classes can be used for several elements but an id can only be used by one element in that document.
+</p>
+</main>

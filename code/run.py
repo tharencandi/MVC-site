@@ -50,7 +50,7 @@ def run_server():
 # Optional SQL support
 # Comment out the current manage_db function, and 
 # uncomment the following one to load an SQLite3 database
-"""
+
 def manage_db():
     '''
         Blank function for database support, use as needed
@@ -66,10 +66,10 @@ def manage_db():
         Starts up and re-initialises an SQL databse for the server
     '''
     database_args = ":memory:" # Currently runs in RAM, might want to change this to a file if you use it
+    
     sql_db = sql.SQLDatabase(database_arg=database_args)
   
     return sql_db
-
 
 #-----------------------------------------------------------------------------
 
