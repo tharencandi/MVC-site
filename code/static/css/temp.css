@@ -24,6 +24,7 @@ nav li a:hover, footer li a:hover {
 
 html, body {
     font-family: sans-serif, Arial, Helvetica;
+    height: 100%;
     margin: 0;
     padding: 0;
 }

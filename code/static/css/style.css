@@ -120,11 +120,11 @@ nav a:hover {
 }
 
 footer {
-	/* all:unset; */
 	background-color: #042f6d;
 	color: #ffb4d3;
 	text-decoration: none;
-	margin-top: auto;
-	/* position: relative; */
+	position: relative;
 	z-index: 1;
+	padding: 0pt 30px;
+	margin-top: auto;
 }
