@@ -157,3 +157,18 @@ def get_content(cat, sub_cat):
     return model.content(cat, sub_cat)
 #-----------------------------------------------------------------------------
 
+@get("/forum")
+def forum_landing():
+    """
+        serve forum landing
+    """
+    return model.forum_landing()
+
+#-----------------------------------------------------------------------------
+
+@get("/forum_post")
+def forum_post():
+    """
+        serve forum
+    """
+    return model.forum_post()

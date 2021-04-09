@@ -123,3 +123,15 @@ def content(cat, sub_cat):
     path = "d_content/" + cat + "/" + sub_cat
 
     return page_view(path)
+
+#-----------------------------------------------------------------------------
+
+def forum_landing():
+    # forum landing page
+    return page_view("forum")
+
+#-----------------------------------------------------------------------------
+
+def forum_post():
+    # forum static page
+    return page_view("forum_post")
