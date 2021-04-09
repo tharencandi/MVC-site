@@ -133,4 +133,4 @@ def about_garble():
 def content(cat, sub_cat):
     # add type information and any other template vars to page view function
     path = "d_content/" + cat + "/" + sub_cat
-
+    return page_view(path)
