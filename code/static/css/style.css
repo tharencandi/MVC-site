@@ -24,7 +24,7 @@ nav div {
 	z-index: 1;
 }
 
-h1 {
+.main-content > h1 {
 	font-weight: 900;
 	font-size: 30px;
 	padding: 50px 0px;
@@ -111,6 +111,14 @@ nav a:hover {
 
 .content-section {
 	width: 60%;
+}
+
+.content_list {
+	text-align: left;
+}
+
+.content_list li {
+	margin: 20px;
 }
 
 .code {

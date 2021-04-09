@@ -146,6 +146,14 @@ def get_about():
     '''
     return model.about()
    
+#-----------------------------------------------------------------------------
+
+@get('/content/<cat>')
+def get_content_index(cat):
+    """
+        serves a content index page
+    """
+    return model.content_index(cat)
 
 #-----------------------------------------------------------------------------
 
