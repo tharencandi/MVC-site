@@ -20,7 +20,6 @@ main {
 
 nav div {
 	font-size: 20px;
-	padding: 0 10px;
 	position: relative;
 	z-index: 1;
 }
@@ -31,12 +30,30 @@ h1 {
 	padding: 50px 0px;
 }
 
+nav #login {
+	float: right;
+	border-radius: 10px;
+	margin: 5px 15px;
+	padding: 10px 15px;
+	color: #ffb4d3;
+	background-color: #042f6d;
+
+}
+
+nav #login:active {
+	transform: translateY(1px);
+}
+
+nav a:hover {
+	background-color: #f3a1c3;
+}
+
 .subtitle {
 	display: inline-block;
 	background-color: #ebeef2;
 	font-size: 20px;
 	font-weight: 600;
-	padding: 5px 5px 5px 5px;
+	padding: 5px;
 	margin-bottom: 20px;
 }
 
@@ -53,7 +70,7 @@ h1 {
   	float: left;
   	color: #042f6d;
   	text-align: center;
-  	padding: 15px 60px 15px 10px;
+  	padding: 15px 30px;
   	text-decoration: none;
   	font-size: 20px;
 }
@@ -103,11 +120,11 @@ h1 {
 }
 
 footer {
-	all:unset;
+	/* all:unset; */
 	background-color: #042f6d;
 	color: #ffb4d3;
 	text-decoration: none;
 	margin-top: auto;
-	position: relative;
+	/* position: relative; */
 	z-index: 1;
 }
