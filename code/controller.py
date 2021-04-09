@@ -107,6 +107,7 @@ def post_login():
 
 #-----------------------------------------------------------------------------
 
+=======
 @get('/signup')
 def get_signup_controller():
     '''
@@ -137,6 +138,7 @@ def post_signup():
 
 #-----------------------------------------------------------------------------
 
+
 @get('/about')
 def get_about():
     '''
@@ -149,6 +151,30 @@ def get_about():
 
 #-----------------------------------------------------------------------------
 
+@get ('/forum')
+def get_forum():
+    '''
+        get_forum
+
+        Serves the general forum page
+    '''
+    return model.forum()
+
+#-----------------------------------------------------------------------------
+
+@get ('/forum_post')
+def get_post():
+    return model.post()
+    
+#----------------------------------------------------------------------------- 
+@get("/content/<content_type>")
+def get_content(content_type):
+    """
+        serves a content page
+    """
+    return model.content(content_type)
+
+=======
 @get('/content/<cat>/<sub_cat>')
 def get_content(cat, sub_cat):
     """

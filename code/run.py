@@ -66,10 +66,10 @@ def manage_db():
         Starts up and re-initialises an SQL databse for the server
     '''
     database_args = ":memory:" # Currently runs in RAM, might want to change this to a file if you use it
-    sql_db = sql.SQLDatabase(database_args=database_args)
-
-    return
-"""
+    
+    sql_db = sql.SQLDatabase(database_arg=database_args)
+  
+    return sql_db
 
 #-----------------------------------------------------------------------------
 
