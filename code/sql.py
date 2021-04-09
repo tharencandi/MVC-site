@@ -46,7 +46,6 @@ class SQLDatabase():
         # Create the users table
         self.execute("""CREATE TABLE Users(
             id INT,
-
             username TEXT,
             password TEXT,
             admin INTEGER DEFAULT 0
