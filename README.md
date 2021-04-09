@@ -5,7 +5,9 @@
 1. Create a new branch. `git branch <branch_name>`
 2. Switch to newly created branch. `git checkout <branch_name>`
 3. Make changes.
-4. Commit changes with meaningful message.
+4. Look at the files that you have changed. `git status`
+5. Stage changes. `git add <file_that_has_been_changed>`
+4. Commit changes with meaningful message. `git commit -m <commit_message>`
 5. Push to remote repository. `git push -u origin <branch_name>`
 6. Create pull request when ready to merge changes to `master` branch.
 7. At least 2 other team members review and approve pull request.

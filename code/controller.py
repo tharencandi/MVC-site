@@ -107,6 +107,36 @@ def post_login():
 
 #-----------------------------------------------------------------------------
 
+@get('/signup')
+def get_signup_controller():
+    '''
+        get_signup
+
+        Serves the sign up page
+    '''
+    return model.signup_form()
+
+
+
+@post('/signup')
+def post_signup():
+    '''
+        post_login
+
+        Handles login attempts
+        Expects a form containing 'username' and 'password' fields
+    '''
+
+    # Handle the form processing
+    username = request.forms.get('username')
+    password = request.forms.get('password')
+    confirm_password = request.forms.get('confirm_password')
+
+    return model.create_user(username=username, password=password, confirm_password=confirm_password)
+
+
+#-----------------------------------------------------------------------------
+
 @get('/about')
 def get_about():
     '''
@@ -117,4 +147,28 @@ def get_about():
     return model.about()
    
 
+#-----------------------------------------------------------------------------
+
+@get('/content/<cat>/<sub_cat>')
+def get_content(cat, sub_cat):
+    """
+        serves a content page
+    """
+    return model.content(cat, sub_cat)
+#-----------------------------------------------------------------------------
+
+@get('/forum')
+def get_forum_landing():
+    """
+        serves static forum page
+    """
+    return model.forum_landing()
+#-----------------------------------------------------------------------------
+
+@get('/forum_post')
+def get_forum_post():
+    """
+        serves forum static content page
+    """
+    return model.forum_post()
 #-----------------------------------------------------------------------------
