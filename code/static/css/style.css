@@ -127,6 +127,10 @@ nav a:hover {
 	background-color: #ebeef2;
 }
 
+a.back_to_index {
+	font-size: 15px;
+}
+
 footer {
 	background-color: #042f6d;
 	color: #ffb4d3;
