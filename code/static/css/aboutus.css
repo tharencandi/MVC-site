@@ -1,0 +1,45 @@
+.description {
+    text-align: center;
+}
+.support {
+    color: #4c668a;
+    text-align: center;
+}
+.dark1 {
+    width: 1000px;
+    height: 200px;
+    margin: 30px 50px;
+    background-color:#ffb4d3;
+}
+
+.light2 {
+    width: 1000px;
+    height: 200px;
+    margin: 30px 150px;
+    background-color:#f6ebff;
+}
+.dark3 {
+    width: 1000px;
+    height: 200px;
+    margin: 30px 50px;
+    background-color:#ffb4d3;
+}
+.light4 {
+    width: 1000px;
+    height: 200px;
+    margin: 30px 150px;
+    background-color:#f6ebff;
+}
+.dark5 {
+    width: 1000px;
+    height: 200px;
+    margin: 30px 50px;
+    background-color:#ffb4d3;
+}
+
+.profileL {
+  float: left;
+}
+.profileR {
+  float: right;
+}
