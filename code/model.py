@@ -45,7 +45,7 @@ def login_check(username, password):
 
         :: username :: The username
         :: password :: The password
-        
+
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
 
@@ -102,21 +102,6 @@ def about():
     '''
     return page_view("about", garble=about_garble())
 
-def forum():
-    '''
-        forum
-        returns the view for the general fourm page
-    '''
-    #posts = db.execute("SELECT p.Id, title, body, author_id, username;FROM Posts p JOIN Users u ON p.author_Id = u.Id;ORDER BY created DESC")
-    #return Template("forum", posts)
-    return page_view("forum")
-    
-   # page_view.load_template("forum", posts)
-
-
-def post():
-    return page_view("forum_post")
-
 # Returns a random string each time
 def about_garble():
     '''
@@ -137,3 +122,4 @@ def content(cat, sub_cat):
     # add type information and any other template vars to page view function
     path = "d_content/" + cat + "/" + sub_cat
 
+    return page_view(path)
