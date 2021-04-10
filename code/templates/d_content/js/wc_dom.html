@@ -6,6 +6,8 @@
 	<a class="active" href="wc_dom">Javascript in Web Development</a>
 </nav>
 
+<script src="/js/prism.js"></script>
+
 <main class='main-content'>
 	<h1>Javascript in Web Development</h1>
 	<div class="content-section content-text">
@@ -24,10 +26,8 @@ Whilst the primary way a web page uses javascript is by linking a script in html
 		<h3 class="subtitle">Linking a Script</h3>
 <p>
 To link a javscript file containing your code, we use a script tag, where the src attribute is the path to the file. Javacsript scripts should either be defined at the bottom of the document since the html loading is paused while the script is being loaded, or if it does not manipulate the html until everything has been loaded it can be given the "async" attribute and can be defined anywhere safely.
-<div class="code">
-// script with async <br>
-&lt;script src="path/to/script.js" async&gt;&lt;/script&gt;
-</div>
+<pre><code class="language-javascript">// script with async <br>
+&lt;script src="path/to/script.js" async&gt;&lt;/script&gt;</code></pre>
 </p>
 		<h3 class="subtitle">Document Object Model</h3>
 <p>
