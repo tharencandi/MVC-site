@@ -1,0 +1,37 @@
+<nav class="sidenav">
+	<a href="wij">What Is Javascript</a>
+	<a href="basic">Basic Syntax</a>
+	<a href="ctr_loops">Control Flow and Loops</a>
+	<a href="objects">Objects and JSON</a>
+	<a class="active" href="wc_dom">Javascript in Web Development</a>
+</nav>
+
+<main class='main-content'>
+	<h1>Javascript in Web Development</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">Web Console</h3>
+
+<p>
+The Web Console shows you information about the currently loaded Web page, and also includes a JavaScript interpreter that you can use to execute JavaScript expressions in the current page.
+
+To open the Firefox Web Console (Ctrl+Shift+I on Windows and Linux or Cmd-Option-K on Mac)
+
+Press Command + Option + J (Mac) or Control + Shift + J (Windows, Linux, Chrome OS) to jump straight into the Console panel.
+<br>
+Whilst the primary way a web page uses javascript is by linking a script in html, the web console is a useful tool for testing and other quick diagnostics.
+</p>
+
+		<h3 class="subtitle">Linking a Script</h3>
+<p>
+To link a javscript file containing your code, we use a script tag, where the src attribute is the path to the file. Javacsript scripts should either be defined at the bottom of the document since the html loading is paused while the script is being loaded, or if it does not manipulate the html until everything has been loaded it can be given the "async" attribute and can be defined anywhere safely.
+<div class="code">
+// script with async <br>
+&lt;script src="path/to/script.js" async&gt;&lt;/script&gt;
+</div>
+</p>
+		<h3 class="subtitle">Document Object Model</h3>
+<p>
+The document object model represents the structure of a document such as the html of a web page in memory, allowing programming languages such as javascript to interact with it. Through the dom, javascript can be used to dynamically change html elements, change classes, add content and more. More information can be found on the in the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model
+">MDN Web Documentation for the DOM</a>.  
+</p>
+</main>
