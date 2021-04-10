@@ -23,41 +23,35 @@ nav li a:hover, footer li a:hover {
 }
 
 html, body {
-    height: 100%;
+    font-family: sans-serif, Arial, Helvetica;
     margin: 0;
     padding: 0;
 }
 
-img {
-    padding: 0;
-    display: block;
-    margin: 0 auto;
-    max-height: 45%;
-    max-width: 45%;
+a:link {
+	color: #042f6d;
 }
 
 #main {
-    all: initial;
-    /* font-family: */
     text-align: center;
     margin: 80px auto;
     max-width: 1200px;
     color: #042f6d;
+    font-family: sans-serif, Arial, Helvetica;
+
 }
 
 #main h1 {
-    font-size: x-large;
     margin-left: auto;
     margin-right: auto;
-    max-width: 960px;
+    max-width: 1080px;
 
 }
 
 #main h2 {
-    font-size: larger;
     margin-left: auto;
     margin-right: auto;
-    max-width: 960px;
+    max-width: 1080px;
 }
 
 #content_cards {
@@ -68,16 +62,17 @@ img {
     margin-left: auto;
     margin-right: auto;
     max-width: 720px;
+    font-family: sans-serif, Arial, Helvetica;
 }
 
 .card {
     display:grid;
     grid-template-columns: 2fr 5fr;
     text-align: left;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin: 15px auto;
     min-width: 150px;
     min-height: 150px;
+    max-width: 90vw;
     box-shadow: 0px 5px 8px 0px #00000054;
     overflow-wrap: break-word;
     font-size: large;

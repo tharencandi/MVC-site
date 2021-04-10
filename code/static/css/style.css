@@ -6,7 +6,8 @@ table {
 body {
 	color: #4c668a;
 	display:flex; 
-	flex-direction:column; 
+	flex-direction:column;
+	font-family: sans-serif, Arial, Helvetica;
 }
 
 nav div a {

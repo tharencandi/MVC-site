@@ -1,21 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link href="loginstyle.css" rel="stylesheet">
-</head>
-
-<h1>Sign In</h1>
-</p>
-<p>
-<form action="/login" method="post" style="border:1px solid #ccc">
-    Username: <input name="username" placeholder="Enter Username" type="text" required/>
-</br>
-    Password: <input name="password" placeholder="Enter Password" type="password" required/>
-</br>
-    <input value="Login" type="submit" />
+<div id=main>
+    
+    <h1>Sign In</h1>
+        <form class = cred_box action="/login" method="post" style="border:1px solid #ccc">
+            Username: <input name="username" placeholder="Enter Username" type="text" required>
+        </br>
+        Password: <input name="password" placeholder="Enter Password" type="password" required>
+    </br>
+    <input value="Login" type="submit">
     <br>
-    <a href="/signup">Sign up!</a>
+    <p>Don't have an account? <a href="/signup">Sign up</a></p>
 </form>
-</p>
-</center>
-</html>
+</div>
