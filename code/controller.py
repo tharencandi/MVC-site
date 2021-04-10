@@ -180,3 +180,19 @@ def get_forum_post():
     """
     return model.forum_post()
 #-----------------------------------------------------------------------------
+
+@get('/forum_new_post')
+def get_forum_post():
+    """
+        serves to write a post
+    """
+    return model.forum_new_post()
+#-----------------------------------------------------------------------------
+
+@get('/faq')
+def get_forum_landing():
+    """
+        serves static forum page
+    """
+    return model.faq()
+#-----------------------------------------------------------------------------

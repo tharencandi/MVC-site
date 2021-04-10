@@ -141,3 +141,14 @@ def forum_landing():
 def forum_post():
     # Forum landing post
     return page_view("forum_post")
+
+#-----------------------------------------------------------------------------
+
+def forum_new_post():
+    # Forum landing post
+    return page_view("forum_new_post")
+#-----------------------------------------------------------------------------
+
+def faq():
+    # Forum landing post
+    return page_view("faq")

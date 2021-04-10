@@ -53,3 +53,49 @@
     cursor: pointer;
     
 }
+
+.ask_button {
+    
+    float:right;
+	border-radius: 10px;
+	padding: 23px 20px;
+	color: #ffb4d3;
+	background-color: #042f6d;
+}
+
+.back_button {
+    padding-right: 70px;
+    box-sizing: border-box;
+    padding: 12px 20px;  
+	border-radius: 10px;
+	padding: 23px 20px;
+	color: #ffb4d3;
+	background-color: #042f6d;
+}
+
+
+
+.post_form > input {
+    
+    width: 50%;
+    padding-right: 70px;
+    padding: 12px 20px;  
+    box-sizing: border-box;
+    
+}
+
+.post_form > input[id=body] {
+   
+    width: 50%;
+    height: 200px;
+    border: 2px solid #ccc;
+    resize: none;
+      
+}
+
+.post_form > select {
+    width: 50%;
+    box-sizing: border-box;
+    padding: 12px 20px; 
+    
+}
