@@ -1,0 +1,35 @@
+<nav class="sidenav">
+	<a class="back_to_index" href="../html">&lt; Back to index</a>
+	<a href="intro">Intro</a>
+	<a href="basic_routing">Basic Routes</a>
+	<a href="dynamic_routing">Dynamic Routes</a>
+	<a class="active" href="http_request_methods">TTP Request methods</a>
+	<a href="templates">Templates</a>
+
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>HTTP request methods</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">How to get information from a user </h3>
+
+        <p>We can specify a route for an HTTP POST request to gather form information.</p>
+
+
+
+<pre><code class="language-python">
+    @post('/login') # or @route('/login', method='POST')
+    def do_login():
+        username = request.forms.get('username')
+        password = request.forms.get('password')
+        if check_login(username, password):
+            return "&lt;p&gt;Your login information was correct.&lt;p&gt;"
+        else:
+    return "&lt;p&gt;Login failed.&lt;p&gt;"
+    
+    </code></pre>
+
+<p>This will store data inputted by the user in a form element 'username' and a form element 'password'. We can then use this data within python.</p>
+</main>

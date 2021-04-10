@@ -1,0 +1,34 @@
+<nav class="sidenav">
+	<a class="back_to_index" href="../html">&lt; Back to index</a>
+	<a href="intro">Intro</a>
+	<a href="basic_routing">Basic Routes</a>
+	<a href="dynamic_routing">Dynamic Routes</a>
+	<a href="http_request_methods">TTP Request methods</a>
+	<a class="active" href="templates">Templates</a>
+
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Templates</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">Mix html with python! </h3>
+
+        <p>Using the .tpl file extension, we can mix html code with python to add extra functionality to our webpages.</p>
+
+        <p>This syntacicle mix can be seen below:</p>
+
+<pre><code class="language-python">
+    %if name == 'World':
+    &lt;h1&gt;Hello {{name}}!&lt;/h1&gt;
+    &lt;p&gt;This is a test.&lt;/p&gt;
+%else:
+    &lt;h1&gt;Hello {{name.title()}}!&lt;/h1&gt;
+    &lt;p&gt;How are you?&lt;/p&gt;
+%end
+
+    </code></pre>
+
+<p>This will store data inputted by the user in a form element 'username' and a form element 'password'. We can then use this data within python.</p>
+</main>
