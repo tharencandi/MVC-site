@@ -1,0 +1,38 @@
+<nav class="sidenav">
+	<a class="active" href="what_is">CSS Syntax</a>
+	<a href="start_apply">Applying CSS</a>
+	<a href="selectors">CSS Selectors</a>
+	<a href="csi">Cascade, Specificity and Inheritance</a>
+</nav>
+
+<main class='main-content'>
+	<h1>What is CSS</h1>
+	<div class="content-section content-text">
+
+<p>
+CSS (Cascading Style Sheets) is a language that specifies how documents (HTML) are
+presented and laid out to the users.
+</p>
+
+<h3 class="subtitle">Syntax</h3>
+<p>CSS is a rule based language, rules specifying groups of styles that should be applied to either a particular element only or a group of elements on your webpage.<br>
+
+This is a simple CSS rule that would apply background and text colour to the whole HTML document.
+</p>
+<div class="code">
+h1 { <br>
+  color: cyan;<br>
+  font-size: 25pt;<br>
+}
+</div>
+<p>
+The rule starts with a selector. Based on the code block above, we are selecting the whole HTML document by selecting the `h1` element on the first line.
+
+The curly braces `{ }` are used to indicate that you want to start or stop one or more <b>declarations</b> for the selected element. A declaration is made up of a <b>property</b> and <b>value</b> pair, separated by a colon `:`. For example, line 2 is a declaration, with the property `color` and value `cyan`. The `color` property is used to define the font colour inside the element selected. Finally, a semicolon `;` is used to indicate that we have finished a declaration. You can do multiple declarations in one rule. On line 3, we set the property `font-size`, which determines the font size in the element selected. `25pt` is the value for this property. `pt` stands for point, which is a unit. Some other units available are `px`, `cm`, `em`, `%` and more.
+</p>
+
+		<h3 class="subtitle">Sources</h3>
+<p>
+<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/What_is_CSS">What is CSS - MDN</a>
+</p>
+</main>

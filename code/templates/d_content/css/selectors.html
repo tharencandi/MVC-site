@@ -1,0 +1,92 @@
+<nav class="sidenav">
+	<a href="what_is">CSS Syntax</a>
+	<a href="start_apply">Applying CSS</a>
+	<a class="active" href="selectors">CSS Selectors</a>
+	<a href="csi">Cascade, Specificity and Inheritance</a>
+</nav>
+
+<main class='main-content'>
+
+<h1>CSS Selectors</h1>
+<p>
+Selectors in CSS are used to target HTML elements on our web pages that we want to style.<br>
+
+A CSS selector is the first part of a CSS rule. It tells the browser which HTML elements should be selected to have the CSS rule applied to them. The `h1` and `p` in the code block below are both selectors.<br>
+
+Put this into your stylesheet file and see what changes.
+</p>
+<div class="code">
+h1 { <br>
+color: red;<br>
+background-color: black;<br>
+}<br>
+<br>
+p {<br>
+color: orange;<br>
+}
+</div>
+<p>In this article, you will learn about different selectors that target HTML elements in different way and also cascade, specificity and inheritance in CSS. However, this article will not describe all selectors available, refer to the selectors reference table at the end of the page for an overview of all the selectors.
+</p>
+
+<h3 class="subtitle">Selectors</h3>
+<p>
+<b>Type Selectors:</b> Targets an HTML element, for example, `&lt;h1&gt;`.
+<div class="code">
+h1 { <br>
+  color: cyan;<br>
+  font-size: 25pt;<br>
+}
+</div>
+</p>
+
+<p>
+<b>Class Selector:</b> Targets a class in the HTML document. The syntax for the selector is `.` followed by the class name. `.replace_with_class_name`
+<br>
+A snippet from the template HTML document.
+<div class="code">
+	&lt;p class=&quot;a_class&quot;&gt;A paragraph with class.&lt;/p&gt;
+</div>
+<br>
+<div class="code">.a_class { }</div>
+</p>
+<p>
+<b>ID Selector:</b> Targets an id in the HTML document. The syntax for the selector is `#` followed by the id. `#replace_with_id`
+<br>
+A snippet from the template HTML document.
+<div class="code">&lt;span id=&quot;unique&quot;&gt;span element&lt;/span&gt;</div>
+<br>
+<div class="code">#unique { }</div>
+</p>
+<p>
+	<b>Attribute Selector:</b> Targets elements based on the presence of certain attribute on an element. `a[attr] { }`
+
+Based on out template, we have 2 `&lt;a&gt;` elements but with different `href` attributes. We can select one of them by using:
+<div class="code">a[href="https://example.com"] { }</div>
+</p>
+<p>
+	<b>Pseudo Class Selector:</b> Targets element based on the state of an element. For example, The syntax for this selector is the element, followed by `:` and then the state of the element. For example:
+<div class="code">
+	a:hover { }
+</div>
+</p>
+<p>
+	<b>Descendant Combinator:</b> Style something based on their location in the HTML document. For example, to select an `&lt;em&gt;` nested inside the `&lt;li&gt;` element instead of the `&lt;em&gt;` in `&lt;p&gt;`, enter both element, separated by space as the selector.
+<div class="code">
+	&lt;p&gt; Lorem &lt;em&gt;Ipsum&lt;/em&gt;&lt;/p&gt; <br>
+	&lt;ul&gt;<br>
+	&lt;li&gt;Item &lt;span&gt;one&lt;/span&gt;&lt;/li&gt;<br>
+	&lt;li&gt;Item two&lt;/li&gt;<br>
+	&lt;li&gt;Item &lt;em&gt;three&lt;/em&gt;&lt;/li&gt;<br>
+&lt;/ul&gt;
+</div>
+<br>
+
+<div class="code">
+	li em { <br>
+	color: rebeccapurple; <br>
+}
+</div>
+<br>
+The text colour of "three" will be `rebeccapurple` while "Ipsum" remains `black`.
+</p>
+</main>
