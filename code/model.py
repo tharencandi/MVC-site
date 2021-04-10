@@ -116,6 +116,12 @@ def about_garble():
     "provide user generated content in real-time will have multiple touchpoints for offshoring."]
     return garble[random.randint(0, len(garble) - 1)]
 
+#----------------------------------------------------------------------------
+
+def content_index(cat):
+    path = f"d_content/{cat}"
+    return page_view(path)
+
 #-----------------------------------------------------------------------------
 
 def content(cat, sub_cat):
