@@ -132,6 +132,11 @@ def content(cat, sub_cat):
 
 #-----------------------------------------------------------------------------
 
+def forum_page(cat):
+    path = f"d_forum/{cat}"
+    return page_view(path)
+
+
 def forum_landing():
     # Forum landing page
     return page_view("forum")

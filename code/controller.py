@@ -165,6 +165,11 @@ def get_content(cat, sub_cat):
     return model.content(cat, sub_cat)
 #-----------------------------------------------------------------------------
 
+
+@get('/forum/<cat>')
+def get_forum_page(cat):
+    return model.forum_page(cat)
+
 @get('/forum')
 def get_forum_landing():
     """
