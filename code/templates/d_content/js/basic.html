@@ -17,29 +17,35 @@
 <p>
 Comments are just as important in Javascript as in every other language. The syntax of comments is the same as in Java, C and and in many other languages:
 </p>
+<pre>
 <code class="language-javascript">// Comment on a single line </code>
-<pre><code class="language-javascript">/* Comment over several lines <br>
- * Insert informative message here.<br>
- *
-</code></pre>
+<code class="language-javascript">/* Comment over several lines 
+ * Insert informative message here.
+ */
+</code>
 <code class="language-javascript">/* No /* Nesting */ Like This */</code>
-
+</pre>
 
 
 		<h3 class="subtitle">Variable Declerations</h3>
 <p>
 Three options to declare a variable:
 </p>
-<code class="language-javascript">var x = 1 <br> let y = 1 <br> const z = 1</code>
+<pre><code class="language-javascript">
+var x = 1;
+let y = 1;
+const z = 1
+</code> 
+</pre>
 <p>
 You should be using let and const, as var is no longer needed in almost all cases (It is has been replaced by the more modern let and const).
 <br>
 
 The "let" keyword declares a block-scoped, local variable, optionally initializing it to a value.
 <br>
-<pre><code class="language-javascript">let a 
+<pre><code class="language-javascript">let a; 
 let x; 
-x = "hello" 
+x = "hello";
 </code></pre>
 <p>
 The const keyword declares a block-scoped, read-only named constant. Note that const is like python properties of reference types i.e objects are not protected, only the name (reference)
