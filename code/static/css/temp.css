@@ -112,8 +112,3 @@ a:link {
     background-color: #ffb4d3;
     padding: 0px 15px;
 }
-
-#how_web_works > h2, #html h2, #css h2, #js h2, #web-frameworks h2 {
-    text-align: left;
-    margin: 10px 0;
-}
