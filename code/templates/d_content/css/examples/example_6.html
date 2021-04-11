@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Getting started with CSS</title>
+    <style>
+        h1 { 
+        color: red;
+        background-color: black;
+         }
+        p { 
+            color: orange; 
+        }
+        li em { 
+	        color: rebeccapurple; 
+        }
+
+        .list {
+            color: rebeccapurple;
+            border: 2px solid #ccc;
+            padding: 1em;
+	    }
+	    .inner {
+            color: black;
+            font-weight: bold;
+        }
+        .a_class { 
+	        color: blueviolet;
+	    }
+	    p {
+	        color: orange;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+    <h1>Level 1 heading</h1>
+
+    <p>This is the first paragraph. In the text is a <span id="unique">span element</span> and also a <a href="https://example.com">link</a>.</p>
+
+    <p>This is the second paragraph. It contains an <em>emphasized</em> element and another <a href="https://duckduckgo.com">link</a>.</p>
+
+    <p class="a_class"> A paragraph with class.</p>
+
+    <ul class="list">
+        <li>One</li>
+        <li>Two
+            <ul>
+                <li>Two One</li>
+                <li>Two Two</li>
+            </ul>
+        </li>
+        <li>Three
+            <ul class=inner>
+                <li>Three One
+                    <ul>
+                        <li>Three One One</li>
+                        <li>Three One Two</li>
+                    </ul>
+                </li>
+                <li>Three Two</li>
+            </ul>
+        </li>
+        <li>Four</li>
+    </ul>
+
+</body>
+
+</html>
