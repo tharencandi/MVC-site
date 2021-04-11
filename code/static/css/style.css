@@ -1,7 +1,7 @@
-table {
+/* table {
 	border-collapse: collapse;
 	border-spacing: 0;
-}
+} */
 
 body {
 	color: #4c668a;
@@ -121,13 +121,7 @@ nav a:hover {
 	margin: 20px;
 }
 
- /*.code {
-	padding: 10px 20px 20px 20px;
-	border-left: 10px inset #ebeef2;
-	background-color: #ebeef2;
-} */ 
-
-a.back_to_index {
+a.back_to_home {
 	font-size: 15px;
 }
 
