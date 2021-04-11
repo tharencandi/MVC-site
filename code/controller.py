@@ -59,6 +59,22 @@ def serve_js(js):
     return static_file(js, root='static/js/')
 
 #-----------------------------------------------------------------------------
+
+# Allow serving file
+@route('/file/<filename:path>')
+def serve_file(filename):
+    '''
+        serve_file
+
+        Serves file from static/file/
+
+        :: filename :: A path to the requested file
+
+        Returns a static file object containing the requested file
+    '''
+    return static_file(filename, root='static/file/')
+
+#-----------------------------------------------------------------------------
 # Pages
 #-----------------------------------------------------------------------------
 
@@ -148,8 +164,9 @@ def get_about():
    
 #-----------------------------------------------------------------------------
 
+@route('/content', method='GET')
 @get('/content/<cat>')
-def get_content_index(cat):
+def get_content_index(cat=""):
     """
         serves a content index page
     """
