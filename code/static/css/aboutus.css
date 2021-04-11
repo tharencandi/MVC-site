@@ -2,30 +2,26 @@
     color: #4c668a;
 }
 
-.left_profile {
+.left_profile, .right_profile {
     min-width: 500px;
     min-height: 150px;
     margin: 30px 50px;
-    padding: 5px;
+    padding: 5px 25px;
     background-color:#ffb4d3;
+    box-shadow: 0px 5px 8px 0px #00000054;
 }
 
 .right_profile {
-    min-width: 500px;
-    min-height: 150px;
-    margin: 30px 50px;
-    padding: 5px;
     background-color:#f6ebff;
 }
 
 .profile_description {
-    padding: 0 10px;
+    /* padding: 0 10px; */
     text-align: center;
 }
 
 img.profileL, img.profileR {
     min-height: inherit;
-    margin: 0 20px;
 }
 
 .profileL {
