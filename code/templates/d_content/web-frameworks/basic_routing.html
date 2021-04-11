@@ -1,9 +1,9 @@
 <nav class="sidenav">
-	<a class="back_to_index" href="../html">&lt; Back to index</a>
-	<a  href="intro">Intro</a>
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a  href="introduction">Introduction</a>
 	<a class="active" href="basic_routing">Basic Routes</a>
 	<a href="dynamic_routing">Dynamic Routes</a>
-	<a href="http_request_methods">TTP Request methods</a>
+	<a href="http_request_methods">HTTP Request methods</a>
 	<a href="templates">Templates</a>
 	
 </nav>
@@ -17,13 +17,13 @@
 
 		<p>Bottle adds a route decorate to Python. This links a URL path to the proceeding function. We can return data to the user within this function.</p>
 
-		<p>All html pages used in this example can be downloaded: <a href="example_project.zip" download> example_project</a></p>
+		<p>All html pages used in this example can be downloaded: <a href="/file/web-frameworks/example_project.zip" download> example_project</a></p>
 
 		
 		<pre><code class="language-python">
 @route('/hello')
 def hello():
-	return  “ <!DOCTYPE html>  <body> <h>  Hello world! </h> </body></code></pre>
+	return “&lt;!DOCTYPE html&gt;  &lt;body&gt; &lt;h&gt; Hello world! &lt;/h&gt; &lt;/body&gt;"</code></pre>
 	
 	<p>With the html code from the example provided above. We can add a simple route with bottle.</p>
 
