@@ -4,7 +4,7 @@ table {
 }
 
 body {
-	color: #4c668a;
+	color: #3c506c;
 	display:flex; 
 	flex-direction:column;
 	font-family: sans-serif, Arial, Helvetica;
@@ -111,6 +111,7 @@ nav a:hover {
 
 .content-section {
 	width: 60%;
+	font-size: 20px;
 }
 
 .content_list {

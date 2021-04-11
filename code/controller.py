@@ -165,6 +165,14 @@ def get_content(cat, sub_cat):
     return model.content(cat, sub_cat)
 #-----------------------------------------------------------------------------
 
+@get('/content/<cat>/<sub_cat>/<sub_sub_cat>')
+def get_content_example(cat, sub_cat, sub_sub_cat):
+    """
+        serves a content page
+    """
+    return static_file(sub_sub_cat+".html", root="./templates/d_content/" + cat + "/" + sub_cat + "/" )
+  
+#-----------------------------------------------------------------------------
 
 @get('/forum/<cat>')
 def get_forum_page(cat):

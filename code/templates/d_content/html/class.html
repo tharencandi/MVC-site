@@ -37,10 +37,13 @@ As stated above, these classes can be used in Javascript to perform tasks, which
 		<h3 class="subtitle">HTML ID's'</h3>
 <p>HTML consists of an id attribute that creates a unique id for each element where there shouldn&rsquo;t be more than one element of the same id in a document. This attribute is used to specify a specific style declaration on the style sheet to use on that element. This can also be used to access that element in Javascript to use.
 The syntax of an id is a hash followed by the name of the id such as <code class="language-html">(#myHeader)</code>.
-<pre><code class="language-html">#myHeader {
+<pre><code class="language-html">&lt;style&gt;#myHeader {
+	color: blue;
 }
-&lt;h1 id=&quot;myHeader&quot;&gt;My Header&lt;/h1&gt;</pre></code>
- 
+&lt;/style&gt;
+&lt;h1 id=&quot;myHeader&quot;&gt;My Header&lt;/h1&gt;
+&lt;h1;&gt;Header without ID&lt;/h1&gt;</pre></code>
+<iframe title="ID example" src="examples/example_4"  width="100%" height=100px></iframe>
 As noticed above Ids and classes seem very similar in HTML&hellip;
 The main difference between an id and class is that classes can be used for several elements but an id can only be used by one element in that document.
 </p>
