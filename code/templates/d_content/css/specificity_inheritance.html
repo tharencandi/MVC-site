@@ -6,8 +6,12 @@
 	<a class="active" href="specificity_inheritance">Cascade, Specificity and Inheritance</a>
 </nav>
 
+<script src="/js/prism.js"></script>
+
 <main class='main-content'>
+	
 	<h1>Cascade, Specificity and Inheritance</h1>
+<div class="content-section content-text">
 <p>
 For inheritance, some CSS properties inherit values set on the parent element by default and some do not. This might cause behaviour that you do not expect.
 <br>
@@ -17,7 +21,7 @@ When you have rules conflicting with each other, cascade and specificity are mec
 <h3 class="subtitle">Inheritance</h3>
 <p>
 The easiest way to understand inheritance is to see it in action.
-<div class="code">
+<pre><code class = "language-css">
 	.list {<br>
 	color: rebeccapurple;<br>
 	border: 2px solid #ccc;<br>
@@ -27,9 +31,10 @@ The easiest way to understand inheritance is to see it in action.
 	color: black;<br>
 	font-weight: bold;<br>
 }
-</div>
+</code></pre>
 <br>
-<div class="code">
+
+<pre><code class = "language-html">
 	&lt;ul class=&quot;list&quot;&gt;<br>
     &lt;li&gt;One&lt;/li&gt;<br>
     &lt;li&gt;Two<br>
@@ -51,7 +56,8 @@ The easiest way to understand inheritance is to see it in action.
     &lt;/li&gt;<br>
     &lt;li&gt;Four&lt;/li&gt;<br>
 &lt;/ul&gt;<br>
-</div>
+</code></pre>
+<iframe title="code example 5" src="examples/example_5"  width="100%" height="440"></iframe>
 </p>
 <p>
 The colour has been applied to all direct and indirect children, the first layer of the list and also the nested list in "Two".<br>
@@ -78,31 +84,30 @@ Try out these value on the example above and see what happens.
 At a very simple level, stylesheets cascade means that the order of CSS rules matter. When two rules that have equal specificity, the one that is defined last in the CSS is the rule that applies.
 
 For example:
-<div class="code">
-	h1 {<br>
+<pre><code class = "language-css"> h1 {<br>
 	color: blue<br>
 	}<br>
 	h1 {<br>
 	color:green;<br>
 }
-</div>
+</pre></code>>
 <h3 class="subtitle">Specificity</h3>
 <p>
 	The browser decides which rule will applies if multiple rules have different selectors, but would still apply to the same element. Basically a selector that is more specific will be selected compared to a less specific element.
 
 For example:
-<div class="code">
-	.a_class { <br>
+<pre><code class = "language-css"> .a_class { <br>
 	color: blueviolet;<br>
 	}<br>
 	p {<br>
 	color: orange;<br>
 }
-</div>
+</pre></code>
 <br>
-<div class="code">
-	&lt;p class=&quot;a_class&quot;&gt; A paragraph with class.&lt;/p&gt;
-</div>
+<pre><code class = "language-html">&lt;p class=&quot;a_class&quot;&gt; A paragraph with class.&lt;/p&gt;
+</pre></code>
+
+<iframe title="code example 6" src="examples/example_6"  width="100%" height="440"></iframe>
 </p>
 <p>
 	Since both rules applies to the HTML snippet above and with the same property `color`, the browser needs to determine which to select. In this case, since a class selector is more specific than a type selector, `.a_class` rule will be applied and the colour of the text will be `blueviolet` instead of `orange`.
@@ -118,4 +123,5 @@ The browser determines specificity by calculating scores for specificity. If you
 <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance">Cascade and inheritance - MDN</a><br>
 <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/Getting_started">Getting Started With CSS - MDN</a><br>
 </p>
+</div>
 </main>
