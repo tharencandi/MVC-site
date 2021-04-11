@@ -64,7 +64,7 @@ def serve_js(js):
 @route('/file/<filename:path>')
 def serve_file(filename):
     '''
-        serve_ile
+        serve_file
 
         Serves file from static/file/
 
