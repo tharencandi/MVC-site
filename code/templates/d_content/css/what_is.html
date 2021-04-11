@@ -5,6 +5,8 @@
 	<a href="csi">Cascade, Specificity and Inheritance</a>
 </nav>
 
+<script src="/js/prism.js"></script>
+
 <main class='main-content'>
 	<h1>What is CSS</h1>
 	<div class="content-section content-text">
@@ -19,16 +21,15 @@ presented and laid out to the users.
 
 This is a simple CSS rule that would apply background and text colour to the whole HTML document.
 </p>
-<div class="code">
-h1 { <br>
+<pre><code class="language-css">h1 { <br>
   color: cyan;<br>
   font-size: 25pt;<br>
 }
-</div>
+</pre></code>
 <p>
-The rule starts with a selector. Based on the code block above, we are selecting the whole HTML document by selecting the `h1` element on the first line.
+The rule starts with a selector. Based on the code block above, we are selecting the whole HTML document by selecting the <code class="language-html">h1</code> element on the first line.
 
-The curly braces `{ }` are used to indicate that you want to start or stop one or more <b>declarations</b> for the selected element. A declaration is made up of a <b>property</b> and <b>value</b> pair, separated by a colon `:`. For example, line 2 is a declaration, with the property `color` and value `cyan`. The `color` property is used to define the font colour inside the element selected. Finally, a semicolon `;` is used to indicate that we have finished a declaration. You can do multiple declarations in one rule. On line 3, we set the property `font-size`, which determines the font size in the element selected. `25pt` is the value for this property. `pt` stands for point, which is a unit. Some other units available are `px`, `cm`, `em`, `%` and more.
+The curly braces <code class="language-css">{ }</code> are used to indicate that you want to start or stop one or more <b>declarations</b> for the selected element. A declaration is made up of a <b>property</b> and <b>value</b> pair, separated by a colon <code class="language-css">:</code>. For example, line 2 is a declaration, with the property <code class="language-css">color</code> and value <code class="language-css">cyan</code>. The <code class="language-css">color</code> property is used to define the font colour inside the element selected. Finally, a semicolon <code class="language-css">;</code> is used to indicate that we have finished a declaration. You can do multiple declarations in one rule. On line 3, we set the property <code class="language-css">font-size</code>, which determines the font size in the element selected. <code class="language-css">25pt</code> is the value for this property. <code class="language-css">pt</code> stands for point, which is a unit. Some other units available are <code class="language-css">px</code>, <code class="language-css">cm</code>, <code class="language-css">em</code>, <code class="language-css">%</code> and more.
 </p>
 
 		<h3 class="subtitle">Sources</h3>

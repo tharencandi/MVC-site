@@ -5,14 +5,15 @@
 	<a href="csi">Cascade, Specificity and Inheritance</a>
 </nav>
 
+<script src="/js/prism.js"></script>
+
 <main class='main-content'>
 	<h1>Applying CSS</h1>
-
+    <div class="content-section content-text">
 <p>
 To see how CSS can be used to style your HTML document, you can copy and paste this document into a plain text editor and save it as `index.html`. You can use and experiment with this template throughout the CSS guide.
 </p>
-<div class="code">
-&lt;!DOCTYPE html&gt;<br>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;<br>
 &lt;html lang=&quot;en&quot;&gt;<br>
 &lt;head&gt;<br>
     &lt;meta charset=&quot;UTF-8&quot;&gt;<br>
@@ -38,28 +39,27 @@ To see how CSS can be used to style your HTML document, you can copy and paste t
 &lt;/body&gt;<br>
 
 &lt;/html&gt;<br>
-</div>
+</code></pre>
 <p>
 Next, create a file named `style.css` in the same directory as `index.html`.
 
-To link and apply the stylesheet `style.css` to `index.html`, add the following code anywhere between the `&lt;head&gt;` `&lt;/head&gt;` in `index.html`.
+To link and apply the stylesheet `style.css` to `index.html`, add the following code anywhere between the <code class="language-html">&lt;head&gt;</code> <code class="language-html">&lt;/head&gt;</code> in `index.html`.
 </p>
-<div class="code">
-&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
-</div>
+<pre><code class="language-css">&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+</code></pre>
 <p>
-The `&lt;link&gt;` element tells the browser that we have an external resources that we want to load and `rel` tells the browser the relationship between this external resources and the HTML document, in this case, the resources is a `stylesheet`. `href` informs the browser the location of the external resources. Since our stylesheet file is in the same directory as our `index.html`, we just need to enter the file name `style.css` as the value.
+The <code class="language-html">&lt;link&gt;</code> element tells the browser that we have an external resources that we want to load and `rel` tells the browser the relationship between this external resources and the HTML document, in this case, the resources is a `stylesheet`. `href` informs the browser the location of the external resources. Since our stylesheet file is in the same directory as our `index.html`, we just need to enter the file name `style.css` as the value.
 
 Open `index.html` using your browser to see how your browser renders `index.html` with an empty stylesheet before we proceed to make changes. You would notice that your browser will do some default styling, where the headings are large and bold, and out list has bullets. This is because browsers have internal stylesheet which is allied to all pages by default. We can override the browser's styling by defining our own CSS rules.
 </p>
-<div class="code">
-p { <br>
+<pre><code class="language-css">p { <br>
 color: orange; <br>
 }
-</div>
+</code></pre>
 
 		<h3 class="subtitle">Sources</h3>
 <p>
 <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/Getting_started">Getting Started With CSS - MDN</a>
 </p>
+</div>
 </main>
