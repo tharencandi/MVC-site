@@ -1,0 +1,61 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="introduction">Introduction</a>
+	<a href="tags_elements">HTML Elements</a>
+	<a class="active" href="attributes">HTML Attributes</a>
+	<a href="formatting">HTML Formatting</a>
+	<a  href="class">Classes and ID</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>HTML Attributes</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">HTML Attributes</h3>
+
+		<p>HTML elements can have attributes, which provide additional information about the elements, usually with the syntax <code class="language-html">name='value'</code>.
+ 
+The <code class="language-html">&lt;a&gt;</code> syntax defines a hyperlink that can be added to the web page through the syntax:  <code class="language-html">&lt;a&gt;</code>, where the href attribute defines the links destination.
+<code class="language-html">&lt;a href="https://www.w3schools.com"&gt; This is a link&lt;/a&gt;</code>
+<br><br> <a href="https://www.w3schools.com"> This is a link</a> <br> <br>
+HTML can also define images that can be displayed in the web page with the <code class="language-html">&lt;img&gt;</code> tag and the attributes:
+<ul>
+	<li>The src attribute refers to the source file
+</li>
+<li>The alt attribute is the alternative text for an image which would be which would be displayed if the image cannot.
+</li>
+<li>The width and the height attributes refer to the measurement of the image on the web page.
+</li>
+</ul>
+		</p>
+<p>
+<code class="language-html">&lt;img src=&quot;w3schools.jpg&quot; alt=&quot;W3Schools.com&quot; width=&quot;104&quot; height=&quot;142&quot;&gt;</code>
+</p>
+<br><br> <p>inspect the element to see its source:</p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/SNice.svg/220px-SNice.svg.png" alt="W3Schools.com" width="104" height="104">  <br> <br>
+<p>
+The style attribute is used to add styles to the element (usually a text)  such fonts, colours, etc.
+<code class="language-html">&lt;p style=&quot;color:red;&quot;&gt;This is a red paragraph.&lt;/p&gt;</code>
+</p>
+<iframe title="red paragraph" src="examples/example_3"  width="100%" height=50px></iframe>
+<p>
+When using HTML, there is a way to define the language of the Web page to help the engines and browsers.  This is done through the lang attribute which goes in the <code class="html">&lt;html&gt; tag.</code>
+<code class="language-html">&lt;html lang=&quot;en&quot;&gt;</code> ('en' for english)
+</p>
+
+<p>
+The title attribute defines information about an element, which appears when the user is about to click the title.
+<code class="language-html">&lt;p title=&quot;I'm a tooltip&quot;&gt;</code>This is a paragraph. <code class="language-html">&lt;/p&gt;</code>
+</p>
+
+		<h3 class="subtitle">Tips</h3>
+
+<ul>
+	<li>Use double quotations marks rather than single ones: <code class="language-html">"</code>
+</li>
+<li>Always put the attribute values in quotation: <code class="language-html">name="value"</code></li>
+<li>Use lowercase attributes: <code class="language-html">title=</code>
+</li>
+</ul>
+
+</main>

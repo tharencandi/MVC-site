@@ -1,0 +1,64 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="introduction">Introduction</a>
+	<a href="basic_routing">Basic Routes</a>
+	<a href="dynamic_routing">Dynamic Routes</a>
+	<a href="http_request_methods">HTTP Request methods</a>
+	<a href="templates">Templates</a>
+	<a class="active" href="working_example">CV Website Example</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Working Example</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">CV website</h3>
+        <a href="/file/web-frameworks/example_project_with_bottle.zip" download></a>
+        <p>Using The CV HTML website found in <a href="basic_routing"> Basic Routes</a>, we can apply all that we have learnt to create a functioning website.</p>
+        <a href="/file/web-frameworks/example_project_with_bottle.zip" download=""> Get final project here.</a>
+      
+        <p>Project directory:</p>
+        <ul>
+            <li>files (other static files)</li>
+            <li>images</li>
+            <li>styles (contains css and fonts)</li>
+            <li>templates (contains hmtl and tpl files)</li>
+            <li>webframe.py</li>
+          </ul>
+        <p>webframe.py:</p>
+
+<pre><code class="language-python">
+from bottle import route, run, template, static_file
+
+@route("/styles/<file:path>")
+def serve_style(file):
+    return static_file(file, root = "./styles")
+
+
+@route("/images/<file:path>")
+def serve_image(file):
+    return static_file(file, root = "./images")
+
+@route("/files/<file:path>")
+def serve_static_files(file):
+    return static_file(file, root = "./files")
+
+# web pages:
+@route('/')
+@route('/home')
+def hello():
+    return static_file("index.html", root = "./templates")
+
+@route('/resume')
+def resume():
+    return template("./templates/resume")
+
+
+run(host='localhost', port= 8080, debug = True)
+    </code></pre>
+
+<p>Home page:</p>
+
+<img src="/img/example_project.jpg" src width="100%" height=100% alt="picture of example project's index.html">
+</main>

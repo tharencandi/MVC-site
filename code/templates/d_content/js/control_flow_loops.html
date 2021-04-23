@@ -1,0 +1,71 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="what_is_js">What Is Javascript</a>
+	<a href="basic">Basic Syntax</a>
+	<a class="active" href="control_flow_loops">Control Flow and Loops</a>
+	<a href="objects">Objects and JSON</a>
+	<a  href="webconsole_dom">Javascript in Web Development</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Control Flow and Loops</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">Control Flow</h3>
+		
+<p> In javascript, we have access to the same control flow found in most other languages, for example the if,else if and else blocks, as well as switch statements.
+</p>
+<pre><code class="language-javascript">if (condition_1) {<br>
+  statement_1; <br>
+} else if (condition_2) {<br>
+  statement_2;<br>
+} else if (condition_n) {<br>
+  statement_n;<br>
+} else {<br>
+  statement_last;<br>
+}</code></pre>
+
+		<h3 class="subtitle">Special Values Needed in Control FLow</h3>
+<p>
+These values all evaluate to false, while everything else evaluates to true. 
+<ul>
+	<li>false</li>
+	<li>undefined</li>
+	<li>null</li>
+	<li>0</li>
+	<li>NaN</li>
+	<li>the empty string ("")</li>
+</ul>
+</p>
+		<h3 class="subtitle">Loops</h3>
+<p>Just as in other languages, Javscript has for loops and while loops. The follow are all types of for loops in Javascript
+<ul>
+	<li>for - loops through a block n times</li>
+	<li>for/in - loops through each of an objects properties </li>
+	<li>for/of - Loops through an iterable</li>
+</ul>
+
+<pre><code class="language-javascript">
+// basic for loop
+for (let i = 0; i &lt; 5; i++) {
+	console.log(i);
+}
+
+// for in loop
+for (key in object) {
+	// do something with key
+}
+
+// for of loop 
+for (variable of iterable) {
+	// do something with variable
+}
+
+</code></pre>
+</p>
+<h3 class="subtitle">Sources</h3>
+<p>
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#if...else_statement
+</p>
+</main>

@@ -1,0 +1,127 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="what_is_css">CSS Syntax</a>
+	<a href="applying_css">Applying CSS</a>
+	<a href="selectors">CSS Selectors</a>
+	<a class="active" href="specificity_inheritance">Cascade, Specificity and Inheritance</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	
+	<h1>Cascade, Specificity and Inheritance</h1>
+<div class="content-section content-text">
+<p>
+For inheritance, some CSS properties inherit values set on the parent element by default and some do not. This might cause behaviour that you do not expect.
+<br>
+When you have rules conflicting with each other, cascade and specificity are mechanisms that control which rule applies. Therefore by understanding these 3 concepts, you will be able to prevent or fix unwanted behaviour.
+</p>
+
+<h3 class="subtitle">Inheritance</h3>
+<p>
+The easiest way to understand inheritance is to see it in action.
+<pre><code class = "language-css">
+	.list {<br>
+	color: rebeccapurple;<br>
+	border: 2px solid #ccc;<br>
+	padding: 1em;<br>
+	}<br>
+	.inner {<br>
+	color: black;<br>
+	font-weight: bold;<br>
+}
+</code></pre>
+<br>
+
+<pre><code class = "language-html">
+	&lt;ul class=&quot;list&quot;&gt;<br>
+    &lt;li&gt;One&lt;/li&gt;<br>
+    &lt;li&gt;Two<br>
+        &lt;ul&gt;<br>
+            &lt;li&gt;Two One&lt;/li&gt;<br>
+            &lt;li&gt;Two Two&lt;/li&gt;<br>
+        &lt;/ul&gt;<br>
+    &lt;/li&gt;<br>
+    &lt;li&gt;Three<br>
+        &lt;ul class=inner&gt;<br>
+            &lt;li&gt;Three One<br>
+                &lt;ul&gt;<br>
+                    &lt;li&gt;Three One One&lt;/li&gt;<br>
+                    &lt;li&gt;Three One Two&lt;/li&gt;<br>
+                &lt;/ul&gt;<br>
+            &lt;/li&gt;<br>
+            &lt;li&gt;Three Two&lt;/li&gt;<br>
+        &lt;/ul&gt;<br>
+    &lt;/li&gt;<br>
+    &lt;li&gt;Four&lt;/li&gt;<br>
+&lt;/ul&gt;<br>
+</code></pre>
+<iframe title="code example 5" src="examples/example_5"  width="100%" height="440"></iframe>
+</p>
+<p>
+The colour has been applied to all direct and indirect children, the first layer of the list and also the nested list in "Two".<br>
+
+For the nested list in "Three", since the `.inner` rule has with the same property `color` defined, its children inherit `black` as the text colour instead of `rebeccapurple`.<br>
+
+Note that not all properties are inherited. Things like widths, margins, padding and borders were not inherited. It would be extremely annoying if these properties were inherited by the children as all item in the list would get a border. <br>
+
+Properties which are inherited or not can mostly be determined by common sense.
+</p>
+<p>
+All CSS property accepts these values for controlling inheritance.
+<ul>
+	<li><b>inherit:</b> Set the property value to be as the same as the parent element.
+	</li>
+	<li><b>initial:</b> Set the property value to the initial value (default) of that property.</li>
+	<li><b>unset:</b> Resets the property to its natural value. If a property naturally inherits a value, it will act like `inherit`, otherwise, it acts like `initial`.
+</li>
+</ul>
+Try out these value on the example above and see what happens.
+</p>
+<h3 class="subtitle">Cascade</h3>
+<p>
+At a very simple level, stylesheets cascade means that the order of CSS rules matter. When two rules that have equal specificity, the one that is defined last in the CSS is the rule that applies.
+
+For example:
+<pre><code class = "language-css"> h1 {<br>
+	color: blue<br>
+	}<br>
+	h1 {<br>
+	color:green;<br>
+}
+</pre></code>
+<h3 class="subtitle">Specificity</h3>
+<p>
+	The browser decides which rule will applies if multiple rules have different selectors, but would still apply to the same element. Basically a selector that is more specific will be selected compared to a less specific element.
+
+For example:
+<pre><code class = "language-css"> .a_class { <br>
+	color: blueviolet;<br>
+	}<br>
+	p {<br>
+	color: orange;<br>
+}
+</pre></code>
+<br>
+<pre><code class = "language-html">&lt;p class=&quot;a_class&quot;&gt; A paragraph with class.&lt;/p&gt;
+</pre></code>
+
+<iframe title="code example 6" src="examples/example_6"  width="100%" height="440"></iframe>
+</p>
+<p>
+	Since both rules applies to the HTML snippet above and with the same property `color`, the browser needs to determine which to select. In this case, since a class selector is more specific than a type selector, `.a_class` rule will be applied and the colour of the text will be `blueviolet` instead of `orange`.
+
+NOTE: The entire rule were not overwritten, only the properties which are the same. If a less specific selector contains properties which are not present in a more specific selector, the non-conflicting properties in the less specific rule still applies.
+
+The browser determines specificity by calculating scores for specificity. If you would like to learn about how that is done, you can refer to <a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance#specificity_2">this explanation</a> by MDN.
+</p>
+</p>
+		<h3 class="subtitle">Sources</h3>
+<p>
+<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors">CSS selectors - MDN</a><br>
+<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Cascade_and_inheritance">Cascade and inheritance - MDN</a><br>
+<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/Getting_started">Getting Started With CSS - MDN</a><br>
+</p>
+</div>
+</main>

@@ -1,0 +1,69 @@
+<nav class="sidenav">
+    <a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="what_is_css">CSS Syntax</a>
+	<a class="active" href="applying_css">Applying CSS</a>
+	<a href="selectors">CSS Selectors</a>
+	<a href="specificity_inheritance">Cascade, Specificity and Inheritance</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Applying CSS</h1>
+    <div class="content-section content-text">
+<p>
+To see how CSS can be used to style your HTML document, you can copy and paste this document into a plain text editor and save it as `index.html`. You can use and experiment with this template throughout the CSS guide.
+</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;<br>
+&lt;html lang=&quot;en&quot;&gt;<br>
+&lt;head&gt;<br>
+    &lt;meta charset=&quot;UTF-8&quot;&gt;<br>
+    &lt;title&gt;Getting started with CSS&lt;/title&gt;<br>
+&lt;/head&gt;<br>
+<br><br>
+&lt;body&gt;<br>
+<br>
+    &lt;h1&gt;Level 1 heading&lt;/h1&gt;<br>
+<br>
+    &lt;p&gt;This is the first paragraph. In the text is a &lt;span id=&quot;unique&quot;&gt;span element&lt;/span&gt; and also a &lt;a href=&quot;https://example.com&quot;&gt;link&lt;/a&gt;.&lt;/p&gt;<br>
+
+    &lt;p&gt;This is the second paragraph. It contains an &lt;em&gt;emphasized&lt;/em&gt; element and another &lt;a href=&quot;https://duckduckgo.com&quot;&gt;link&lt;/a&gt;.&lt;/p&gt;<br>
+
+    &lt;p class=&quot;a_class&quot;&gt; A paragraph with class.&lt;/p&gt;<br>
+
+    &lt;ul&gt;<br>
+        &lt;li&gt;Item &lt;span&gt;one&lt;/span&gt;&lt;/li&gt;<br>
+        &lt;li&gt;Item two&lt;/li&gt;<br>
+        &lt;li&gt;Item &lt;em&gt;three&lt;/em&gt;&lt;/li&gt;<br>
+    &lt;/ul&gt;<br>
+<br>
+&lt;/body&gt;<br>
+
+&lt;/html&gt;<br>
+</code></pre>
+
+<iframe title="code example 1" src="examples/example_1"  width="100%" height="300"></iframe>
+<p>
+Next, create a file named `style.css` in the same directory as `index.html`.
+
+To link and apply the stylesheet `style.css` to `index.html`, add the following code anywhere between the <code class="language-html">&lt;head&gt;</code> <code class="language-html">&lt;/head&gt;</code> in `index.html`.
+</p>
+<pre><code class="language-css">&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
+</code></pre>
+<p>
+The <code class="language-html">&lt;link&gt;</code> element tells the browser that we have an external resources that we want to load and `rel` tells the browser the relationship between this external resources and the HTML document, in this case, the resources is a `stylesheet`. `href` informs the browser the location of the external resources. Since our stylesheet file is in the same directory as our `index.html`, we just need to enter the file name `style.css` as the value.
+
+Open `index.html` using your browser to see how your browser renders `index.html` with an empty stylesheet before we proceed to make changes. You would notice that your browser will do some default styling, where the headings are large and bold, and out list has bullets. This is because browsers have internal stylesheet which is allied to all pages by default. We can override the browser's styling by defining our own CSS rules.
+</p>
+<pre><code class="language-css">p { <br>
+color: orange; <br>
+}
+</code></pre>
+<iframe title="code example 2" src="examples/example_2"  width="100%" height="300"></iframe>
+
+		<h3 class="subtitle">Sources</h3>
+<p>
+<a href="https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/Getting_started">Getting Started With CSS - MDN</a>
+</p>
+</div>
+</main>

@@ -1,0 +1,37 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a  href="introduction">Introduction</a>
+	<a class="active" href="basic_routing">Basic Routes</a>
+	<a href="dynamic_routing">Dynamic Routes</a>
+	<a href="http_request_methods">HTTP Request methods</a>
+	<a href="templates">Templates</a>
+	<a href="working_example">CV Website Example</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Basic Routing</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">Setting up a home page</h3>
+
+		<p>Bottle adds a route decorate to Python. This links a URL path to the proceeding function. We can return data to the user within this function.</p>
+
+		<p>All html pages used in this example can be downloaded: <a href="/file/web-frameworks/example_project.zip" download> example_project</a></p>
+
+		
+		<pre><code class="language-python">
+@route('/hello')
+def hello():
+	return “&lt;!DOCTYPE html&gt;  &lt;body&gt; &lt;h&gt; Hello world! &lt;/h&gt; &lt;/body&gt;"</code></pre>
+	
+	<p>With the html code from the example provided above. We can add a simple route with bottle.</p>
+
+	<pre><code class="language-python">
+@route('/')
+@route('/home')
+def hello():
+	return static_file("index.html", root = "./templates")
+			 </code></pre>
+
+</main>

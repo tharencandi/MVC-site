@@ -1,0 +1,85 @@
+card_id,card_label,category_id,category_label,user_id
+1,Terminology of web,1,How the Web works,1
+2,What is JS,1,How the Web works,1
+3,How the webs works,1,How the Web works,1
+4,HTTP knowledge,1,How the Web works,1
+5,Overview of the web,1,How the Web works,1
+6,Html elements,2,HTML basics,1
+7,html format,2,HTML basics,1
+8,What is html,2,HTML basics,1
+9,Attributes of html and css,2,HTML basics,1
+10,html Classes and ID,2,HTML basics,1
+11,Templates,2,HTML basics,1
+12,Basic Syntax and Data Types of javascript,3,JavaScript,1
+13,Objects,3,JavaScript,1
+14,Java Script in Web Developement,3,JavaScript,1
+15,Basic routing/ getting setup,4,Web Frameworks(eg.bottle),1
+16,Basic Control Flow and Loops,4,Web Frameworks(eg.bottle),1
+17,Request data,4,Web Frameworks(eg.bottle),1
+18,Dynamic routes and static files,4,Web Frameworks(eg.bottle),1
+19,sign up,5,home page,1
+20,sign in,5,home page,1
+21,posts,6,discussion forum,1
+22,comments,6,discussion forum,1
+23,discussion,6,discussion forum,1
+24,how to apply css to html,7,CSS basics,1
+25,getting started with css,7,CSS basics,1
+26,Bootstrap,7,CSS basics,1
+27,css selectors,7,CSS basics,1
+28,css syntax,7,CSS basics,1
+1,Terminology of web,1,How the Web works,2
+5,Overview of the web,1,How the Web works,2
+4,HTTP knowledge,1,How the Web works,2
+3,How the webs works,1,How the Web works,2
+11,Templates,2,HTML basics,2
+6,Html elements,2,HTML basics,2
+7,html format,2,HTML basics,2
+8,What is html,2,HTML basics,2
+9,Attributes of html and css,2,HTML basics,2
+10,html Classes and ID,2,HTML basics,2
+13,Objects,3,JavaScript,2
+14,Java Script in Web Developement,3,JavaScript,2
+12,Basic Syntax and Data Types of javascript,3,JavaScript,2
+2,What is JS,3,JavaScript,2
+15,Basic routing/ getting setup,4,Web Frameworks(eg.bottle),2
+26,Bootstrap,4,Web Frameworks(eg.bottle),2
+16,Basic Control Flow and Loops,4,Web Frameworks(eg.bottle),2
+17,Request data,4,Web Frameworks(eg.bottle),2
+18,Dynamic routes and static files,4,Web Frameworks(eg.bottle),2
+19,sign up,5,home page,2
+20,sign in,5,home page,2
+22,comments,6,discussion forum,2
+21,posts,6,discussion forum,2
+23,discussion,6,discussion forum,2
+24,how to apply css to html,7,CSS basics,2
+28,css syntax,7,CSS basics,2
+25,getting started with css,7,CSS basics,2
+27,css selectors,7,CSS basics,2
+3,How the webs works,1,How the Web works,3
+5,Overview of the web,1,How the Web works,3
+1,Terminology of web,1,How the Web works,3
+10,html Classes and ID,2,HTML basics,3
+7,html format,2,HTML basics,3
+8,What is html,2,HTML basics,3
+6,Html elements,2,HTML basics,3
+4,HTTP knowledge,2,HTML basics,3
+16,Basic Control Flow and Loops,3,JavaScript,3
+13,Objects,3,JavaScript,3
+12,Basic Syntax and Data Types of javascript,3,JavaScript,3
+14,Java Script in Web Developement,3,JavaScript,3
+2,What is JS,3,JavaScript,3
+15,Basic routing/ getting setup,4,Web Frameworks(eg.bottle),3
+18,Dynamic routes and static files,4,Web Frameworks(eg.bottle),3
+11,Templates,4,Web Frameworks(eg.bottle),3
+17,Request data,4,Web Frameworks(eg.bottle),3
+26,Bootstrap,4,Web Frameworks(eg.bottle),3
+20,sign in,5,home page,3
+19,sign up,5,home page,3
+22,comments,6,discussion forum,3
+21,posts,6,discussion forum,3
+23,discussion,6,discussion forum,3
+24,how to apply css to html,7,CSS basics,3
+25,getting started with css,7,CSS basics,3
+9,Attributes of html and css,7,CSS basics,3
+27,css selectors,7,CSS basics,3
+28,css syntax,7,CSS basics,3

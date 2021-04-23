@@ -1,0 +1,38 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="introduction">Introduction</a>
+	<a href="basic_routing">Basic Routes</a>
+	<a class="active" href="dynamic_routing">Dynamic Routes</a>
+	<a href="http_request_methods">HTTP Request methods</a>
+	<a href="templates">Templates</a>
+	<a href="working_example">CV Website Example</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Dynamic Routing</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">Adding CSS with a dynamic route </h3>
+
+		<p>Bottle allows us to generalise routes to match multiple URL's. A dynamic route will accept anything between <>. For example <code class ="language-python"> @route("/helo/&lt;name&gt;")</code> will accept /hello/Jerry as a URL.</p>
+        <p>&lt;name&gt; can then be passed as an argument to the corresponding function. This allows us to create a general function and route to load all CSS style sheets.</p>   
+		<p>All html pages used in this example can be downloaded: <a href="/file/web-frameworks/example_project.zip" download> example_project</a></p>
+
+		
+		<pre><code class="language-python">
+@route("/styles/<file:path>")
+    def serve_style(file):
+        return static_file(file, root = "./styles")
+                 </code></pre>
+	
+	<p>As well as all images:</p>
+
+	<pre><code class="language-python">
+@route("/images/<file:path>")
+    def serve_image(file):
+        return static_file(file, root = "./images")
+            
+			 </code></pre>
+
+</main>

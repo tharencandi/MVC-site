@@ -1,0 +1,142 @@
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+body {
+	color: #3c506c;
+	display:flex; 
+	flex-direction:column;
+	font-family: sans-serif, Arial, Helvetica;
+}
+
+nav div a {
+	text-decoration: none;	
+}
+
+main {
+	margin-top: 80px;
+}
+
+nav div {
+	font-size: 20px;
+	position: relative;
+	z-index: 1;
+}
+
+.main-content > h1 {
+	font-weight: 900;
+	font-size: 30px;
+	padding: 50px 0px;
+}
+
+nav #login {
+	float: right;
+	border-radius: 10px;
+	margin: 5px 15px;
+	padding: 10px 15px;
+	color: #ffb4d3;
+	background-color: #042f6d;
+
+}
+
+nav #login:active {
+	transform: translateY(1px);
+}
+
+nav a:hover {
+	background-color: #f3a1c3;
+}
+
+.subtitle {
+	display: inline-block;
+	background-color: #ebeef2;
+	font-size: 20px;
+	font-weight: 600;
+	padding: 5px;
+	margin-bottom: 20px;
+}
+
+.topnav {
+  	background-color: #ffb4d3;
+  	overflow: hidden;
+	position: fixed;
+	top: 0;
+	width: 100%;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  	float: left;
+  	color: #042f6d;
+  	text-align: center;
+  	padding: 15px 30px;
+  	text-decoration: none;
+  	font-size: 20px;
+}
+
+.sidenav {
+  	height: 100%;
+  	width: 190px;
+  	position: fixed;
+  	z-index: 1;
+  	top: 0;
+  	left: 0;
+	border-right: 1px solid #818181; 
+  	overflow-x: hidden;
+  	margin-top: 55px;
+}
+
+.sidenav a {
+  	padding: 20px 10px;
+  	text-decoration: none;
+  	font-size: 25px;
+  	color: #4c668a;
+  	display: block;
+}
+
+.sidenav a:link {
+	color: #4c668a;
+}
+
+.sidenav a:hover {
+	background-color: #ebeef2;
+}
+
+.sidenav a.active {
+	background-color: #d9dfe7;
+	border-right: 6px inset #ffd8e8;
+}
+
+.main-content {
+  	margin-left: 240px; /* Same as the width of the sidenav */
+	padding-bottom: 50px;
+}
+
+.content-section {
+	max-width: 1080px;
+	padding-right: 60px;
+	font-size: 20px;
+}
+
+.content_list {
+	text-align: left;
+}
+
+.content_list li {
+	margin: 20px;
+}
+
+a.back_to_home {
+	font-size: 15px;
+}
+
+footer {
+	background-color: #042f6d;
+	color: #ffb4d3;
+	text-decoration: none;
+	position: relative;
+	z-index: 1;
+	padding: 0pt 30px;
+	margin-top: auto;
+}

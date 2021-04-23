@@ -1,0 +1,112 @@
+<nav class="sidenav">
+	<a class="back_to_home" href="/">&lt; Back to home</a>
+	<a href="what_is_js">What Is Javascript</a>
+	<a class="active" href="basic">Basic Syntax</a>
+	<a href="control_flow_loops">Control Flow and Loops</a>
+	<a href="objects">Objects and JSON</a>
+	<a href="webconsole_dom">Javascript in Web Development</a>
+</nav>
+
+<script src="/js/prism.js"></script>
+
+<main class='main-content'>
+	<h1>Basic Syntax</h1>
+	<div class="content-section content-text">
+		<h3 class="subtitle">Comments</h3>
+
+<p>
+Comments are just as important in Javascript as in every other language. The syntax of comments is the same as in Java, C and and in many other languages:
+</p>
+<pre>
+<code class="language-javascript">// Comment on a single line </code>
+<code class="language-javascript">/* Comment over several lines 
+ * Insert informative message here.
+ */
+</code>
+<code class="language-javascript">/* No /* Nesting */ Like This */</code>
+</pre>
+
+
+		<h3 class="subtitle">Variable Declerations</h3>
+<p>
+Three options to declare a variable:
+</p>
+<pre><code class="language-javascript">
+var x = 1;
+let y = 1;
+const z = 1
+</code> 
+</pre>
+<p>
+You should be using let and const, as var is no longer needed in almost all cases (It is has been replaced by the more modern let and const).
+<br>
+
+The "let" keyword declares a block-scoped, local variable, optionally initializing it to a value.
+<br>
+<pre><code class="language-javascript">let a; 
+let x; 
+x = "hello";
+</code></pre>
+<p>
+The const keyword declares a block-scoped, read-only named constant. Note that const is like python properties of reference types i.e objects are not protected, only the name (reference)
+</p>
+<pre><code class="language-javascript">const h = "constant"</code></pre>
+
+</p>
+		<h3 class="subtitle">What is Variable Scope</h3>
+<p>
+When you declare a variable outside of any function, it is called a global variable, because it is available to any other code in the current document. When you declare a variable within a function, it is called a local variable, because it is available only within that function.
+</p>
+
+		<h3 class="subtitle">Arithmatic and Logical Operators</h3> 
+<p>
+These operators are exactly the same as in Java. However, it is important to note that the == does not behave the same as in other languages. Instead === should be used.
+
+<ul>
+	<li> <b>Comparison Operators</b>
+		<ul>
+			<li> === strict equality: == behaves differently and should not be used.
+			</li>
+			<li> !== strict inequality. != behaves differently and should not be used.
+			</li>
+			<li>&lt;</li>
+			<li>&gt;</li>
+			<li>&lt;=</li>
+			<li>&gt;=</li>
+
+		</ul>
+
+	</li>
+	<li>
+		<b>Arithmatic Operators</b>
+		<ul>
+			<li>+</li>
+			<li>-</li>
+			<li>*</li>
+			<li>/</li>
+			<li>%</li>
+			<li>++</li>
+			<li>--</li>
+			<li>**</li>
+		</ul>
+	</li>
+	<li> 
+		<b>Logical Operators</b>
+		<ul>
+			<li>&#38;&#38;</li>
+			<li>||</li>
+			<li>!</li>
+		</ul>
+	</li>
+</ul>
+</p>
+
+<h3 class="subtitle">Sources</h3>
+
+<p>
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types#basics <br>
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_Operators#comparison_operators
+</p>
+
+</main>
