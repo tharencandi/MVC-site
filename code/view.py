@@ -3,6 +3,7 @@
 # You can find a fuller explanation for this file in the README file
 #-----------------------------------------------------------------------------
 
+from bottle import SimpleTemplate
 import string
 
 class View():
@@ -40,14 +41,14 @@ class View():
             :: tailer :: Tailer template to use
             :: kwargs :: Keyword arguments to pass
         '''
-        body_template = self.load_template(filename)
-        header_template = self.load_template(header)
-        tailer_template = self.load_template(tailer)
+        body_tpl = self.load_template(filename)
+        header_tpl= self.load_template(header)
+        tailer_tpl= self.load_template(tailer)
 
         rendered_template = self.render(
-            body_template=body_template, 
-            header_template=header_template, 
-            tailer_template=tailer_template, 
+            body_template=body_tpl, 
+            header_template=header_tpl, 
+            tailer_template=tailer_tpl, 
             **kwargs)
 
         return rendered_template
@@ -67,7 +68,7 @@ class View():
         for line in file:
             text+= line
         file.close()
-        return text
+        return SimpleTemplate(text)
 
 
     def render(self, body_template, header_template, tailer_template, **kwargs):
@@ -78,16 +79,14 @@ class View():
             :: template :: The template to use
             :: kwargs :: The local key value pairs to pass to the template
         '''
-        # Construct the head, body and tail separately
-        rendered_body = self.simple_render(body_template, **kwargs)
-        rendered_head = self.simple_render(header_template, **kwargs)
-        rendered_tail = self.simple_render(tailer_template, **kwargs)
+        # Construct the head, body and tail separately 
+        # global renders will be overidden by k,v from kwargs
+        rendered_body = body_template.render(self.global_renders | kwargs)
+        rendered_head = header_template.render(self.global_renders | kwargs)
+        rendered_tail = tailer_template.render(self.global_renders | kwargs)
 
         # Join them
         rendered_template = rendered_head + rendered_body + rendered_tail
-
-        # Apply any global templating that needs to occur
-        rendered_template = self.global_render(rendered_template)
 
         # Return the template
         return rendered_template
