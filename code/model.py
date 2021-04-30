@@ -165,3 +165,5 @@ def forum_new_post():
 def faq():
     # Forum landing post
     return page_view("faq")
+
+

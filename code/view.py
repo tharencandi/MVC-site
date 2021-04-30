@@ -68,7 +68,8 @@ class View():
         for line in file:
             text+= line
         file.close()
-        return SimpleTemplate(text)
+        tpl = SimpleTemplate(text)
+        return tpl
 
 
     def render(self, body_template, header_template, tailer_template, **kwargs):
