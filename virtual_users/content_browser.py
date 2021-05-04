@@ -23,8 +23,15 @@ class virtual_user:
         username = getpass.getpass()
         password = getpass.getpass()
 
-        #need to make sign_up page for website 
-        #can then login with this function for every vu
+        name_f = self.driver.find_element_by_name('username')
+        name_f.clear()
+        name_f.send_keys(username)
+
+        pass_f = self.driver.find_element_by_name('password')
+        pass_f.clear()
+        pass_f.send_keys(password)
+
+        pass_f.submit()
 
     def visit(self, page_url):
         self.driver.get(page_url)
