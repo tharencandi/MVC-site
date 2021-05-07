@@ -6,13 +6,13 @@
     <div class="post">
     <article class ="new_post">
         <a href="forum_post"></a>
-            <form class="post_form">
+            <form class="post_form", action="/forum_new_post", method="POST">
                 <p>Question</p>
-                <input class="title_box" type = "text" id="title" name="answer">
+                <input class="title_box" type = "text" id="title" name="title">
                 <p>Elaboration</p>
-                <input class="body_box" type = "text" id="body" name="answer">
+                <input class="body_box" type = "text" id="body" name="body">
                 <p>select sub-forum</p>
-                <select id="select_forum" name="select_forum">
+                <select id="select_forum" name="forum">
                     <option value="general">General</option>
                     <option value="httw">The Web</option>
                     <option value="html">HTML</option>
