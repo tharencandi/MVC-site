@@ -226,3 +226,10 @@ def get_forum_landing():
     """
     return model.faq()
 #-----------------------------------------------------------------------------
+
+@get('/admin/users')
+def get_users():
+    """
+        serves user page
+    """
+    return model.admin_users()
