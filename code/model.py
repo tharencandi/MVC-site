@@ -15,7 +15,7 @@ import bcrypt
 page_view = view.View()
 
 db = db_manager()
-db.execute()
+
 
 cookies = {}
 #-----------------------------------------------------------------------------
@@ -157,9 +157,13 @@ def forum_landing():
 
 #-----------------------------------------------------------------------------
 
-def forum_post():
+def forum_post(id):
     # Forum landing post
-    return page_view("forum_post")
+    res = db.get_post_thread(id)
+    print(res)
+    post = res[0]
+    replies = res[1:]
+    return page_view("d_forum/forum_post", post=post, replies=replies)
 
 #-----------------------------------------------------------------------------
 
@@ -174,13 +178,33 @@ def forum_create_new_post(cookie, post):
     user_id = cookies.get(cookie)
 
     #post_details :(author_id, forum, title, body, parent_id )
-    print("USER ID:", user_id)
  
     res = db.add_post(post_details=[user_id, post["forum"], post["title"], post["body"], post["parent_id"]])
     if res == False:
         return page_view("error", reason="internal server error")
-    return page_view("forum\{}".format(post["forum"]))
+    return forum_page(post["forum"])
 
+def create_post_reply(cookie, post):
+    if cookie not in cookies:
+        return page_view("error", reason="must be logged in")
+    user_id = cookies.get(cookie)
+    parent_post = db.get_post(post["parent_id"])
+    print("\n parent")
+    print(parent_post)
+    post["body"] = ""
+    try:
+        res = db.add_post(post_details=[user_id, parent_post["forum"], post["title"], post["body"], post["parent_id"]])
+    except:
+        return page_view("error", reason="internal server error")
+        
+    if res == False:
+        return page_view("error", reason="internal server error")
+    return forum_post(post["parent_id"])
+
+    
+
+   
+    
 #-----------------------------------------------------------------------------
 
 def faq():

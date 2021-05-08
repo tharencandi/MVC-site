@@ -66,12 +66,14 @@ class db_manager:
         try:
           
             query = "SELECT u.id, password, salt FROM Users u WHERE u.username=?;"
-            result = self.cur.execute(query,(username,)).fetchall()[0]
-            #result = self.db_get_request(query, (username))
+            result = self.cur.execute(query,(username,)).fetchall()
+            if len(result) != 0:
+                result = result[0]
+                #result = self.db_get_request(query, (username))
          
-            #print(bcrypt.hashpw(password.encode(),result["salt"]))
-            if result["password"] ==  bcrypt.hashpw(password.encode(),result["salt"].encode()).decode():
-                return (True, result["id"])
+                #print(bcrypt.hashpw(password.encode(),result["salt"]))
+                if result["password"] ==  bcrypt.hashpw(password.encode(),result["salt"].encode()).decode():
+                    return (True, result["id"])
             return (False, None)
         except sqlite3.OperationalError as e:
             print(e)

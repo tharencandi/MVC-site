@@ -211,12 +211,21 @@ def get_forum_landing():
     return model.forum_landing()
 #-----------------------------------------------------------------------------
 
-@get('/forum_post')
-def get_forum_post():
+@get('/forum_post/<id>')
+def get_forum_post(id):
+    print("hello")
     """
         serves forum static content page
     """
-    return model.forum_post()
+    return model.forum_post(id)
+
+@post('/forum_post/<id>')
+def forum_reply(id):
+    print("hello")
+    cookie = request.get_cookie('authentication').encode()
+    request.forms["parent_id"] = id
+    return model.create_post_reply(cookie=cookie, post=request.forms)
+
 #-----------------------------------------------------------------------------
 
 @get('/forum_new_post')
@@ -229,9 +238,9 @@ def get_forum_post():
 @post('/forum_new_post')
 def create_forum_post():
     cookie = request.get_cookie('authentication').encode()
-    print("cook", cookie)
     request.forms["parent_id"] = -1
     return model.forum_create_new_post(cookie=cookie, post=request.forms)
+
 #-----------------------------------------------------------------------------
 
 @get('/faq')
