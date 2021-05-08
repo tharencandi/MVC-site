@@ -227,6 +227,7 @@ def get_forum_landing():
     return model.faq()
 #-----------------------------------------------------------------------------
 
+
 @get('/admin/users')
 def get_users():
     """
@@ -245,3 +246,4 @@ def del_post(pid):
 @delete('/users/<uid>')
 def del_post(uid):
     model.del_user(uid)
+

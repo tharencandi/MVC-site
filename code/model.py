@@ -166,6 +166,7 @@ def faq():
     # Forum landing post
     return page_view("faq")
 
+
 #-----------------------------------------------------------------------------
 
 def admin_users():
@@ -189,3 +190,4 @@ def del_post(pid):
             
 def del_user(uid):
     print(f"delete user {uid}")
+
