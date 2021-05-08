@@ -131,6 +131,26 @@ a.back_to_home {
 	font-size: 15px;
 }
 
+.user-list, .user-post {
+	list-style-type: none;
+	text-decoration: none;
+	text-align: left;
+}
+
+.user-post {
+	padding: 10px 10px;
+	margin-bottom: 10px;
+}
+
+.user-post > li {
+	padding-bottom: 10px;
+}
+.user-list > li {
+	border-bottom: 4px solid #ffb4d3;
+	padding-bottom: 15px
+}
+
+
 footer {
 	background-color: #042f6d;
 	color: #ffb4d3;

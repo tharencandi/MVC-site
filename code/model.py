@@ -169,7 +169,17 @@ def faq():
 #-----------------------------------------------------------------------------
 
 def admin_users():
-    users = [{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000}]}]
+    users = [{"id": 1, "username": "tharen", "num_posts": 9000000}, {"id": 2, "username": "tharen", "num_posts": 9000000}]
+    # "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000, "title": "bla bla"}]
     return page_view("admin_users", users=users)
 
+def admin_posts(user):
+    # get the users name, number of posts and posts 
+    username="Username"
+    num_posts = 1
+    posts = [{"id": 1, "reports": 1000, "title": "bla bla"}, {"id": 2, "reports": 1000, "title": "bla bla"}, {"id": 3, "reports": 1000, "title": "bla bla"}]
+
+    return page_view("admin_posts", username=username, num_posts=num_posts, posts=posts)
+
+            
 

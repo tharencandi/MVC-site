@@ -233,3 +233,8 @@ def get_users():
         serves user page
     """
     return model.admin_users()
+
+@get('/admin/users/<uid>')
+def get_posts(uid):
+    return model.admin_posts(uid)
+
