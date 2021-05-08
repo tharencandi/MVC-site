@@ -15,7 +15,7 @@
 #-----------------------------------------------------------------------------
 
 import sys
-from bottle import run
+from bottle import run, PasteServer
 
 #-----------------------------------------------------------------------------
 # You may eventually wish to put these in their own directories and then load 
@@ -44,7 +44,7 @@ def run_server():
         run_server
         Runs a bottle server
     '''
-    run(host=host, port=port, debug=debug)
+    run(host=host, port=port, debug=debug, server=PasteServer)
 
 #-----------------------------------------------------------------------------
 # Optional SQL support

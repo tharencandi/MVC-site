@@ -44,6 +44,11 @@ def login_form():
 
 # Check the login credentials
 def login_check(username, password):
+
+    ##########################################
+    ##########################################
+    ##########################################
+    ########            API          #########
     '''
         login_check
         Checks usernames and passwords
@@ -53,9 +58,11 @@ def login_check(username, password):
 
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
+
     
     (login, id) = db.check_credentials(username, password)
     
+
     if login == False:
         err_str = "Incorrect username/password"
         
@@ -77,6 +84,10 @@ def signup_form():
     return page_view("signup")
 
 def create_user(username, password, confirm_password):
+    ##########################################
+    ##########################################
+    ##########################################
+    ########            API          #########
     '''
         User sign up logic
         Returns success page if success,
@@ -210,3 +221,4 @@ def create_post_reply(cookie, post):
 def faq():
     # Forum landing post
     return page_view("faq") 
+
