@@ -166,12 +166,10 @@ def faq():
     # Forum landing post
     return page_view("faq")
 
-<<<<<<< HEAD
 #-----------------------------------------------------------------------------
 
 def admin_users():
-    users = [{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000}]}]
-    page_view("admin_user_list", users=users)
-=======
+    users = [{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000}]}]
+    return page_view("admin_users", users=users)
 
->>>>>>> tpl_rewrite
+

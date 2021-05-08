@@ -88,7 +88,6 @@ class View():
 
         # Join them
         rendered_template = rendered_head + rendered_body + rendered_tail
-
         # Return the template
         return rendered_template
 
