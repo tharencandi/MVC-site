@@ -4,7 +4,7 @@
     maybe some simple program logic
 '''
 
-from bottle import route, get, post, request, static_file
+from bottle import route, get, post, request, static_file, delete
 
 import model
 
@@ -238,3 +238,10 @@ def get_users():
 def get_posts(uid):
     return model.admin_posts(uid)
 
+@delete('/posts/<pid>')
+def del_post(pid):
+    model.del_post(pid)
+
+@delete('/users/<uid>')
+def del_post(uid):
+    model.del_user(uid)

@@ -181,5 +181,11 @@ def admin_posts(user):
 
     return page_view("admin_posts", username=username, num_posts=num_posts, posts=posts)
 
-            
 
+def del_post(pid):
+    print("delete http method")
+    print(pid)
+
+            
+def del_user(uid):
+    print(f"delete user {uid}")
