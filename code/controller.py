@@ -6,17 +6,21 @@
 
 
 
-from bottle import route, get, post, request, static_file, response, delete
+#from bottle import route, get, post, request, static_file, response, delete
+from bottle import request, static_file, response
 
+import bottle_instance
 
 import model
+
+app = bottle_instance.app
 
 #-----------------------------------------------------------------------------
 # Static file paths
 #-----------------------------------------------------------------------------
 
 # Allow image loading
-@route('/img/<picture:path>')
+@app.route('/img/<picture:path>')
 def serve_pictures(picture):
     '''
         serve_pictures
@@ -32,7 +36,7 @@ def serve_pictures(picture):
 #-----------------------------------------------------------------------------
 
 # Allow CSS
-@route('/css/<css:path>')
+@app.route('/css/<css:path>')
 def serve_css(css):
     '''
         serve_css
@@ -48,7 +52,7 @@ def serve_css(css):
 #-----------------------------------------------------------------------------
 
 # Allow javascript
-@route('/js/<js:path>')
+@app.route('/js/<js:path>')
 def serve_js(js):
     '''
         serve_js
@@ -64,7 +68,7 @@ def serve_js(js):
 #-----------------------------------------------------------------------------
 
 # Allow serving file
-@route('/file/<filename:path>')
+@app.route('/file/<filename:path>')
 def serve_file(filename):
     '''
         serve_file
@@ -82,8 +86,8 @@ def serve_file(filename):
 #-----------------------------------------------------------------------------
 
 # Redirect to login
-@get('/')
-@get('/home')
+@app.get('/')
+@app.get('/home')
 def get_index():
     '''
         get_index
@@ -95,7 +99,7 @@ def get_index():
 #-----------------------------------------------------------------------------
 
 # Display the login page
-@get('/login')
+@app.get('/login')
 def get_login_controller():
     '''
         get_login
@@ -110,7 +114,7 @@ def get_login_controller():
 #-----------------------------------------------------------------------------
 
 # Attempt the login
-@post('/login')
+@app.post('/login')
 def post_login():
     '''
         post_login
@@ -132,7 +136,7 @@ def post_login():
 
 #-----------------------------------------------------------------------------
 
-@get('/signup')
+@app.get('/signup')
 def get_signup_controller():
     '''
         get_signup
@@ -143,7 +147,7 @@ def get_signup_controller():
 
 
 
-@post('/signup')
+@app.post('/signup')
 def post_signup():
     '''
         post_login
@@ -164,7 +168,7 @@ def post_signup():
 
 #-----------------------------------------------------------------------------
 
-@get('/about')
+@app.get('/about')
 def get_about():
     '''
         get_about
@@ -175,8 +179,8 @@ def get_about():
    
 #-----------------------------------------------------------------------------
 
-@route('/content', method='GET')
-@get('/content/<cat>')
+@app.route('/content', method='GET')
+@app.get('/content/<cat>')
 def get_content_index(cat=""):
     """
         serves a content index page
@@ -185,7 +189,7 @@ def get_content_index(cat=""):
 
 #-----------------------------------------------------------------------------
 
-@get('/content/<cat>/<sub_cat>')
+@app.get('/content/<cat>/<sub_cat>')
 def get_content(cat, sub_cat):
     """
         serves a content page
@@ -193,7 +197,7 @@ def get_content(cat, sub_cat):
     return model.content(cat, sub_cat)
 #-----------------------------------------------------------------------------
 
-@get('/content/<cat>/<sub_cat>/<sub_sub_cat>')
+@app.get('/content/<cat>/<sub_cat>/<sub_sub_cat>')
 def get_content_example(cat, sub_cat, sub_sub_cat):
     """
         serves a content page
@@ -202,11 +206,11 @@ def get_content_example(cat, sub_cat, sub_sub_cat):
   
 #-----------------------------------------------------------------------------
 
-@get('/forum/<cat>')
+@app.get('/forum/<cat>')
 def get_forum_page(cat):
     return model.forum_page(cat)
 
-@get('/forum')
+@app.get('/forum')
 def get_forum_landing():
     """
         serves static forum page
@@ -214,7 +218,7 @@ def get_forum_landing():
     return model.forum_landing()
 #-----------------------------------------------------------------------------
 
-@get('/forum_post/<id>')
+@app.get('/forum_post/<id>')
 def get_forum_post(id):
     print("hello")
     """
@@ -222,7 +226,7 @@ def get_forum_post(id):
     """
     return model.forum_post(id)
 
-@post('/forum_post/<id>')
+@app.post('/forum_post/<id>')
 def forum_reply(id):
     print("hello")
     cookie = request.get_cookie('authentication').encode()
@@ -231,14 +235,14 @@ def forum_reply(id):
 
 #-----------------------------------------------------------------------------
 
-@get('/forum_new_post')
+@app.get('/forum_new_post')
 def get_forum_post():
     """
         serves to write a post
     """
     return model.forum_new_post()
 
-@post('/forum_new_post')
+@app.post('/forum_new_post')
 def create_forum_post():
     cookie = request.get_cookie('authentication').encode()
     request.forms["parent_id"] = -1
@@ -246,7 +250,7 @@ def create_forum_post():
 
 #-----------------------------------------------------------------------------
 
-@get('/faq')
+@app.get('/faq')
 def get_forum_landing():
     """
         serves static forum page
@@ -255,22 +259,22 @@ def get_forum_landing():
 #-----------------------------------------------------------------------------
 
 
-@get('/admin/users')
+@app.get('/admin/users')
 def get_users():
     """
         serves user page
     """
     return model.admin_users()
 
-@get('/admin/users/<uid>')
+@app.get('/admin/users/<uid>')
 def get_posts(uid):
     return model.admin_posts(uid)
 
-@delete('/posts/<pid>')
+@app.delete('/posts/<pid>')
 def del_post(pid):
     model.del_post(pid)
 
-@delete('/users/<uid>')
+@app.delete('/users/<uid>')
 def del_post(uid):
     model.del_user(uid)
 
