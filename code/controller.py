@@ -4,7 +4,10 @@
     maybe some simple program logic
 '''
 
-from bottle import route, get, post, request, static_file, response
+
+
+from bottle import route, get, post, request, static_file, response, delete
+
 
 import model
 
@@ -250,4 +253,24 @@ def get_forum_landing():
     """
     return model.faq()
 #-----------------------------------------------------------------------------
+
+
+@get('/admin/users')
+def get_users():
+    """
+        serves user page
+    """
+    return model.admin_users()
+
+@get('/admin/users/<uid>')
+def get_posts(uid):
+    return model.admin_posts(uid)
+
+@delete('/posts/<pid>')
+def del_post(pid):
+    model.del_post(pid)
+
+@delete('/users/<uid>')
+def del_post(uid):
+    model.del_user(uid)
 
