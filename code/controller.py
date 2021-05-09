@@ -4,7 +4,7 @@
     maybe some simple program logic
 '''
 
-from bottle import route, get, post, request, static_file
+from bottle import route, get, post, request, static_file, response
 
 import model
 
@@ -99,7 +99,10 @@ def get_login_controller():
         
         Serves the login page
     '''
+    
     return model.login_form()
+  
+    
 
 #-----------------------------------------------------------------------------
 
@@ -118,8 +121,11 @@ def post_login():
     password = request.forms.get('password')
     
     # Call the appropriate method
-    return model.login_check(username, password)
-
+    (page, cookie) = model.login_check(username, password)
+    print("COOOKIE", cookie)
+    response.set_cookie('authentication', cookie.decode('utf-8'))
+    return page
+    
 
 #-----------------------------------------------------------------------------
 
@@ -149,6 +155,8 @@ def post_signup():
     confirm_password = request.forms.get('confirm_password')
 
     return model.create_user(username=username, password=password, confirm_password=confirm_password)
+    
+    
 
 
 #-----------------------------------------------------------------------------
@@ -203,12 +211,21 @@ def get_forum_landing():
     return model.forum_landing()
 #-----------------------------------------------------------------------------
 
-@get('/forum_post')
-def get_forum_post():
+@get('/forum_post/<id>')
+def get_forum_post(id):
+    print("hello")
     """
         serves forum static content page
     """
-    return model.forum_post()
+    return model.forum_post(id)
+
+@post('/forum_post/<id>')
+def forum_reply(id):
+    print("hello")
+    cookie = request.get_cookie('authentication').encode()
+    request.forms["parent_id"] = id
+    return model.create_post_reply(cookie=cookie, post=request.forms)
+
 #-----------------------------------------------------------------------------
 
 @get('/forum_new_post')
@@ -217,6 +234,13 @@ def get_forum_post():
         serves to write a post
     """
     return model.forum_new_post()
+
+@post('/forum_new_post')
+def create_forum_post():
+    cookie = request.get_cookie('authentication').encode()
+    request.forms["parent_id"] = -1
+    return model.forum_create_new_post(cookie=cookie, post=request.forms)
+
 #-----------------------------------------------------------------------------
 
 @get('/faq')

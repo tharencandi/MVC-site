@@ -7,12 +7,17 @@
 '''
 import view
 import random
-from sql import SQLDatabase
+
+from database_manager import db_manager
+import bcrypt
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
-db = SQLDatabase("database.db")
 
+db = db_manager()
+
+
+cookies = {}
 #-----------------------------------------------------------------------------
 # Index
 #-----------------------------------------------------------------------------
@@ -53,15 +58,23 @@ def login_check(username, password):
 
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
-    login = db.check_credentials(username, password)
+
+    
+    (login, id) = db.check_credentials(username, password)
+    
 
     if login == False:
         err_str = "Incorrect username/password"
         
     if login: 
-        return page_view("success", name=username)
+
+        cookie = bcrypt.gensalt()
+        cookies[cookie] = id
+        
+        print(cookie)
+        return (page_view("success", name=username), cookie)
     else:
-        return page_view("error", reason=err_str)
+        return (page_view("error", reason=err_str), None)
 
 def signup_form():
     '''
@@ -82,15 +95,17 @@ def create_user(username, password, confirm_password):
     '''
     if username == None or password == None or confirm_password == None:
         return page_view("error", reason="Internal server error")
-    
     if password != confirm_password:
         return page_view("error", reason="Password does not match!")
 
-    result = db.add_user(username=username, password=password)
-    if result[0] == True:
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode(), salt).decode()
+    (result, err) = db.add_user((username, hashed_password, salt.decode(), 0))
+ 
+    if result == True:
         return page_view("success", name=username)
     else:
-        return page_view("error", reason=result[1])
+        return page_view("error", reason=err)
 
     
 
@@ -142,7 +157,9 @@ def content(cat, sub_cat):
 
 def forum_page(cat):
     path = f"d_forum/{cat}"
-    return page_view(path)
+    posts = db.get_posts(cat)
+    print(posts)
+    return page_view("d_forum/forum", posts=posts)
 
 
 def forum_landing():
@@ -151,19 +168,57 @@ def forum_landing():
 
 #-----------------------------------------------------------------------------
 
-def forum_post():
+def forum_post(id):
     # Forum landing post
-    return page_view("forum_post")
+    res = db.get_post_thread(id)
+    print(res)
+    post = res[0]
+    replies = res[1:]
+    return page_view("d_forum/forum_post", post=post, replies=replies)
 
 #-----------------------------------------------------------------------------
 
 def forum_new_post():
     # Forum landing post
-    return page_view("forum_new_post")
+    return page_view("d_forum/forum_new_post")
+
+def forum_create_new_post(cookie, post):
+    if cookie not in cookies:
+        print("cookie not found")
+        return page_view("error", reason="must be logged in")
+    user_id = cookies.get(cookie)
+
+    #post_details :(author_id, forum, title, body, parent_id )
+ 
+    res = db.add_post(post_details=[user_id, post["forum"], post["title"], post["body"], post["parent_id"]])
+    if res == False:
+        return page_view("error", reason="internal server error")
+    return forum_page(post["forum"])
+
+def create_post_reply(cookie, post):
+    if cookie not in cookies:
+        return page_view("error", reason="must be logged in")
+    user_id = cookies.get(cookie)
+    parent_post = db.get_post(post["parent_id"])
+    print("\n parent")
+    print(parent_post)
+    post["body"] = ""
+    try:
+        res = db.add_post(post_details=[user_id, parent_post["forum"], post["title"], post["body"], post["parent_id"]])
+    except:
+        return page_view("error", reason="internal server error")
+        
+    if res == False:
+        return page_view("error", reason="internal server error")
+    return forum_post(post["parent_id"])
+
+    
+
+   
+    
 #-----------------------------------------------------------------------------
 
 def faq():
     # Forum landing post
-    return page_view("faq")
-
+    return page_view("faq") 
 

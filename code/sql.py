@@ -39,19 +39,28 @@ class SQLDatabase():
     # Default admin password
     def database_setup(self, admin_password='admin'):
 
-        # Clear the database if needed
-        self.execute("DROP TABLE IF EXISTS Users")
-        self.commit()
 
         # Create the users table
-        self.execute("""CREATE TABLE Users(
-            id INT,
-            username TEXT,
-            password TEXT,
+        self.execute("""
+        CREATE TABLE IF NOT EXISTS Users(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            password TEXT NOT NULL,
             admin INTEGER DEFAULT 0
         )""")
 
         self.commit()
+
+        self.execute("""
+        CREATE TABLE IF NOT EXISTS Posts(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            author_id INTEGER NOT NULL,
+            forum TEXT NOT NULL,
+            title TEXT NOT NULL,
+            body TEXT NOT NULL,
+            parent_id INTEGER DEFAULT -1,
+            FOREIGN KEY (author_id) REFERENCES Users (id)
+        """)
 
         # Add our admin user
         self.add_user('admin', admin_password, is_admin=True)
