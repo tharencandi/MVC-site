@@ -125,8 +125,9 @@ def post_login():
     
     # Call the appropriate method
     (page, cookie) = model.login_check(username, password)
-    print("COOOKIE", cookie)
-    response.set_cookie('authentication', cookie.decode('utf-8'))
+    if cookie != None:
+        print("COOOKIE", cookie)
+        response.set_cookie('authentication', cookie.decode('utf-8'))
     return page
     
 
@@ -225,7 +226,9 @@ def get_forum_post(id):
 @post('/forum_post/<id>')
 def forum_reply(id):
     print("hello")
-    cookie = request.get_cookie('authentication').encode()
+    cookie = request.get_cookie('authentication')
+    if cookie != None:
+        cookie = cookie.encode()
     request.forms["parent_id"] = id
     return model.create_post_reply(cookie=cookie, post=request.forms)
 

@@ -7,17 +7,64 @@
 '''
 import view
 import random
-
-from database_manager import db_manager
+import socket
+import json
 import bcrypt
+import hashlib
+from datetime import date, datetime, timedelta
 
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
 
-db = db_manager()
-
-
 cookies = {}
+
+def db_req(function, paramaters):
+
+    query = {
+        "function": function,
+        "params": paramaters,
+        "auth": "password",      
+    }
+    HOST, PORT = "localhost", 9999
+    # SOCK_DGRAM is the socket type to use for UDP sockets
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto(bytes(json.dumps(query), encoding="utf-8"), (HOST, PORT))
+    data = sock.recv(2048)
+    if data != None:
+        received = json.loads(data.decode())
+        return received
+    return None
+
+
+def encrypt_password(password,salt):
+    m = hashlib.sha512()
+    m.update(password.encode())
+    hashed_password = m.digest()
+    if salt == None:
+        salt = bcrypt.gensalt()
+    encrypted_password = bcrypt.hashpw(hashed_password, salt)
+    return encrypted_password, salt
+
+def create_cookie(user_id):
+    cookie = bcrypt.gensalt()
+    cookies[cookie] = [user_id, datetime.now()]
+    return cookie
+
+def get_id(cookie):
+    if cookie in cookies:
+        print("coookie")
+        birth_time = cookies.get(cookie)[1]
+        now = datetime.now()
+        tdelta = now - birth_time
+        delta_threshold = timedelta(minutes=5)
+        print(tdelta)
+        print(delta_threshold)
+        if tdelta > delta_threshold:
+            cookies.pop(cookie)
+            return None
+        return cookies.get(cookie)[0]
+    return None
+
 #-----------------------------------------------------------------------------
 # Index
 #-----------------------------------------------------------------------------
@@ -42,6 +89,7 @@ def login_form():
 
 #-----------------------------------------------------------------------------
 
+  
 # Check the login credentials
 def login_check(username, password):
 
@@ -58,23 +106,25 @@ def login_check(username, password):
 
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
+    salt = db_req("get_salt_by_username", {"username": username})[0]["salt"]
 
-    
-    (login, id) = db.check_credentials(username, password)
-    
+    encrypted_password, salt = encrypt_password(password, salt.encode())
+    print(encrypted_password)
 
-    if login == False:
+    res = db_req("check_credentials", {"username": username, "password": encrypted_password.decode(),})
+    print("REEEEEE", res)
+
+    if res["success"] == False :
+        print("hello")
         err_str = "Incorrect username/password"
-        
-    if login: 
-
-        cookie = bcrypt.gensalt()
-        cookies[cookie] = id
-        
-        print(cookie)
-        return (page_view("success", name=username), cookie)
-    else:
         return (page_view("error", reason=err_str), None)
+    else:
+
+        cookie = create_cookie(res["id"])
+     
+        return (page_view("success", name=username), cookie)
+ 
+        
 
 def signup_form():
     '''
@@ -82,6 +132,9 @@ def signup_form():
         Returns the view for the signup_form
     '''
     return page_view("signup")
+
+
+
 
 def create_user(username, password, confirm_password):
     ##########################################
@@ -98,14 +151,14 @@ def create_user(username, password, confirm_password):
     if password != confirm_password:
         return page_view("error", reason="Password does not match!")
 
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode(), salt).decode()
-    (result, err) = db.add_user((username, hashed_password, salt.decode(), 0))
- 
-    if result == True:
+
+    encrypted_password, salt = encrypt_password(password=password, salt=None)
+    res = db_req("add_user", {'username': username, 'password': encrypted_password.decode(), "salt": salt.decode(), "is_admin": 0})
+   
+    if res["success"] == True:
         return page_view("success", name=username)
     else:
-        return page_view("error", reason=err)
+        return page_view("error", reason=res["error_msg"])
 
     
 
@@ -157,9 +210,8 @@ def content(cat, sub_cat):
 
 def forum_page(cat):
     path = f"d_forum/{cat}"
-    posts = db.get_posts(cat)
-    print(posts)
-    return page_view("d_forum/forum", posts=posts)
+    posts = db_req("get_posts", {"forum": cat})
+    return page_view("d_forum/forum", forum=cat, posts=posts)
 
 
 def forum_landing():
@@ -170,7 +222,7 @@ def forum_landing():
 
 def forum_post(id):
     # Forum landing post
-    res = db.get_post_thread(id)
+    res = db_req("get_post_thread", {"id": id})
     print(res)
     post = res[0]
     replies = res[1:]
@@ -183,31 +235,53 @@ def forum_new_post():
     return page_view("d_forum/forum_new_post")
 
 def forum_create_new_post(cookie, post):
-    if cookie not in cookies:
+
+    user_id = get_id(cookie)
+    if user_id == None:
         print("cookie not found")
         return page_view("error", reason="must be logged in")
-    user_id = cookies.get(cookie)
+
+  
 
     #post_details :(author_id, forum, title, body, parent_id )
- 
-    res = db.add_post(post_details=[user_id, post["forum"], post["title"], post["body"], post["parent_id"]])
-    if res == False:
+
+    post_dict = {
+        "author_id": user_id,
+        "forum": post["forum"],
+        "title": post["title"],
+        "body": post["body"],
+        "parent_id": -1,
+    } 
+    res = db_req("add_post",  post_dict)
+
+    if res["success"] == False:
         return page_view("error", reason="internal server error")
     return forum_page(post["forum"])
 
 def create_post_reply(cookie, post):
-    if cookie not in cookies:
+
+    user_id = get_id(cookie)
+    if user_id == None:
+        print("cookie not found")
         return page_view("error", reason="must be logged in")
-    user_id = cookies.get(cookie)
-    parent_post = db.get_post(post["parent_id"])
+
+    parent_post = db_req("get_post", {"id": post["parent_id"]})[0]
+   
     print("\n parent")
     print(parent_post)
-    post["body"] = ""
-    try:
-        res = db.add_post(post_details=[user_id, parent_post["forum"], post["title"], post["body"], post["parent_id"]])
-    except:
-        return page_view("error", reason="internal server error")
-        
+
+    
+    post_dict = {
+        "title": "",
+        "body": post["answer"], 
+        "forum": parent_post["forum"],
+        "parent_id": post["parent_id"],
+        "author_id": user_id,
+    }
+
+
+    res = db_req("add_post", post_dict )
+  
     if res == False:
         return page_view("error", reason="internal server error")
     return forum_post(post["parent_id"])
