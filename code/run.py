@@ -26,6 +26,8 @@ from bottle import run, PasteServer
 import model
 import view
 import controller
+import bottle_instance
+application = bottle_instance.app
 
 #-----------------------------------------------------------------------------
 
@@ -44,7 +46,7 @@ def run_server():
         run_server
         Runs a bottle server
     '''
-    run(host=host, port=port, debug=debug, server=PasteServer)
+    run(application, host=host, port=port, debug=debug, server=PasteServer)
 
 #-----------------------------------------------------------------------------
 # Optional SQL support
@@ -105,4 +107,5 @@ def run_commands(args):
 
 #-----------------------------------------------------------------------------
 
-run_commands(sys.argv)
+if "__main__" == __name__:
+    run_commands(sys.argv)
