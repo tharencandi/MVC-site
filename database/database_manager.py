@@ -87,8 +87,8 @@ class db_manager:
         self.conn.commit()
         return json.dumps({"success": True})
 
-    #def get_user(self, params ):
-     #   pass
+    def get_user(self, params ):
+        pass
 
     def get_salt_by_username(self, params):
         query = """SELECT p.salt FROM Users p WHERE p.username =?;"""
@@ -148,7 +148,17 @@ class db_manager:
             return json.dumps({"success": True})
         except sqlite3.OperationalError:
             return json.dumps({"success": False})
+    
+    def is_admin(self, params):
+        print("params")
+        query = """SELECT u.admin FROM Users u WHERE u.id=?;"""
+        res = None
+        try:
+            res = json.dumps(self.db_get_request(query, (params['user_id'])))
+        except:
+            return res
         
+        return res
 
 
     

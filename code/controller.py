@@ -11,6 +11,29 @@ from bottle import route, get, post, request, static_file, response, delete
 
 import model
 
+# some utility functions 
+
+"""
+    Takes a request object and tries to get the session cookie
+    
+    Returns the session_cookie value if one exists, otherwise returns None
+
+    If an unspecified exception occurs it returns None
+"""
+def safe_get_session(request):
+    try:
+        if not request:
+            return None
+
+        session_cookie = request.get_cookie('authentication')
+
+        if not session_cookie:
+            return None
+        
+        return session_cookie
+    
+    except:
+        return None
 #-----------------------------------------------------------------------------
 # Static file paths
 #-----------------------------------------------------------------------------
@@ -62,6 +85,9 @@ def serve_js(js):
     return static_file(js, root='static/js/')
 
 #-----------------------------------------------------------------------------
+############# THIS IS BROKEN ################
+############ CAN'T CORRECTLY CHANGE NAVBAR FOR ADMINS SINCE ITS STATIC
+############# NEED TO CHANGE TO A MODEL PAGE VIEW
 
 # Allow serving file
 @route('/file/<filename:path>')
@@ -90,7 +116,8 @@ def get_index():
         
         Serves the index page
     '''
-    return model.index()
+    session_cookie = safe_get_session(request)
+    return model.index(session=session_cookie)
 
 #-----------------------------------------------------------------------------
 
@@ -102,8 +129,9 @@ def get_login_controller():
         
         Serves the login page
     '''
+    session_cookie = safe_get_session(request)
     
-    return model.login_form()
+    return model.login_form(session=session_cookie)
   
     
 
@@ -127,7 +155,7 @@ def post_login():
     (page, cookie) = model.login_check(username, password)
     if cookie != None:
         print("COOOKIE", cookie)
-        response.set_cookie('authentication', cookie.decode('utf-8'))
+        response.set_cookie('authentication', cookie)
     return page
     
 
@@ -140,6 +168,9 @@ def get_signup_controller():
 
         Serves the sign up page
     '''
+    session_cookie = safe_get_session(request)
+    if session_cookie:
+        #shouldn't be able to signup if already loggin in
     return model.signup_form()
 
 
@@ -182,7 +213,8 @@ def get_content_index(cat=""):
     """
         serves a content index page
     """
-    return model.content_index(cat)
+    session_cookie = safe_get_session(request)
+    return model.content_index(cat, session=session_cookie)
 
 #-----------------------------------------------------------------------------
 
@@ -191,28 +223,37 @@ def get_content(cat, sub_cat):
     """
         serves a content page
     """
-    return model.content(cat, sub_cat)
+    session_cookie = safe_get_session(request)
+    return model.content(cat, sub_cat, session=session_cookie)
 #-----------------------------------------------------------------------------
+
+############# THIS IS BROKEN ################
+############ CAN'T CORRECTLY CHANGE NAVBAR FOR ADMINS SINCE ITS STATIC
+############# NEED TO CHANGE TO A MODEL PAGE VIEW
 
 @get('/content/<cat>/<sub_cat>/<sub_sub_cat>')
 def get_content_example(cat, sub_cat, sub_sub_cat):
     """
         serves a content page
     """
+    session_cookie = safe_get_session(request)
+
     return static_file(sub_sub_cat+".html", root="./templates/d_content/" + cat + "/" + sub_cat + "/" )
   
 #-----------------------------------------------------------------------------
 
 @get('/forum/<cat>')
 def get_forum_page(cat):
-    return model.forum_page(cat)
+    session_cookie = safe_get_session(request)
+    return model.forum_page(cat, session=)
 
 @get('/forum')
 def get_forum_landing():
     """
         serves static forum page
     """
-    return model.forum_landing()
+    session_cookie = safe_get_session(request)
+    return model.forum_landing(session=session_cookie)
 #-----------------------------------------------------------------------------
 
 @get('/forum_post/<id>')
@@ -221,16 +262,16 @@ def get_forum_post(id):
     """
         serves forum static content page
     """
-    return model.forum_post(id)
+    session_cookie = safe_get_session(request)
+    return model.forum_post(id, session=session_cookie)
 
 @post('/forum_post/<id>')
 def forum_reply(id):
     print("hello")
-    cookie = request.get_cookie('authentication')
-    if cookie != None:
-        cookie = cookie.encode()
+
     request.forms["parent_id"] = id
-    return model.create_post_reply(cookie=cookie, post=request.forms)
+    session_cookie = safe_get_session(request)
+    return model.create_post_reply(session=session_cookie, post=request.forms)
 
 #-----------------------------------------------------------------------------
 
@@ -239,13 +280,16 @@ def get_forum_post():
     """
         serves to write a post
     """
-    return model.forum_new_post()
+    session_cookie = safe_get_session(request)
+    return model.forum_new_post(session=session_cookie)
 
 @post('/forum_new_post')
 def create_forum_post():
-    cookie = request.get_cookie('authentication').encode()
+
     request.forms["parent_id"] = -1
-    return model.forum_create_new_post(cookie=cookie, post=request.forms)
+
+    session_cookie = safe_get_session(request)
+    return model.forum_create_new_post(session=session_cookie, post=request.forms)
 
 #-----------------------------------------------------------------------------
 
@@ -254,7 +298,8 @@ def get_forum_landing():
     """
         serves static forum page
     """
-    return model.faq()
+    session_cookie = safe_get_session(request)
+    return model.faq(session=session_cookie)
 #-----------------------------------------------------------------------------
 
 
@@ -263,17 +308,21 @@ def get_users():
     """
         serves user page
     """
-    return model.admin_users()
+    session_cookie = safe_get_session(request)
+    return model.admin_users(session=session_cookie)
 
 @get('/admin/users/<uid>')
 def get_posts(uid):
-    return model.admin_posts(uid)
+    session_cookie = safe_get_session(request)
+    return model.admin_posts(uid, session=session_cookie)
 
 @delete('/posts/<pid>')
 def del_post(pid):
-    model.del_post(pid)
+    session_cookie = safe_get_session(request)
+    model.del_post(pid, session=session_cookie)
 
 @delete('/users/<uid>')
 def del_post(uid):
-    model.del_user(uid)
+    session_cookie = safe_get_session(request)
+    model.del_user(uid, session=session_cookie)
 

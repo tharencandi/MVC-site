@@ -17,7 +17,8 @@ db_functions = {
     "get_post_thread": db.get_post_thread,
     "report_post": db.report_post,
     "add_post": db.add_post,
-    "get_salt_by_username": db.get_salt_by_username
+    "get_salt_by_username": db.get_salt_by_username,
+    "is_admin": db.is_admin
 }
 
 def parse_request(data):
