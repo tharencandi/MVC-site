@@ -92,7 +92,7 @@ def index(session_cookie=None):
     if session_cookie:
         return page_view("index", has_session=True, is_admin=session_cookie[2])
 
-    return page_view("index")
+    return page_view("index", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
 # Login
@@ -107,7 +107,7 @@ def login_form(session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
     if session_cookie:
         return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
-    return page_view("login")
+    return page_view("login", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
 
@@ -143,12 +143,12 @@ def login_check(username, password, session_cookie=None):
     if res["success"] == False :
         print("hello")
         err_str = "Incorrect username or password"
-        return (page_view("error", message=err_str), None)
+        return (page_view("error", message=err_str, has_session=False, is_admin=False), None)
     else:
 
         cookie = create_cookie(res["id"])
      
-        return (page_view("success", name=global_san.sanitize(username)), cookie)
+        return (page_view("success", name=global_san.sanitize(username), has_session=False, is_admin=False), cookie)
  
         
 
@@ -162,7 +162,7 @@ def signup_form(session_cookie=None):
     if session_cookie:
         return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
 
-    return page_view("signup")
+    return page_view("signup", has_session=False, is_admin=False)
 
 
 
@@ -178,23 +178,23 @@ def create_user(username, password, confirm_password, session_cookie=None):
         return page_view("error", message="Please logout before creating a user", has_session=True, is_admin=session_cookie[2])
 
     if username == None or password == None or confirm_password == None:
-        return page_view("error", message="Internal server error")
+        return page_view("error", message="Internal server error", has_session=False, is_admin=False)
     
     ##### Doesn't black list script tags need to fix
     if global_san.contains_black_list(username):
-        return page_view("error", message="That username is not allowed")
+        return page_view("error", message="That username is not allowed", has_session=False, is_admin=False)
 
     if password != confirm_password:
-        return page_view("error", message="Password does not match!")
+        return page_view("error", message="Password does not match!", has_session=False, is_admin=False)
 
 
     hashed_password, salt = encrypt_password(password=password, salt=None)
     res = db_req("add_user", {'username': username, 'password': hashed_password.decode(), "salt": salt.decode(), "is_admin": 0})
    
     if res["success"] == True:
-        return page_view("success", name=global_san.sanitize(username))
+        return page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=False)
     else:
-        return page_view("error", message=global_san.sanitize(res["error_msg"]))
+        return page_view("error", message=global_san.sanitize(res["error_msg"]), has_session=False, is_admin=False)
 
     
 #----------------------------------------------------------------------------
@@ -202,16 +202,11 @@ def create_user(username, password, confirm_password, session_cookie=None):
 def content_index(cat, session_cookie=None):
     path = "content"
 
-    try:
-        if session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("content", is_admin=session_cookie[2])
-    except:
-        pass
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+            return page_view("content", has_session=True, is_admin=session_cookie[2])
 
-    return page_view("content")
+    return page_view("content", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
 
@@ -223,7 +218,7 @@ def content(cat, sub_cat, session_cookie=None):
     if session_cookie:
             return page_view(path, has_session=True, is_admin=session_cookie[2])
     
-    return page_view(path, has_session=False)
+    return page_view(path, has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
 
@@ -237,7 +232,7 @@ def forum_page(cat, session_cookie=None):
         return page_view("d_forum/forum", forum=cat, posts=posts, hasSession=True, is_admin=session_cookie[2])
 
 
-    return page_view("d_forum/forum", forum=cat, posts=posts, has_session=False)
+    return page_view("d_forum/forum", forum=cat, posts=posts, has_session=False, is_admin=False)
 
 
 def forum_landing(session_cookie=None):
@@ -247,7 +242,7 @@ def forum_landing(session_cookie=None):
     if session_cookie:
         return page_view("forum", has_session=True, is_admin=session_cookie[2])
 
-    return page_view("forum", has_session=False)
+    return page_view("forum", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
 
@@ -264,7 +259,7 @@ def forum_post(pid, session_cookie=None):
         return page_view("d_forum/forum_post", post=post, replies=replies, has_session=True, is_admin=session_cookie[2])
 
 
-    return page_view("d_forum/forum_post", post=post, replies=replies, has_session=False)
+    return page_view("d_forum/forum_post", post=post, replies=replies, has_session=False, is_admin=False)
 
 
 #-----------------------------------------------------------------------------
@@ -274,7 +269,7 @@ def forum_new_post(session_cookie=None):
 
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
-        return page_view("error", message="Please log in to post.")
+        return page_view("error", message="Please log in to post.", has_session=False, is_admin = False)
 
     return page_view("d_forum/forum_new_post", has_session=True, is_admin=session_cookie[2])
 
@@ -283,7 +278,7 @@ def forum_create_new_post(post, session_cookie=None):
 
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
-        return page_view("error", message="Please log in to post.")
+        return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
 
   
 
@@ -299,7 +294,7 @@ def forum_create_new_post(post, session_cookie=None):
 
     for key in post_dict:
         if global_san.contains_black_list(post_dict[key]):
-            return page_view("error", message="Sorry, your reply could not be added.")
+            return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
         else:
             post_dict[key] = global_san.sanitize(post_dict[key])
 
@@ -311,7 +306,7 @@ def create_post_reply(post, session_cookie=None):
 
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
-        return page_view("error", message="Please log in to post.")
+        return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
 
     parent_post = db_req("get_post", {"id": post["parent_id"]})[0]
    
@@ -325,7 +320,7 @@ def create_post_reply(post, session_cookie=None):
 
     for key in post_dict:
         if global_san.contains_black_list(post_dict[key]):
-            return page_view("error", message="Sorry, your reply could not be added.")
+            return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
         else:
             post_dict[key] = global_san.sanitize(post_dict[key])
 
@@ -333,7 +328,7 @@ def create_post_reply(post, session_cookie=None):
     res = db_req("add_post", post_dict)
   
     if res == False:
-        return page_view("error", reason="internal server error", has_session=True)
+        return page_view("error", reason="internal server error", has_session=True, is_admin=session_cookie[2])
 
     return forum_post(post["parent_id"], session_cookie)
 
@@ -346,8 +341,14 @@ def faq(session_cookie=None):
     if session_cookie:
         return page_view("faq", has_session = True, is_admin=session_cookie[2]) 
 
-    return page_view("faq") 
+    return page_view("faq", has_session=False, is_admin=False) 
 
+def about(session_cookie=None):
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("about", has_session=True, is_admin=session_cookie[2])
+
+    return page_view("about", has_session=False, is_admin=False)
 #-----------------------------------------------------------------------------
 
 def admin_users():
@@ -357,8 +358,10 @@ def admin_users():
 
 def admin_posts(user, session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
-    if not session_cookie or not session_cookie[2]:
-        page_view("error", message="You do not have permission to view this resource.")
+    if not session_cookie:
+        page_view("error", message="You do not have permission to view this resource.", has_session=False, is_admin=False)
+    if not session_cookie[2]:
+        page_view("error", message="You do not have permission to view this resource.", has_session=True, is_admin=False)
     
     
     

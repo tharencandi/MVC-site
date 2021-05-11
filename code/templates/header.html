@@ -24,7 +24,10 @@
     <a href="/about">About Us</a>
     % if is_admin:
     <a href="/admin/users">User Management</a>
-    %
+    % end
+
+    % if not has_session:
     <a id="login" href="/login">Sign In</a>
+    % end
   </div> 
 </nav>
