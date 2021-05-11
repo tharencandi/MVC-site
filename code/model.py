@@ -5,18 +5,20 @@
     It should exist as a separate layer to any database or data structure that you might be using
     Nothing here should be stateful, if it's stateful let the database handle it
 '''
-import view
-import random
 import socket
 import json
 import bcrypt
 import hashlib
+import secrets
 from datetime import date, datetime, timedelta
 
+import view
+from sanitizer import Sanitizer
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
 
 cookies = {}
+global_san = Sanitizer()
 
 def db_req(function, paramaters):
 
@@ -46,13 +48,13 @@ def encrypt_password(password,salt):
     return encrypted_password, salt
 
 def create_cookie(user_id, is_admin = False):
-    cookie = bcrypt.Random.get_random_bytes(16)
+    cookie = secrets.token_hex(16)
     cookies[cookie] = [user_id, datetime.now(), is_admin]
     return cookie
 
 """Ensures a cookie exists and hasn't expired. If it exists and hasn't expired,
 expory time is reset to 5 minutes from current time"""
-def get_cookie(cookie):
+def validate_cookie(cookie):
     if not cookie:
         return None
 
@@ -70,7 +72,7 @@ def get_cookie(cookie):
             else:
                 exp_time = now + timedelta(minutes=5)
                 cookies.get(cookie)[1] = exp_time
-                res = cookies.get(cookie)[0]
+                res = cookies.get(cookie)
     except:
         return None
 
@@ -80,44 +82,38 @@ def get_cookie(cookie):
 # Index
 #-----------------------------------------------------------------------------
 
-def index(unvalidated_session_cookie=None):
+def index(session_cookie=None):
     '''
         index
         Returns the view for the index
     '''
-    try:
-        if unvalidated_session_cookie:
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("index", is_admin=session_cookie[2])
-    except:
-        pass
 
-    return page_view("index", message=None)
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("index", has_session=True, is_admin=session_cookie[2])
+
+    return page_view("index")
 
 #-----------------------------------------------------------------------------
 # Login
 #-----------------------------------------------------------------------------
 
-def login_form(unvalidated_session_cookie=None):
+def login_form(session_cookie=None):
     '''
         login_form
         Returns the view for the login_form
     '''
-    try:
-        if unvalidated_session_cookie:
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("index", is_admin=session_cookie[2])
-    except:
-        pass
-    return page_view("login", message=None)
+
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
+    return page_view("login")
 
 #-----------------------------------------------------------------------------
 
   
 # Check the login credential
-def login_check(username, password):
+def login_check(username, password, session_cookie=None):
 
     ##########################################
     ##########################################
@@ -132,78 +128,78 @@ def login_check(username, password):
 
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
+
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
+
     salt = db_req("get_salt_by_username", {"username": username})[0]["salt"]
 
     encrypted_password, salt = encrypt_password(password, salt.encode())
     print(encrypted_password)
 
     res = db_req("check_credentials", {"username": username, "password": encrypted_password.decode(),})
-    print("REEEEEE", res)
 
     if res["success"] == False :
         print("hello")
-        err_str = "Incorrect username/password"
-        return (page_view("error", reason=err_str), None)
+        err_str = "Incorrect username or password"
+        return (page_view("error", message=err_str), None)
     else:
 
         cookie = create_cookie(res["id"])
      
-        return (page_view("success", name=username), cookie)
+        return (page_view("success", name=global_san.sanitize(username)), cookie)
  
         
 
-def signup_form(unvalidated_session_cookie=None):
+def signup_form(session_cookie=None):
     '''
         signup_form
         Returns the view for the signup_form
     '''
-    try:
-        if unvalidated_session_cookie:
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("index", message="You are already signed in." is_admin=session_cookie[2])
-    except:
-        pass
+
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
 
     return page_view("signup")
 
 
 
 
-def create_user(username, password, confirm_password):
-    ##########################################
-    ##########################################
-    ##########################################
-    ########            API          #########
+def create_user(username, password, confirm_password, session_cookie=None):
     '''
         User sign up logic
         Returns success page if success,
         error page if failed with reasons defined here or sql.
     '''
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("error", message="Please logout before creating a user", has_session=True, is_admin=session_cookie[2])
+
     if username == None or password == None or confirm_password == None:
-        return page_view("error", reason="Internal server error")
+        return page_view("error", message="Internal server error")
+    
+    ##### Doesn't black list script tags need to fix
+    if global_san.contains_black_list(username):
+        return page_view("error", message="That username is not allowed")
+
     if password != confirm_password:
-        return page_view("error", reason="Password does not match!")
+        return page_view("error", message="Password does not match!")
 
 
-    encrypted_password, salt = encrypt_password(password=password, salt=None)
-    res = db_req("add_user", {'username': username, 'password': encrypted_password.decode(), "salt": salt.decode(), "is_admin": 0})
+    hashed_password, salt = encrypt_password(password=password, salt=None)
+    res = db_req("add_user", {'username': username, 'password': hashed_password.decode(), "salt": salt.decode(), "is_admin": 0})
    
     if res["success"] == True:
-        return page_view("success", name=username)
+        return page_view("success", name=global_san.sanitize(username))
     else:
-        return page_view("error", reason=res["error_msg"])
+        return page_view("error", message=global_san.sanitize(res["error_msg"]))
 
-    
-
-def set_user_pass(username, password):
-    original_username = username
-    original_password = password
-    return
     
 #----------------------------------------------------------------------------
 
-def content_index(cat, session=None):
+def content_index(cat, session_cookie=None):
     path = "content"
 
     try:
@@ -219,151 +215,137 @@ def content_index(cat, session=None):
 
 #-----------------------------------------------------------------------------
 
-def content(cat, sub_cat, session=None):
+def content(cat, sub_cat, session_cookie=None):
     # add type information and any other template vars to page view function
     path = "d_content/" + cat + "/" + sub_cat
 
-    try:
-        if session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view(path, is_admin=session_cookie[2])
-    except:
-        pass
-
-    return page_view(path)
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+            return page_view(path, has_session=True, is_admin=session_cookie[2])
+    
+    return page_view(path, has_session=False)
 
 #-----------------------------------------------------------------------------
 
-def forum_page(cat, session=None):
+def forum_page(cat, session_cookie=None):
     path = f"d_forum/{cat}"
     posts = db_req("get_posts", {"forum": cat})
-
-    try:
-        if session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("d_forum/forum", forum=cat, posts=posts, hasSession=True is_admin=session_cookie[2])
-    except:
-        pass
-
-    return page_view("d_forum/forum", forum=cat, posts=posts)
+    
+    session_cookie = validate_cookie(session_cookie)
+    
+    if session_cookie:
+        return page_view("d_forum/forum", forum=cat, posts=posts, hasSession=True, is_admin=session_cookie[2])
 
 
-def forum_landing(**kwargs):
+    return page_view("d_forum/forum", forum=cat, posts=posts, has_session=False)
+
+
+def forum_landing(session_cookie=None):
     # Forum landing page
-    try:
-        if session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("forum", hasSession=True, is_admin=session_cookie[2])
-    except:
-        pass
 
-    return page_view("forum")
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("forum", has_session=True, is_admin=session_cookie[2])
+
+    return page_view("forum", has_session=False)
 
 #-----------------------------------------------------------------------------
 
-def forum_post(id, **kwargs):
+def forum_post(pid, session_cookie=None):
     # Forum landing post
-    res = db_req("get_post_thread", {"id": id})
-    print(res)
+
+    session_cookie = validate_cookie(session_cookie)
+
+    res = db_req("get_post_thread", {"id": pid})
     post = res[0]
     replies = res[1:]
 
-    try:
-        if session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("d_forum/forum_post", post=post, replies=replies, hasSession=True is_admin=session_cookie[2])
-    except:
-        pass
+    if session_cookie:
+        return page_view("d_forum/forum_post", post=post, replies=replies, has_session=True, is_admin=session_cookie[2])
 
-    return page_view("d_forum/forum_post", post=post, replies=replies)
+
+    return page_view("d_forum/forum_post", post=post, replies=replies, has_session=False)
+
 
 #-----------------------------------------------------------------------------
 
-def forum_new_post(**kwargs):
+def forum_new_post(session_cookie=None):
     # Forum landing post
 
-    try:
-        if session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("d_forum/forum_new_post", hasSession=True, is_admin=session_cookie[2])
-    except:
-        pass
-    return page_view("login", message="Please log in before posting.")
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie:
+        return page_view("error", message="Please log in to post.")
 
-def forum_create_new_post(cookie, post):
+    return page_view("d_forum/forum_new_post", has_session=True, is_admin=session_cookie[2])
 
-    try:
-        if not session in kwargs:
-            unvalidated_session_cookie = kwargs['session']
-            session_cookie = get_cookie(unvalidated_session_cookie)
-            if session_cookie:
-                return page_view("d_forum/forum_new_post", hasSession=True, is_admin=session_cookie[2])
-    except:
-        pass
+
+def forum_create_new_post(post, session_cookie=None):
+
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie:
+        return page_view("error", message="Please log in to post.")
 
   
 
     #post_details :(author_id, forum, title, body, parent_id )
 
     post_dict = {
-        "author_id": user_id,
+        "author_id": cookies[session_cookie[0]],
         "forum": post["forum"],
         "title": post["title"],
         "body": post["body"],
         "parent_id": -1,
     } 
-    res = db_req("add_post",  post_dict)
 
-    if res["success"] == False:
-        return page_view("error", reason="internal server error")
-    return forum_page(post["forum"])
+    for key in post_dict:
+        if global_san.contains_black_list(post_dict[key]):
+            return page_view("error", message="Sorry, your reply could not be added.")
+        else:
+            post_dict[key] = global_san.sanitize(post_dict[key])
 
-def create_post_reply(cookie, post):
+    db_req("add_post",  post_dict)
 
-    user_id = get_id(cookie)
-    if user_id == None:
-        print("cookie not found")
-        return page_view("error", reason="must be logged in")
+    return forum_page(post["forum"], session_cookie)
+
+def create_post_reply(post, session_cookie=None):
+
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie:
+        return page_view("error", message="Please log in to post.")
 
     parent_post = db_req("get_post", {"id": post["parent_id"]})[0]
    
-    print("\n parent")
-    print(parent_post)
-
-    
     post_dict = {
         "title": "",
         "body": post["answer"], 
         "forum": parent_post["forum"],
         "parent_id": post["parent_id"],
-        "author_id": user_id,
+        "author_id": cookies[session_cookie[0]],
     }
 
+    for key in post_dict:
+        if global_san.contains_black_list(post_dict[key]):
+            return page_view("error", message="Sorry, your reply could not be added.")
+        else:
+            post_dict[key] = global_san.sanitize(post_dict[key])
 
-    res = db_req("add_post", post_dict )
+
+    res = db_req("add_post", post_dict)
   
     if res == False:
-        return page_view("error", reason="internal server error")
-    return forum_post(post["parent_id"])
+        return page_view("error", reason="internal server error", has_session=True)
 
-    
+    return forum_post(post["parent_id"], session_cookie)
 
-   
     
 #-----------------------------------------------------------------------------
 
-def faq():
+def faq(session_cookie=None):
     # Forum landing post
+    session_cookie = validate_cookie(session_cookie)
+    if session_cookie:
+        return page_view("faq", has_session = True, is_admin=session_cookie[2]) 
+
     return page_view("faq") 
 
 #-----------------------------------------------------------------------------
@@ -373,20 +355,37 @@ def admin_users():
     # "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000, "title": "bla bla"}]
     return page_view("admin_users", users=users)
 
-def admin_posts(user):
-    # get the users name, number of posts and posts 
-    username="Username"
-    num_posts = 1
-    posts = [{"id": 1, "reports": 1000, "title": "bla bla"}, {"id": 2, "reports": 1000, "title": "bla bla"}, {"id": 3, "reports": 1000, "title": "bla bla"}]
+def admin_posts(user, session_cookie=None):
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie or not session_cookie[2]:
+        page_view("error", message="You do not have permission to view this resource.")
+    
+    
+    
 
-    return page_view("admin_posts", username=username, num_posts=num_posts, posts=posts)
+    return page_view("admin_posts", username=username, num_posts=num_posts, posts=posts, has_session=True, is_admin=session_cookie[2])
 
 
-def del_post(pid):
-    print("delete http method")
-    print(pid)
+def del_post(pid, session_cookie=None):
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie or not session_cookie[2]:
+        return 
+    try:
+        pid = int(pid)
+        params = {"id": pid}
+    except ValueError:
+        return
+    db_req("delete_post", params)
 
             
-def del_user(uid):
-    print(f"delete user {uid}")
+def del_user(uid, session_cookie=None):
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie or not session_cookie[2]:
+        return 
+    try:
+        uid = int(uid)
+        params = {"id": uid}
+    except ValueError:
+        return
+    db_req("delete_user", params)
 

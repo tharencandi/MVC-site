@@ -1,1 +1,5 @@
-<p style="margin: 100px;">{{reason}} <a href="">Go back</a></p>
+% if message in kwargs:
+<p class="error-msg" style="margin: 100px;">{{message}}</p>
+else:
+<p class="error-msg" style="margin: 100px;">An error has occured. Please try again later</p>
+% end

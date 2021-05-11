@@ -87,7 +87,7 @@ class db_manager:
         self.conn.commit()
         return json.dumps({"success": True})
 
-    def get_user(self, params ):
+    def get_user(self, params):
         pass
 
     def get_salt_by_username(self, params):
