@@ -195,7 +195,10 @@ def post_signup():
     confirm_password = request.forms.get('confirm_password')
     
     session_cookie = safe_get_session(request)
-    return model.create_user(username=username, password=password, confirm_password=confirm_password, session_cookie=session_cookie)
+    (page, cookie) = model.create_user(username=username, password=password, confirm_password=confirm_password, session_cookie=session_cookie)
+    if cookie != None:
+        response.set_cookie('authentication', cookie)
+    return page
     
     
 

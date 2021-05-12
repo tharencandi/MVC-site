@@ -33,6 +33,7 @@ class View():
 
 
     def load_and_render(self, filename, header="header", tailer="tailer", **kwargs):
+        print(kwargs)
         ''' 
             Loads and renders templates
 
@@ -45,7 +46,7 @@ class View():
         header_tpl= self.load_template(header)
         tailer_tpl= self.load_template(tailer)
 
-        rendered_template = self.render(
+        rendered_template = self.c_render(
             body_template=body_tpl, 
             header_template=header_tpl, 
             tailer_template=tailer_tpl, 
@@ -72,7 +73,7 @@ class View():
         return tpl
 
 
-    def render(self, body_template, header_template, tailer_template, **kwargs):
+    def c_render(self, body_template, header_template, tailer_template, **kwargs):
         ''' 
             render
             A more complex render that joins global settings with local settings
@@ -82,6 +83,8 @@ class View():
         '''
         # Construct the head, body and tail separately 
         # global renders will be overidden by k,v from kwargs
+
+        print(kwargs)
         rendered_body = body_template.render(kwargs)
         rendered_head = header_template.render(kwargs)
         rendered_tail = tailer_template.render(kwargs)

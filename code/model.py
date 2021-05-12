@@ -21,6 +21,9 @@ cookies = {}
 global_san = Sanitizer()
 
 def db_req(function, paramaters):
+    print(paramaters)
+    print(function)
+
 
     query = {
         "function": function,
@@ -38,7 +41,8 @@ def db_req(function, paramaters):
     return None
 
 
-def encrypt_password(password,salt):
+def encrypt_password(password, salt):
+    print("akjfhsaldfdjk: " + password)
     m = hashlib.sha512()
     m.update(password.encode())
     hashed_password = m.digest()
@@ -53,7 +57,7 @@ def create_cookie(user_id, is_admin = False):
     return cookie
 
 """Ensures a cookie exists and hasn't expired. If it exists and hasn't expired,
-expory time is reset to 5 minutes from current time"""
+expiry time is reset to 5 minutes from current time"""
 def validate_cookie(cookie):
     if not cookie:
         return None
@@ -129,18 +133,22 @@ def login_check(username, password, session_cookie=None):
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
 
+    print("check_credentials")
     session_cookie = validate_cookie(session_cookie)
     if session_cookie:
-        return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
+        return (page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2]), None)
 
-    salt = db_req("get_salt_by_username", {"username": username})[0]["salt"]
+    db_res = db_req("get_salt_by_username", {"username": username})
+    print(db_res)
+    if not db_res or not "data" in db_res:
+        return (page_view("error", message="Incorrect username or password", has_session=False, is_admin=False), None)
+    salt = db_res["data"][0]["salt"]
 
     encrypted_password, salt = encrypt_password(password, salt.encode())
     print(encrypted_password)
-
     res = db_req("check_credentials", {"username": username, "password": encrypted_password.decode(),})
 
-    if res["success"] == False :
+    if res["status"] == False :
         print("hello")
         err_str = "Incorrect username or password"
         return (page_view("error", message=err_str, has_session=False, is_admin=False), None)
@@ -175,26 +183,28 @@ def create_user(username, password, confirm_password, session_cookie=None):
     '''
     session_cookie = validate_cookie(session_cookie)
     if session_cookie:
-        return page_view("error", message="Please logout before creating a user", has_session=True, is_admin=session_cookie[2])
+        return (page_view("error", message="Please logout before creating a user", has_session=True, is_admin=session_cookie[2]), None)
 
     if username == None or password == None or confirm_password == None:
-        return page_view("error", message="Internal server error", has_session=False, is_admin=False)
+        return (page_view("error", message="Internal server error", has_session=False, is_admin=False), None)
     
     ##### Doesn't black list script tags need to fix
     if global_san.contains_black_list(username):
-        return page_view("error", message="That username is not allowed", has_session=False, is_admin=False)
+        return (page_view("error", message="That username is not allowed", has_session=False, is_admin=False), None)
 
     if password != confirm_password:
-        return page_view("error", message="Password does not match!", has_session=False, is_admin=False)
+        return (page_view("error", message="Password does not match!", has_session=False, is_admin=False), None)
 
-
+    print(password)
     hashed_password, salt = encrypt_password(password=password, salt=None)
     res = db_req("add_user", {'username': username, 'password': hashed_password.decode(), "salt": salt.decode(), "is_admin": 0})
    
-    if res["success"] == True:
-        return page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=False)
+    if res["status"] == True:
+        cookie = create_cookie(res["id"]) 
+        return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=False), cookie)
     else:
-        return page_view("error", message=global_san.sanitize(res["error_msg"]), has_session=False, is_admin=False)
+        print(res)
+        return (page_view("error", message=global_san.sanitize(res["message"]), has_session=False, is_admin=False), None)
 
     
 #----------------------------------------------------------------------------
@@ -224,12 +234,13 @@ def content(cat, sub_cat, session_cookie=None):
 
 def forum_page(cat, session_cookie=None):
     path = f"d_forum/{cat}"
-    posts = db_req("get_posts", {"forum": cat})
+    db_res = db_req("get_posts", {"forum": cat})
+    posts = db_res["data"]
     
     session_cookie = validate_cookie(session_cookie)
     
     if session_cookie:
-        return page_view("d_forum/forum", forum=cat, posts=posts, hasSession=True, is_admin=session_cookie[2])
+        return page_view("d_forum/forum", forum=cat, posts=posts, has_session=True, is_admin=session_cookie[2])
 
 
     return page_view("d_forum/forum", forum=cat, posts=posts, has_session=False, is_admin=False)
@@ -251,9 +262,9 @@ def forum_post(pid, session_cookie=None):
 
     session_cookie = validate_cookie(session_cookie)
 
-    res = db_req("get_post_thread", {"id": pid})
-    post = res[0]
-    replies = res[1:]
+    db_res = db_req("get_post_thread", {"id": pid})
+    post = db_res["data"][0]
+    replies = db_res["data"][1:]
 
     if session_cookie:
         return page_view("d_forum/forum_post", post=post, replies=replies, has_session=True, is_admin=session_cookie[2])

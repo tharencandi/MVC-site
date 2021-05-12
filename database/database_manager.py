@@ -4,6 +4,7 @@ import json
 import bcrypt
 
 forums=["general", "html", "htww", "javascript", "web-frameworks"]
+
 def dict_factory(cursor, row):
         d = {}
         for idx, col in enumerate(cursor.description):
@@ -12,7 +13,7 @@ def dict_factory(cursor, row):
 
 
 class db_manager:
-    def __init__(self, ):
+    def __init__(self):
             self.conn = sqlite3.connect('database.db')
             self.conn.row_factory = dict_factory
             self.cur = self.conn.cursor()
@@ -24,7 +25,8 @@ class db_manager:
                         username TEXT NOT NULL UNIQUE,
                         password TEXT NOT NULL,
                         salt TEXT NOT NULL,
-                        is_admin INTEGER DEFAULT 0
+                        is_admin INTEGER DEFAULT 0,
+                        is_banned INTEGER DEFAULT 0
                     )''')
     
             #Posts
@@ -41,6 +43,91 @@ class db_manager:
                     )''')
 
             self.conn.commit()
+
+            self.actions = {
+  
+                "add_user": self.add_user,
+                "check_credentials": self.check_credentials,
+                "delete_user": self.delete_user,
+                "admin_data": self.admin_data,
+                "get_posts": self.get_posts,
+                "get_post": self.get_post, 
+                "delete_post": self.delete_post,
+                "get_post_thread": self.get_post_thread,
+                "report_post": self.report_post,
+                "add_post": self.add_post,
+                "get_salt_by_username": self.get_salt_by_username,
+                "is_admin": self.is_admin
+            }
+    
+    """Safe transaction. Logging should be done here"""
+    def safe_transaction_wrapper(self, data):
+        response = None
+        if not data:
+            response = self.error_response("No data provided.", None)
+        
+        try:
+            data = data.decode()
+            data = json.loads(data)
+        except ValueError:
+                response = self.error_response("Couldn\'t decode data.")
+                return self.response_builder(response)
+
+        try:
+            params = data["params"]
+        except ValueError:
+            response = self.error_response("No params field.")
+            return self.response_builder(response)
+
+        try:
+            function = data["function"]
+        except KeyError:
+            response = self.error_response("No function field.")
+            return self.response_builder(response)
+
+        try:
+            callback = self.actions[function]
+        except KeyError:
+            response = self.error_response("No function field.")
+            return self.response_builder(response)
+
+        
+        # run function
+        try:
+            response = callback(params)
+        except sqlite3.OperationalError as e:
+            print("here")
+            print(e)
+            response = self.error_response("Database operational error.", params)
+        except KeyError:
+            response = self.error_response("Missing or bad parameter.", params)
+
+        return self.response_builder(response)
+
+    
+    """Error has response, error logging should be done here"""
+    def error_response(self, message, req_params=None):
+        if message:
+            response = {"status": False, "message": message}
+        else:
+            response = {"status": False, "message": "Bad request."}
+
+        return response
+    
+
+    """
+    Safe response builder. Will return error response if it fails.
+    """
+    def response_builder(self, response):
+        if not response:
+            response = self.error_response(None)
+
+        try:
+            json_res = json.dumps(response)
+        except ValueError:
+            json_res = json.dumps(self.error_response("Bad response format."))
+
+        return json_res
     
    
     def db_get_request(self, query, to_filter):
@@ -52,54 +139,85 @@ class db_manager:
     #details (username, hashed_password, salt)
     def add_user(self, params):
         #check if username exists
+        response = None
         try:
-            query = "INSERT INTO Users (username, password, salt, is_admin) VALUES (?,?,?,?)"
+            query = "INSERT INTO Users (username, password, salt, is_admin, is_banned) VALUES (?,?,?,?,0)"
+            print("here")
+            print(params['password'])
             self.cur.execute(query, (params['username'], params['password'], params['salt'], params['is_admin']))
+
             self.conn.commit()
-            ret = {"success": True}
-            return json.dumps(ret)
-        except sqlite3.OperationalError:
-            ret = {"success": False, "error_msg": "Internal server error"}
-            return json.dumps(ret)
+            uid = self.get_user_id({"username": params["username"]})
+            response = {"status": True, "id": uid, "message": None}
+
         except sqlite3.IntegrityError:
-            ret = {"success": False, "error_msg": "username already exists"}
-            return json.dumps(ret)
+            response = {"status": False, "message": "Username already exists"}
+
+        return response
+
     
     #details (username, hashed_password)
     def check_credentials(self, params):
-        try:
-            query = "SELECT u.id, password, salt FROM Users u WHERE u.username=?;"
-            result = self.cur.execute(query,(params["username"],)).fetchall()
-            if len(result) != 0:
-                result = result[0]
-                if result["password"] == params["password"]:
-                    print("SUCCCCCC")
-                    return json.dumps({"success": True, "id": result["id"]})
-            return json.dumps({"success": False})
-        except sqlite3.OperationalError as e:
-            print(e)
-            return json.dumps({"success": False})
+        print("checking creds")
+        print(self.cur.execute("SELECT * FROM Users").fetchall())
+        query = "SELECT u.id, password, salt FROM Users u WHERE u.username=?;"
+        print("here")
+        print(params)
+        result = self.cur.execute(query,(params["username"],)).fetchall()
+        print(result)
+
+        if result:
+            result = result[0]
+            if result["password"] == params["password"]:
+                return {"status": True, "id": result["id"]}
+            else:
+                return {"status": False, "message": "Passwords do not match"}
+
+        return {"status": False, "message": "Username does not match"}
 
 
     def delete_user(self, params):
         query = "DELETE FROM Users u WHERE u.id=?;"
         self.cur.execute(query,(params["id"],))
         self.conn.commit()
-        return json.dumps({"success": True})
+        return {"status": True}
 
-    def get_user(self, params):
-        pass
+    def ban_user(self, params):
+        query = "UPDATE Users SET is_banned=1 WHERE id=?;"
+        self.cur.execute(query, (params["id"],))
+        self.conn.commit()
+        return {"status": True}
+
+    def unban_user(self, params):
+        query = "UPDATE Users SET is_banned=0 WHERE id=?;"
+        self.cur.execute(query, (params["id"],))
+        self.conn.commit()
+        return {"status": True}
+    
+    def is_banned(self, params):
+        query = """SELECT is_banned FROM Users u WHERE id =?;"""
+        results = self.cur.execute(query, (params["id"], )).fetchall()
+        return {"status": True, "is_banned": results}
+
+    def get_user_id(self, params):
+        query = """SELECT u.id FROM Users u WHERE u.username=?;"""
+        res = self.cur.execute(query, (params["username"], )).fetchone()
+        print("asdasdasdasdasdasdasd: ")
+        print(res)
+        return res
 
     def get_salt_by_username(self, params):
         query = """SELECT p.salt FROM Users p WHERE p.username =?;"""
+        print(params)
         results = self.cur.execute(query, (params["username"], )).fetchall()
-        return json.dumps(results)
+        print(results)
+        return {"status": True, "data": results}
 
 
     def admin_data(self):
         query = """Select p.id, report_count, username FROM Posts p JOIN Users u ON p.author_id = u.id;"""
         results = self.cur.execute(query).fetchall()
-        return json.dumps(results)
+        return {"status": True, "data": results}
 
     """ 
         FORUM STUFF 
@@ -107,58 +225,43 @@ class db_manager:
    
     def get_posts(self, params):
         query = """SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE FORUM=? AND p.parent_id= -1;"""
-        try:
-            results = self.db_get_request(query, (params["forum"],))
-            return json.dumps(results)
-        except sqlite3.OperationalError:
-            return None
+        results = self.db_get_request(query, (params["forum"],))
+        return {"status": True, "data": results}
 
     def get_post(self, params):
         query = "SELECT p.id, forum, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? ;"
         results = self.db_get_request(query, (params["id"],))
-        return json.dumps(results)
+        return {"status": True, "data": results}
 
     def delete_post(self, params):
         query = "DELETE FROM Posts p WHERE p.id=?;"
         self.cur.execute(query,(params["id"],))
         self.conn.commit()
-        return json.dumps({"success": True})
+        return {"status": True}
     
     def get_post_thread(self, params):
         query = "SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? OR p.parent_id=?;"
-        try:
-            results = self.db_get_request(query, (params["id"],params["id"]))
-            return json.dumps(results)
-        except sqlite3.OperationalError:
-            return None
+        results = self.db_get_request(query, (params["id"],params["id"]))
+        return {"status": True, "data": results}
     
     def report_post(self, params):
         query = "UPDATE Posts SET report_count=report_count+1 WHERE id=?;"
         self.cur.execute(query, (params["id"],))
         self.conn.commit()
-        return json.dumps({"success": True})
+        return {"status": True}
 
     #post_details :(author_id, forum, title, body, parent_id )
     def add_post(self, params):
-        print("post details", params)
         query = "INSERT INTO Posts (author_id, forum, title, body, parent_id) VALUES (?, ?, ?, ?, ?);"
-        try:
-            self.cur.execute(query, (params["author_id"],params["forum"], params["title"], params["body"], params["parent_id"]))
-            self.conn.commit()
-            return json.dumps({"success": True})
-        except sqlite3.OperationalError:
-            return json.dumps({"success": False})
+        self.cur.execute(query, (params["author_id"],params["forum"], params["title"], params["body"], params["parent_id"]))
+        self.conn.commit()
+        return {"status": True}
     
     def is_admin(self, params):
         print("params")
-        query = """SELECT u.admin FROM Users u WHERE u.id=?;"""
-        res = None
-        try:
-            res = json.dumps(self.db_get_request(query, (params['user_id'])))
-        except:
-            return res
-        
-        return res
+        query = """SELECT u.is_admin FROM Users u WHERE u.id=?;"""
+        results = self.db_get_request(query, (params['user_id']))
+        return {"status": True, "data": results}
 
 
     
