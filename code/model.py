@@ -159,6 +159,10 @@ def login_check(username, password, session_cookie=None):
         return (page_view("success", name=global_san.sanitize(username), has_session=False, is_admin=False), cookie)
  
         
+    if login: 
+        return page_view("success", name=username)
+    else:
+        return page_view("error", reason=err_str)
 
 def signup_form(session_cookie=None):
     '''

@@ -3,8 +3,6 @@ import sqlite3
 con = sqlite3.connect('database.db')
 cur = con.cursor()
 
-
-
 #Users
 cur.execute('''
         CREATE TABLE IF NOT EXISTS Users (

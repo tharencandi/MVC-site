@@ -10,11 +10,11 @@
         <a href="forum_post"></a>
         <header class = post_head>
             <div>
-                <h1>{{post['title']}}</h1>
-                <div class="about">{{post['username']}}</div>
+                <h1>Routing problem</h1>
+                <div class="about">user_1231 answers: 10</div>
             </div>
         </header>
-            <p class="body">{{post['body']}}</p>
+            <p class="body"> I have tried to add routing to my bottle code but it is not working properly. It can't find the page for some reason.</p>
     </article>
     </div>
 
@@ -22,7 +22,7 @@
     <div class = reply>
         <article class ="answer">
         <p>reply here:</p>
-        <form class="reply_form", action="/forum_post/{{post['id']}}", method="POST">
+        <form class="reply_form">
             <input class="answer_box" type ="text" id="answer" name="answer">
             <input class="submit" type="submit" value="Submit">
         </form>
@@ -33,18 +33,23 @@
 
     <div class="answers">
         <h1> 2 Answers</h1>
-        %for reply in replies:
         <article class="answer">
             <div class="about">
-                 {{reply["username"]}} 
+                 user_2352 
             </div>
             <p class="body">
-                {{reply["body"]}}
+                Can you send your code? Are you sure you have the correct directory to the html page you are trying to route?
             </p>
         </article>
-        %end
-       
-        
+        <article class="answer">
+            <div class="about">
+                 user_sasd 
+            </div>
+            <p class="body">
+                make sure you have a '/' in the route.
+            </p>
+        </article>
+   
 
         
 </div>
