@@ -1,0 +1,13 @@
+<div id=main>
+	<ul class="user-list">
+		% for u in users:
+		<li> 
+		<h2 class="username">{{u["username"]}}</h2>
+		<div class="id">User ID: {{u["id"]}}</div>
+		<div class="num_posts">Number of posts: {{u["num_posts"]}}</div>
+		<h4><a href="/admin/users/{{u["id"]}}">See Posts</a></h4>
+		<button id="{{u["id"]}}"class=remove-btn-user>Remove User</button>
+		</li>
+		% end
+	</ul>
+</div>
