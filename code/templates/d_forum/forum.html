@@ -1,14 +1,14 @@
 <nav class="sidenav">
     <a class="active" href="general">General</a>
-	<a href="htww">How The Web Works</a>
-	<a href="html">HTML</a>
-	<a href="css">CSS</a>
-	<a href="web-framework">Web Frameworks</a>
-	<a href="javascript">JavaScript</a>
+	<a href="/forum/htww">How The Web Works</a>
+	<a href="/forum/html">HTML</a>
+	<a href="/forum/css">CSS</a>
+	<a href="/forum/web-framework">Web Frameworks</a>
+	<a href="/forum/javascript">JavaScript</a>
 </nav>
 
 <main class='main-content'>
-<h1>General - Forum</h1>
+<h1>{{forum}} - Forum</h1>
 <article class ="all_posts">
     <div class="heading">
     <h1 class="forum_h1">All questions</h1>
@@ -27,14 +27,14 @@
         <article class ="a_post">
             <header class = post_head>
                 <div>
-                    <a href="/forum_post/{{post{'id'}}}">
-                        <h1>={{row["title"]}}</h1>
+                    <a href="/forum_post/{{post['id']}}">
+                        <h1>{{post["title"]}}</h1>
                     </a>
-                    <div class="about">{{row["username"]}}</div>
+                    <div class="about">{{post["username"]}}</div>
                 </div>
             </header>
-            <p class="body">{{row["body"]}}</p>
+            <p class="body">{{post["body"]}}</p>
         </article>
-        &end
+        %end
     </div>
 </main>

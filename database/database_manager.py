@@ -50,44 +50,51 @@ class db_manager:
 
 
     #details (username, hashed_password, salt)
-    def add_user(self, details):
+    def add_user(self, params):
         #check if username exists
         try:
-            self.cur.execute("INSERT INTO Users (username, password, salt, is_admin) VALUES (?,?,?,?)", details)
+            query = "INSERT INTO Users (username, password, salt, is_admin) VALUES (?,?,?,?)"
+            self.cur.execute(query, (params['username'], params['password'], params['salt'], params['is_admin']))
             self.conn.commit()
-            return (True, None)
+            ret = {"success": True}
+            return json.dumps(ret)
         except sqlite3.OperationalError:
-            return (False, "Internal server error")
+            ret = {"success": False, "error_msg": "Internal server error"}
+            return json.dumps(ret)
         except sqlite3.IntegrityError:
-            return (False, "username already exists")
+            ret = {"success": False, "error_msg": "username already exists"}
+            return json.dumps(ret)
     
     #details (username, hashed_password)
-    def check_credentials(self, username, password):
+    def check_credentials(self, params):
         try:
-          
             query = "SELECT u.id, password, salt FROM Users u WHERE u.username=?;"
-            result = self.cur.execute(query,(username,)).fetchall()
+            result = self.cur.execute(query,(params["username"],)).fetchall()
             if len(result) != 0:
                 result = result[0]
-                #result = self.db_get_request(query, (username))
-         
-                #print(bcrypt.hashpw(password.encode(),result["salt"]))
-                if result["password"] ==  bcrypt.hashpw(password.encode(),result["salt"].encode()).decode():
-                    return (True, result["id"])
-            return (False, None)
+                if result["password"] == params["password"]:
+                    print("SUCCCCCC")
+                    return json.dumps({"success": True, "id": result["id"]})
+            return json.dumps({"success": False})
         except sqlite3.OperationalError as e:
             print(e)
-            return (False, None)
+            return json.dumps({"success": False})
 
 
-    def delete_user(self, id):
+    def delete_user(self, params):
         query = "DELETE FROM Users u WHERE u.id=?;"
-        self.cur.execute(query,(id,))
+        self.cur.execute(query,(params["id"],))
         self.conn.commit()
-        return True
+        return json.dumps({"success": True})
 
-    def get_user(self, id ):
-        pass
+    #def get_user(self, params ):
+     #   pass
+
+    def get_salt_by_username(self, params):
+        query = """SELECT p.salt FROM Users p WHERE p.username =?;"""
+        results = self.cur.execute(query, (params["username"], )).fetchall()
+        return json.dumps(results)
+
 
     def admin_data(self):
         query = """Select p.id, report_count, username FROM Posts p JOIN Users u ON p.author_id = u.id;"""
@@ -98,48 +105,49 @@ class db_manager:
         FORUM STUFF 
     """
    
-    def get_posts(self, forum):
-        query = """SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE FORUM=?;"""
+    def get_posts(self, params):
+        query = """SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE FORUM=? AND p.parent_id= -1;"""
         try:
-            results = self.db_get_request(query, (forum,))
+            results = self.db_get_request(query, (params["forum"],))
             return json.dumps(results)
         except sqlite3.OperationalError:
             return None
 
-    def get_post(self, id):
+    def get_post(self, params):
         query = "SELECT p.id, forum, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? ;"
-        results = self.db_get_request(query, (id,))
+        results = self.db_get_request(query, (params["id"],))
         return json.dumps(results)
 
-    def delete_post(self, id):
+    def delete_post(self, params):
         query = "DELETE FROM Posts p WHERE p.id=?;"
-        self.cur.execute(query,(id,))
+        self.cur.execute(query,(params["id"],))
         self.conn.commit()
-        return True
+        return json.dumps({"success": True})
     
-    def get_post_thread(self, id):
+    def get_post_thread(self, params):
         query = "SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? OR p.parent_id=?;"
         try:
-            results = self.db_get_request(query, (id,id))
+            results = self.db_get_request(query, (params["id"],params["id"]))
             return json.dumps(results)
         except sqlite3.OperationalError:
             return None
     
-    def report_post(self, id):
+    def report_post(self, params):
         query = "UPDATE Posts SET report_count=report_count+1 WHERE id=?;"
-        self.cur.execute(query, (id,))
+        self.cur.execute(query, (params["id"],))
         self.conn.commit()
+        return json.dumps({"success": True})
 
     #post_details :(author_id, forum, title, body, parent_id )
-    def add_post(self, post_details):
-        print("post details", post_details)
+    def add_post(self, params):
+        print("post details", params)
         query = "INSERT INTO Posts (author_id, forum, title, body, parent_id) VALUES (?, ?, ?, ?, ?);"
         try:
-            self.cur.execute(query, tuple(post_details))
+            self.cur.execute(query, (params["author_id"],params["forum"], params["title"], params["body"], params["parent_id"]))
             self.conn.commit()
-            return True
+            return json.dumps({"success": True})
         except sqlite3.OperationalError:
-            return False
+            return json.dumps({"success": False})
         
 
 
