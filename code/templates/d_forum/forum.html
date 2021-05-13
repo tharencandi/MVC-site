@@ -1,0 +1,40 @@
+<nav class="sidenav">
+    <a class="active" href="general">General</a>
+	<a href="htww">How The Web Works</a>
+	<a href="html">HTML</a>
+	<a href="css">CSS</a>
+	<a href="web-framework">Web Frameworks</a>
+	<a href="javascript">JavaScript</a>
+</nav>
+
+<main class='main-content'>
+<h1>General - Forum</h1>
+<article class ="all_posts">
+    <div class="heading">
+    <h1 class="forum_h1">All questions</h1>
+    <a href="/forum_new_post"><button class=ask_button type="button">Ask a Question! </button></a>
+    </div>
+    <div class="forum_sort">
+        <button type="button">New</button>
+        <button type="button">Answered</button>
+        <button type="button">Liked</button>
+    </div>
+   
+
+    <div class="user_posts">
+
+        %for post in posts:
+        <article class ="a_post">
+            <header class = post_head>
+                <div>
+                    <a href="/forum_post/{{post{'id'}}}">
+                        <h1>={{row["title"]}}</h1>
+                    </a>
+                    <div class="about">{{row["username"]}}</div>
+                </div>
+            </header>
+            <p class="body">{{row["body"]}}</p>
+        </article>
+        &end
+    </div>
+</main>
