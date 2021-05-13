@@ -322,22 +322,28 @@ def create_post_reply(post, session_cookie=None):
     
     print(post)
     print(post["parent_id"])
+    print(post["answer"])
     parent_post = db_req("get_post", {"id": post["parent_id"]})
+    if not parent_post["status"]:
+            return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
+    else:
+        res = parent_post["data"][0]
+
     print(parent_post)
    
     post_dict = {
         "title": "",
         "body": post["answer"], 
-        "forum": parent_post["forum"],
+        "forum": res["forum"],
         "parent_id": post["parent_id"],
-        "author_id": cookies[session_cookie[0]],
+        "author_id": session_cookie[0],
     }
 
-    for key in post_dict:
-        if global_san.contains_black_list(post_dict[key]):
-            return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
-        else:
-            post_dict[key] = global_san.sanitize(post_dict[key])
+    if global_san.contains_black_list(post_dict["title"]) or global_san.contains_black_list(post_dict["body"]):
+        return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
+    else:
+        post_dict["title"] = global_san.sanitize(post_dict["title"])
+        post_dict["body"] = global_san.sanitize(post_dict["body"])
 
 
     res = db_req("add_post", post_dict)
