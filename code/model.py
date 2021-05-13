@@ -319,8 +319,11 @@ def create_post_reply(post, session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
         return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
-
-    parent_post = db_req("get_post", {"id": post["parent_id"]})[0]
+    
+    print(post)
+    print(post["parent_id"])
+    parent_post = db_req("get_post", {"id": post["parent_id"]})
+    print(parent_post)
    
     post_dict = {
         "title": "",
