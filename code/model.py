@@ -294,20 +294,21 @@ def forum_create_new_post(post, session_cookie=None):
   
 
     #post_details :(author_id, forum, title, body, parent_id )
-
+    print(cookies)
+    print(session_cookie)
     post_dict = {
-        "author_id": cookies[session_cookie[0]],
+        "author_id": session_cookie[0],
         "forum": post["forum"],
         "title": post["title"],
         "body": post["body"],
         "parent_id": -1,
     } 
 
-    for key in post_dict:
-        if global_san.contains_black_list(post_dict[key]):
-            return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
-        else:
-            post_dict[key] = global_san.sanitize(post_dict[key])
+    if global_san.contains_black_list(post_dict["title"]) or global_san.contains_black_list(post_dict["body"]):
+        return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
+    else:
+        post_dict["title"] = global_san.sanitize(post_dict["title"])
+        post_dict["body"] = global_san.sanitize(post_dict["body"])
 
     db_req("add_post",  post_dict)
 
