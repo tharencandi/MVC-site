@@ -253,7 +253,7 @@ class db_manager:
     #post_details :(author_id, forum, title, body, parent_id )
     def add_post(self, params):
         query = "INSERT INTO Posts (author_id, forum, title, body, parent_id) VALUES (?, ?, ?, ?, ?);"
-        self.cur.execute(query, (params["author_id"],params["forum"], "reply", params["body"], params["parent_id"]))
+        self.cur.execute(query, (params["author_id"],params["forum"], params["title"], params["body"], params["parent_id"]))
         self.conn.commit()
         return {"status": True}
     

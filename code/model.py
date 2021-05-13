@@ -114,6 +114,15 @@ def login_form(session_cookie=None):
     return page_view("login", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
+def logout(session_cookie=None):
+    if not session_cookie:
+        return page_view("error", message="You are not logged in.", has_session=False, is_admin=False)
+    else:
+        print(session_cookie)
+        print(cookies[session_cookie])
+        del cookies[session_cookie]
+        return page_view("index", has_session=False, is_admin=False)
+        
 
   
 # Check the login credential
@@ -332,7 +341,7 @@ def create_post_reply(post, session_cookie=None):
     print(parent_post)
    
     post_dict = {
-        "title": "",
+        "title": "reply",
         "body": post["answer"], 
         "forum": res["forum"],
         "parent_id": post["parent_id"],

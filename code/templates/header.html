@@ -29,5 +29,8 @@
     % if not has_session:
     <a id="login" href="/login">Sign In</a>
     % end
+    % if has_session:
+    <a id="login" href="/logout">Logout</a>
+    % end
   </div> 
 </nav>

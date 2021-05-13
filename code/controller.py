@@ -139,7 +139,13 @@ def get_login_controller():
     session_cookie = safe_get_session(request)
     
     return model.login_form(session_cookie=session_cookie)
-  
+
+@app.get('/logout')
+def logout():
+    session_cookie = safe_get_session(request)
+
+    return model.logout(session_cookie=session_cookie)
+
     
 
 #-----------------------------------------------------------------------------
