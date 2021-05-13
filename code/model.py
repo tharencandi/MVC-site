@@ -42,7 +42,6 @@ def db_req(function, paramaters):
 
 
 def encrypt_password(password, salt):
-    print("akjfhsaldfdjk: " + password)
     m = hashlib.sha512()
     m.update(password.encode())
     hashed_password = m.digest()
