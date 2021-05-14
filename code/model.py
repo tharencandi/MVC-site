@@ -122,7 +122,8 @@ def logout(session_cookie=None):
     else:
         print(session_cookie)
         print(cookies[session_cookie])
-        del cookies[session_cookie]
+        if session_cookie in cookies:
+            del cookies[session_cookie]
         return page_view("index", has_session=False, is_admin=False)
         
 
@@ -144,18 +145,15 @@ def login_check(username, password, session_cookie=None):
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
 
-    print("check_credentials")
     session_cookie = validate_cookie(session_cookie)
     if session_cookie:
         return (page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2]), None)
 
     db_res = db_req("get_salt_by_username", {"username": username})
-    print(db_res)
 
     if not db_res or not "data" in db_res or not db_res["data"]:
         return (page_view("error", message="Incorrect username or password", has_session=False, is_admin=False), None)
     
-    print(db_res)
     salt = db_res["data"][0]["salt"]
 
     hashed_password, salt = hash_password(password, salt.encode())
@@ -172,7 +170,7 @@ def login_check(username, password, session_cookie=None):
 
         cookie = create_cookie(res["id"], res['is_admin'])
      
-        return (page_view("success", name=global_san.sanitize(username), has_session=False, is_admin=False), cookie)
+        return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=res["is_admin"]), cookie)
  
         
 
