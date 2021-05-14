@@ -42,14 +42,14 @@ def db_req(function, paramaters):
     return None
 
 
-def encrypt_password(password, salt):
+def hash_password(password, salt):
     m = hashlib.sha512()
     m.update(password.encode())
     hashed_password = m.digest()
     if salt == None:
         salt = bcrypt.gensalt()
-    encrypted_password = bcrypt.hashpw(hashed_password, salt)
-    return encrypted_password, salt
+    hashed_password = bcrypt.hashpw(hashed_password, salt)
+    return hashed_password, salt
 
 def create_cookie(user_id, is_admin = False):
     cookie = secrets.token_hex(16)
@@ -158,10 +158,9 @@ def login_check(username, password, session_cookie=None):
     print(db_res)
     salt = db_res["data"][0]["salt"]
 
-    encrypted_password, salt = encrypt_password(password, salt.encode())
-    print(encrypted_password)
+    hashed_password, salt = hash_password(password, salt.encode())
 
-    res = db_req("check_credentials", {"username": username, "password": encrypted_password.decode(),})
+    res = db_req("check_credentials", {"username": username, "password": hashed_password.decode(),})
 
     if res["status"] == False :
         print("hello")
@@ -213,7 +212,7 @@ def create_user(username, password, confirm_password, session_cookie=None):
         return (page_view("error", message="Password does not match!", has_session=False, is_admin=False), None)
 
     print(password)
-    hashed_password, salt = encrypt_password(password=password, salt=None)
+    hashed_password, salt = hash_password(password=password, salt=None)
     res = db_req("add_user", {'username': username, 'password': hashed_password.decode(), "salt": salt.decode(), "is_admin": 0})
    
     if res["status"] == True:
