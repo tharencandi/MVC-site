@@ -9,8 +9,8 @@ import time
 class Virtual_user:
 
     def __init__(self):
-        #driverpath = "/home/roy/geckodriver"
-        driverpath = "/usr/local/bin/geckodriver"
+        driverpath = "/home/roy/geckodriver"
+        #driverpath = "/usr/local/bin/geckodriver"
         url = "https://jerry.voyager.my"
         options = Options()
         options.headless = True
