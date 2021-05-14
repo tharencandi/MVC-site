@@ -6,11 +6,11 @@
 		<h4><a href="/admin/users/{{u['id']}}">See Posts</a></h4>
 		% if u["is_banned"]:
 		<form action="/users/unban/{{u['id']}}" method="post">
-			<input type="submit" value="unban" type="unban">
+			<input id="{{u['username']}}" type="submit" value="unban" type="unban">
 		</form>
 		% else:
 		<form action="/users/ban/{{u['id']}}" method="post">
-			<input type="submit" value="ban" type="ban">
+			<input id="{{u['username']}}" type="submit" value="ban" type="ban">
 		</form>
 			%end
 		</li>
