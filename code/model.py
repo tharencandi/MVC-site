@@ -212,7 +212,7 @@ def create_user(username, password, confirm_password, session_cookie=None):
     res = db_req("add_user", {'username': username, 'password': hashed_password.decode(), "salt": salt.decode(), "is_admin": 0})
    
     if res["status"] == True:
-        cookie = create_cookie(res["id"]) 
+        cookie = create_cookie(res["id"], res["is_admin"]) 
         return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=False), cookie)
     else:
         print(res)
@@ -423,7 +423,8 @@ def del_post(pid, session_cookie=None):
     db_req("delete_post", params)
 
             
-def del_user(uid, session_cookie=None):
+def ban_user(uid, session_cookie=None):
+    print("ban user request recieved")
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie or not session_cookie[2]:
         return 
@@ -432,5 +433,19 @@ def del_user(uid, session_cookie=None):
         params = {"id": uid}
     except ValueError:
         return
-    db_req("delete_user", params)
+    db_req("ban_user", params)
+
+
+def unban_user(uid, session_cookie=None):
+    print("unban user request recieved")
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie or not session_cookie[2]:
+        return 
+    try:
+        uid = int(uid)
+        params = {"id": uid}
+    except ValueError:
+        return
+    db_req("unban_user", params)
+
 
