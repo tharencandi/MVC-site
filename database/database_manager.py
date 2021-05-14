@@ -241,12 +241,12 @@ class db_manager:
     def get_user(self, params):
         query = """Select u.username, is_banned, is_admin FROM Users u WHERE u.id=?;"""
         results = self.cur.execute(query, (params["id"], )).fetchall()
-        return {"satus": True, "data": results}
+        return {"status": True, "data": results}
 
     def get_user_posts(self, params):
-        query = """Select p.id, title, report_count FROM Posts JOIN Users u WHERE author_id=?"""
+        query = """Select p.id, parent_id, title, report_count FROM Posts p WHERE author_id=?"""
         results = self.cur.execute(query, (params["id"], )).fetchall()
-        return {"satus": True, "data": results}
+        return {"status": True, "data": results}
         
 
 

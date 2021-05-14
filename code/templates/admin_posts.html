@@ -4,9 +4,15 @@
 	<ul class="post-list">
 		% for p in posts:
 		<ul id="{{p["id"]}}"class=user-post>
-			<li class="post-url"><a href="">{{p["title"]}}</a></li>
+			% if p["title"] == "reply":
+
+			<li class="post-url"><a href="/forum_post/{{p["parent_id"]}}">{{p["title"]}}</a></li>
+			% else:
+
+			<li class="post-url"><a href="/forum_post/{{p["parent_id"]}}">{{p["title"]}}</a></li>
+			% end
 			<li class=post-id>Post id: {{p["id"]}}</li>
-			<li class="post-reports">Number of reports: {{p["reports"]}}</li>
+			<li class="post-reports">Number of reports: {{p["report_count"]}}</li>
 			<li><button id="{{p["id"]}}" class="remove-button-post">Remove Post</button></li>
 		</ul>
 		% end

@@ -407,6 +407,23 @@ def admin_posts(user, session_cookie=None):
         page_view("error", message="You do not have permission to view this resource.", has_session=False, is_admin=False)
     if not session_cookie[2]:
         page_view("error", message="You do not have permission to view this resource.", has_session=True, is_admin=False)
+
+    res = db_req("get_user", {"id": user})
+    print(res)
+    if res:
+        res = res["data"][0]
+        print(res)
+        username = res["username"]
+        posts_res = db_req("get_user_posts", {"id": user})
+        print(posts_res)
+        if posts_res:
+            if posts_res["status"]:
+                posts = posts_res["data"]
+                num_posts = len(posts)
+        else:
+            pass
+    else:
+        page_view("error", message="Cant find ")
     
     
     
