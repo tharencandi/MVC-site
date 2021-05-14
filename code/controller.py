@@ -167,7 +167,7 @@ def post_login():
     # Call the appropriate method
     (page, cookie) = model.login_check(username, password, session_cookie=session_cookie)
     if cookie != None:
-        response.set_cookie('authentication', cookie, secure=True, httponly=True, samesite="strict")
+        response.set_cookie('authentication', cookie, secure=True, httponly=True)
     return page
     
 
