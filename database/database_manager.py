@@ -157,7 +157,7 @@ class db_manager:
 
             self.conn.commit()
             uid = self.get_user_id({"username": params["username"]})
-            response = {"status": True, "id": uid, "message": None}
+            response = {"status": True, "id": uid, "message": None, "is_admin": 0}
 
         except sqlite3.IntegrityError:
             response = {"status": False, "message": "Username already exists"}
