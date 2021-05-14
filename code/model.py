@@ -148,12 +148,16 @@ def login_check(username, password, session_cookie=None):
 
     db_res = db_req("get_salt_by_username", {"username": username})
     print(db_res)
-    if not db_res or not "data" in db_res:
+
+    if not db_res or not "data" in db_res or not db_res["data"]:
         return (page_view("error", message="Incorrect username or password", has_session=False, is_admin=False), None)
+    
+    print(db_res)
     salt = db_res["data"][0]["salt"]
 
     encrypted_password, salt = encrypt_password(password, salt.encode())
     print(encrypted_password)
+
     res = db_req("check_credentials", {"username": username, "password": encrypted_password.decode(),})
 
     if res["status"] == False :
@@ -380,10 +384,19 @@ def about(session_cookie=None):
     return page_view("about", has_session=False, is_admin=False)
 #-----------------------------------------------------------------------------
 
-def admin_users():
-    users = [{"id": 1, "username": "tharen", "num_posts": 9000000}, {"id": 2, "username": "tharen", "num_posts": 9000000}]
+def admin_users(session_cookie=None):
+    session_cookie = validate_cookie(session_cookie)
+    if not session_cookie:
+        print("here")
+        page_view("error", message="Permission Denied.", has_session=False, is_admin=False)
+    elif not session_cookie[2]:
+        page_view("error", message="Permission Denied.", has_session=True, is_admin=False)
+    else:
+
+        users = [{"id": 1, "username": "tharen", "num_posts": 9000000}, {"id": 2, "username": "tharen", "num_posts": 9000000}]
     # "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000, "title": "bla bla"}]
-    return page_view("admin_users", users=users)
+    
+        return page_view("admin_users", users=users, has_session=True, is_admin=True)
 
 def admin_posts(user, session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
