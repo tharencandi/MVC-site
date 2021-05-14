@@ -32,8 +32,9 @@ def db_req(function, paramaters):
     }
     HOST, PORT = "localhost", 9999
     # SOCK_DGRAM is the socket type to use for UDP sockets
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.sendto(bytes(json.dumps(query), encoding="utf-8"), (HOST, PORT))
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((HOST, PORT))
+    sock.sendall(bytes(json.dumps(query), encoding="utf-8"))
     data = sock.recv(2048)
     if data != None:
         received = json.loads(data.decode())
