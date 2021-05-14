@@ -260,7 +260,7 @@ class db_manager:
         return {"status": True, "data": results}
 
     def get_post(self, params):
-        query = "SELECT p.id, forum, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? ;"
+        query = "SELECT p.id, forum, title, body, author_id, username, parent_id FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? ;"
         results = self.db_get_request(query, (params["id"],))
         return {"status": True, "data": results}
 

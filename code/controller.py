@@ -290,8 +290,9 @@ def forum_reply(id):
 
 @app.post('/report_post/<id>')
 def report_post(id):
+    print("REPORTING USER")
     session_cookie = safe_get_session(request)
-    return model.report_post(session_cookie=session_cookie, id=id)
+    return model.report_post(id, session_cookie=session_cookie)
 
 #-----------------------------------------------------------------------------
 

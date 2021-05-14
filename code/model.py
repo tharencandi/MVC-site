@@ -449,8 +449,30 @@ def del_post(pid, session_cookie=None):
         return page_view("error", message="not a post", has_session=True, is_admin=True)
     res = db_req("delete_post", params)
 
-def report_post(id, session_cookie=None):
+
+def report_post(pid, session_cookie=None):
+    raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
+    if not session_cookie:
+        return page_view("error", message="Permission denied hombre", has_session=False, is_admin=False)
+    if not session_cookie[2]:
+        return page_view("error", message="Permission denied hombre", has_session=True, is_admin=False)
+    
+    try:
+        pid = int(pid)
+        params = {"id": pid}
+    except ValueError:
+        return page_view("error", message="not a post", has_session=True, is_admin=True)
+    res = db_req("report_post", params)
+
+    res2 =  db_req("get_post", params)
+    print(res2)
+    if res2["data"][0]["parent_id"] != -1:
+        pid = res2["data"][0]["parent_id"]
+
+    return forum_post(pid, session_cookie=raw_cookie)
+
+   
     
 
 
