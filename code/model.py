@@ -167,6 +167,8 @@ def login_check(username, password, session_cookie=None):
         print("hello")
         err_str = "Incorrect username or password"
         return (page_view("error", message=err_str, has_session=False, is_admin=False), None)
+    elif res["is_banned"]:
+        return (page_view("error", message="Nah bro your toxic af", has_session=False, is_admin=False), None)
     else:
 
         cookie = create_cookie(res["id"], res['is_admin'])
@@ -390,18 +392,15 @@ def about(session_cookie=None):
 def admin_users(session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
-        print("here")
+        print("no cookie")
         page_view("error", message="Permission Denied.", has_session=False, is_admin=False)
     elif not session_cookie[2]:
+        print("isnt admin")
         page_view("error", message="Permission Denied.", has_session=True, is_admin=False)
     else:
-
-
         res = db_req("get_users", None)
         print("ADMIN DATA", res)
-        #users = [{"id": 1, "username": "tharen", "num_posts": 9000000, 'is_banned': 0}, {"id": 2, "username": "tharen", "num_posts": 9000000, "is_banned": 1}]
-    # "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000, "title": "bla bla"}]
-    
+
         return page_view("admin_users", users=res["data"], has_session=True, is_admin=True)
 
 def admin_posts(user, session_cookie=None):
@@ -463,18 +462,18 @@ def report_post(pid, session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
         return page_view("error", message="Permission denied hombre", has_session=False, is_admin=False)
-    if not session_cookie[2]:
-        return page_view("error", message="Permission denied hombre", has_session=True, is_admin=False)
     
     try:
         pid = int(pid)
         params = {"id": pid}
     except ValueError:
-        return page_view("error", message="not a post", has_session=True, is_admin=True)
+        return page_view("error", message="not a post", has_session=True, is_admin=session_cookie[2])
     res = db_req("report_post", params)
 
     res2 =  db_req("get_post", params)
     print(res2)
+    if not res2 or not "status" in res2 or not res2["status"]:
+        return page_view("error", message="woops", has_session=True, is_admin=session_cookie[2])
     if res2["data"][0]["parent_id"] != -1:
         pid = res2["data"][0]["parent_id"]
 
@@ -485,28 +484,53 @@ def report_post(pid, session_cookie=None):
 
 
 def ban_user(uid, session_cookie=None):
+    print(uid)
     print("ban user request recieved")
+    print(session_cookie + "the cooooooookie")
+    raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
-    if not session_cookie or not session_cookie[2]:
-        return 
+    print("cookies user: " + str(session_cookie[0]))
+    if not session_cookie:
+        return page_view("error", message="Absolutely not!.", has_session=False, is_admin=False)
+    if not session_cookie[2]:
+        return page_view("error", message="Absolutely not sir.", has_session=True, is_admin=False)
     try:
         uid = int(uid)
         params = {"id": uid}
     except ValueError:
         return
-    db_req("ban_user", params)
 
+    if uid == session_cookie[0]:
+        return page_view("error", message="Are you ok? Please contact a helpline xx", has_session=True, is_admin=True)
+    
+    to_remove = None
+    for k,v in cookies.items():
+        if v[0] == uid:
+            to_remove = k
+    if to_remove:
+        cookies.pop(to_remove)
+
+    res = db_req("ban_user", params)
+
+    return admin_users(session_cookie=raw_cookie)
 
 def unban_user(uid, session_cookie=None):
     print("unban user request recieved")
+    raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
-    if not session_cookie or not session_cookie[2]:
-        return 
+    if not session_cookie:
+        return page_view("error", message="Absolutely not!", has_session=False, is_admin=False)
+    if not session_cookie[2]:
+        return page_view("error", message="Absolutely not sir.", has_session=True, is_admin=False)
     try:
         uid = int(uid)
         params = {"id": uid}
     except ValueError:
-        return
-    db_req("unban_user", params)
+        return page_view("error", message="not a user", has_session=True, is_admin=session_cookie[2])
+
+    res = db_req("unban_user", params)
+
+
+    return admin_users(session_cookie=raw_cookie)
 
 

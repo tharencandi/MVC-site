@@ -5,9 +5,13 @@
 		<h2 class="username">{{u["username"]}}</h2>
 		<h4><a href="/admin/users/{{u['id']}}">See Posts</a></h4>
 		% if u["is_banned"]:
-		<button id="{{u['id']}}"class="unban-btn-user">Unban User</button>
+		<form action="/users/unban/{{u['id']}}" method="post">
+			<input type="submit" value="unban" type="unban">
+		</form>
 		% else:
-		<button id="{{u['id']}}" class="ban-btn-user">Ban User</button>
+		<form action="/users/ban/{{u['id']}}" method="post">
+			<input type="submit" value="ban" type="ban">
+		</form>
 			%end
 		</li>
 		% end

@@ -59,7 +59,9 @@ class db_manager:
                 "report_post": self.report_post,
                 "add_post": self.add_post,
                 "get_salt_by_username": self.get_salt_by_username,
-                "is_admin": self.is_admin
+                "is_admin": self.is_admin,
+                "ban_user": self.ban_user,
+                "unban_user": self.unban_user
             }
         
             admins = [
@@ -172,17 +174,15 @@ class db_manager:
     def check_credentials(self, params):
         print("checking creds")
         print(self.cur.execute("SELECT * FROM Users").fetchall())
-        query = "SELECT u.id, password, salt, is_admin FROM Users u WHERE u.username=?;"
+        query = "SELECT u.id, password, salt, is_admin, is_banned FROM Users u WHERE u.username=?;"
         print("here")
         print(params)
-        result = self.cur.execute(query,(params["username"],)).fetchall()
+        result = self.cur.execute(query,(params["username"],)).fetchone()
         print(result)
 
         if result:
-         
-            result = result[0]
             if result["password"] == params["password"]:
-                return {"status": True, "id": result["id"], "is_admin": result["is_admin"]}
+                return {"status": True, "id": result["id"], "is_admin": result["is_admin"], "is_banned": result["is_banned"]}
             else:
                 return {"status": False, "message": "Passwords do not match"}
         
@@ -199,8 +199,10 @@ class db_manager:
         return {"status": True}
 
     def ban_user(self, params):
-        query = "UPDATE Users SET is_banned=1 WHERE id=?;"
-        self.cur.execute(query, (params["id"],))
+        print("bannnnnnnnnnnned userrrrrr")
+        print(params)
+        query = "UPDATE Users SET is_banned=? WHERE id=?;"
+        self.cur.execute(query, (1, params["id"],))
         self.conn.commit()
         return {"status": True}
 
