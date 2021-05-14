@@ -41,7 +41,7 @@ class db_manager:
                         report_count INTEGER DEFAULT 0,
                         FOREIGN KEY (author_id) REFERENCES Users (id)
                     )''')
-
+            
             self.conn.commit()
 
             self.actions = {
@@ -59,6 +59,15 @@ class db_manager:
                 "get_salt_by_username": self.get_salt_by_username,
                 "is_admin": self.is_admin
             }
+        
+            admins = [
+                {"username": "haeata", "password": "$2b$12$8jinT1wqx3znObyTsNH1fePlXwGNljj.WjvxmPPHZnwHMHKHqn9ma", "salt": "$2b$12$8jinT1wqx3znObyTsNH1fe", "is_admin": 1},
+                {"username": "mariam", "password": '$2b$12$TbwX8/Iu1QzvVU1n6wo5LelLYhiClW5cDep.Lu/5uP18cHb41Qgv.', "salt": '$2b$12$TbwX8/Iu1QzvVU1n6wo5Le', "is_admin": 1},
+                {"username": "roy", "password": '$2b$12$Jg0Q53aVRzdAj4RfVcC8LOGpvafwku1zAmhQ2IaxQ1Afc9lqc54ly', "salt": '$2b$12$Jg0Q53aVRzdAj4RfVcC8LO', "is_admin": 1},
+                {"username": "candiman", "password": '$2b$12$JRl3w.15i0Ung0EKR9kYBO01lPkg0i64cnySB7wHDbBlfhB5hfezu', "salt": '$2b$12$JRl3w.15i0Ung0EKR9kYBO', "is_admin": 1}
+            ]
+            for admin in admins:
+                self.add_user(admin)
     
     """Safe transaction. Logging should be done here"""
     def safe_transaction_wrapper(self, data):
@@ -160,7 +169,7 @@ class db_manager:
     def check_credentials(self, params):
         print("checking creds")
         print(self.cur.execute("SELECT * FROM Users").fetchall())
-        query = "SELECT u.id, password, salt FROM Users u WHERE u.username=?;"
+        query = "SELECT u.id, password, salt, is_admin FROM Users u WHERE u.username=?;"
         print("here")
         print(params)
         result = self.cur.execute(query,(params["username"],)).fetchall()
@@ -169,7 +178,7 @@ class db_manager:
         if result:
             result = result[0]
             if result["password"] == params["password"]:
-                return {"status": True, "id": result["id"]}
+                return {"status": True, "id": result["id"], "is_admin": result["is_admin"]}
             else:
                 return {"status": False, "message": "Passwords do not match"}
 
