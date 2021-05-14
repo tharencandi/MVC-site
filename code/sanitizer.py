@@ -59,5 +59,3 @@ class Sanitizer:
             string = string.replace(k, self.replace[k])
 
         return string
-
-
