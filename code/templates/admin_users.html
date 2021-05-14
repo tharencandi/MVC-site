@@ -7,7 +7,7 @@
 		<div class="num_posts">Number of posts: {{u["num_posts"]}}</div>
 		<h4><a href="/admin/users/{{u['id']}}">See Posts</a></h4>
 		% if u["is_banned"]:
-		<button id="{{u['id']}}"class="unbanned-btn-user">Unban User</button>
+		<button id="{{u['id']}}"class="unban-btn-user">Unban User</button>
 		% else:
 		<button id="{{u['id']}}" class="ban-btn-user">Ban User</button>
 			%end
