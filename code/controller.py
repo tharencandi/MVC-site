@@ -323,6 +323,7 @@ def get_users():
     """
         serves user page
     """
+    print("admin page requested")
     session_cookie = safe_get_session(request)
     return model.admin_users(session_cookie=session_cookie)
 
@@ -336,8 +337,16 @@ def del_post(pid):
     session_cookie = safe_get_session(request)
     model.del_post(pid, session_cookie=session_cookie)
 
-@app.delete('/users/<uid>')
-def del_post(uid):
+@app.route('/users/ban/<uid>', method='PATCH')
+def ban_user(uid):
+    print("recieved patch request for ban")
     session_cookie = safe_get_session(request)
-    model.del_user(uid, session_cookie=session_cookie)
+    model.ban_user(uid, session_cookie=session_cookie)
+
+
+@app.route('/users/unban/<uid>', method='PATCH')
+def unban_user(uid):
+    print("recieved patch request for unban")
+    session_cookie = safe_get_session(request)
+    model.unban_user(uid, session_cookie=session_cookie)
 
