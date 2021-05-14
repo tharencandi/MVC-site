@@ -12,7 +12,7 @@ function setup_post_buttons(removal_btns) {
 		removal_btns[i].addEventListener("click", function (e) {
 			let target_id = e.target.id
 			let xhr = new XMLHttpRequest()
-			xhr.open("DELETE", `http://localhost:8080/posts/${target_id}`)
+			xhr.open("POST", `http://localhost:8080/posts/${target_id}`)
 			xhr.send()
 		})
 	}
@@ -23,7 +23,7 @@ function setup_user_bans(removal_btns) {
 		removal_btns[i].addEventListener("click", function (e) {
 			let target_id = e.target.id
 			let xhr = new XMLHttpRequest()
-			xhr.open("PATCH", `http://localhost:8080/users/ban/${target_id}`)
+			xhr.open("POST", `http://localhost:8080/users/ban/${target_id}`)
 			xhr.send()
 		})
 	}
@@ -35,7 +35,7 @@ function setup_user_unbans(removal_btns) {
 		removal_btns[i].addEventListener("click", function (e) {
 			let target_id = e.target.id
 			let xhr = new XMLHttpRequest()
-			xhr.open("PATCH", `http://localhost:8080/users/unban/${target_id}`)
+			xhr.open("POST", `http://localhost:8080/users/unban/${target_id}`)
 			xhr.send()
 		})
 	}

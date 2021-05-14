@@ -13,7 +13,9 @@
 			% end
 			<li class=post-id>Post id: {{p["id"]}}</li>
 			<li class="post-reports">Number of reports: {{p["report_count"]}}</li>
-			<li><button id="{{p["id"]}}" class="remove-button-post">Remove Post</button></li>
+			<form action="/posts/{{p['id']}}", method="post">
+				<input type="submit" name="delete" value="delete">
+			</form>
 		</ul>
 		% end
 	</ul>

@@ -65,6 +65,7 @@ def validate_cookie(cookie):
     res = None
     try:
         if cookie in cookies:
+            print("cookie exists")
             birth_time = cookies.get(cookie)[1]
             now = datetime.now()
             tdelta = now - birth_time
@@ -78,6 +79,7 @@ def validate_cookie(cookie):
                 cookies.get(cookie)[1] = exp_time
                 res = cookies.get(cookie)
     except:
+        print("error")
         return None
 
     return res
@@ -404,6 +406,7 @@ def admin_users(session_cookie=None):
 
 def admin_posts(user, session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
+    print("ADMIN POSTSSSSSS")
     if not session_cookie:
         page_view("error", message="You do not have permission to view this resource.", has_session=False, is_admin=False)
     if not session_cookie[2]:
@@ -424,7 +427,7 @@ def admin_posts(user, session_cookie=None):
         else:
             pass
     else:
-        page_view("error", message="Cant find ")
+        page_view("error", message="Cant find ", has_session=True, is_admin=session_cookie[2])
     
     
     
@@ -435,9 +438,9 @@ def admin_posts(user, session_cookie=None):
 def del_post(pid, session_cookie=None):
     print("del_post")
     print(pid)
-
+    raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
-
+    print(session_cookie)
     if not session_cookie:
         return page_view("error", message="Permission denied hombre", has_session=False, is_admin=False)
     if not session_cookie[2]:
@@ -447,7 +450,12 @@ def del_post(pid, session_cookie=None):
         params = {"id": pid}
     except ValueError:
         return page_view("error", message="not a post", has_session=True, is_admin=True)
+
     res = db_req("delete_post", params)
+    
+    print("rawest of cookies " + raw_cookie)
+    print(session_cookie[0])
+    return admin_posts(session_cookie[0], session_cookie=raw_cookie)
 
             
 def ban_user(uid, session_cookie=None):

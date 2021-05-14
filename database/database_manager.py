@@ -191,6 +191,8 @@ class db_manager:
 
 
     def delete_user(self, params):
+        print("DELETEING POST with params")
+        print(params)
         query = "DELETE FROM Users u WHERE u.id=?;"
         self.cur.execute(query,(params["id"],))
         self.conn.commit()
@@ -265,8 +267,8 @@ class db_manager:
         return {"status": True, "data": results}
 
     def delete_post(self, params):
-        query = "DELETE FROM Posts p WHERE p.id=?;"
-        self.cur.execute(query,(params["id"],))
+        query = "DELETE FROM Posts WHERE id=? OR parent_id=?;"
+        self.cur.execute(query,(params["id"],params["id"]))
         self.conn.commit()
         return {"status": True}
     

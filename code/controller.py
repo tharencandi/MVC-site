@@ -332,21 +332,22 @@ def get_posts(uid):
     session_cookie = safe_get_session(request)
     return model.admin_posts(uid, session_cookie=session_cookie)
 
-@app.delete('/posts/<pid>')
+@app.route('/posts/<pid>', method="POST")
 def del_post(pid):
     session_cookie = safe_get_session(request)
-    model.del_post(pid, session_cookie=session_cookie)
+    print(session_cookie)
+    return model.del_post(pid, session_cookie=session_cookie)
 
-@app.route('/users/ban/<uid>', method='PATCH')
+@app.route('/users/ban/<uid>', method='POST')
 def ban_user(uid):
     print("recieved patch request for ban")
     session_cookie = safe_get_session(request)
-    model.ban_user(uid, session_cookie=session_cookie)
+    return model.ban_user(uid, session_cookie=session_cookie)
 
 
-@app.route('/users/unban/<uid>', method='PATCH')
+@app.route('/users/unban/<uid>', method='POST')
 def unban_user(uid):
     print("recieved patch request for unban")
     session_cookie = safe_get_session(request)
-    model.unban_user(uid, session_cookie=session_cookie)
+    return model.unban_user(uid, session_cookie=session_cookie)
 
