@@ -66,7 +66,8 @@ class db_manager:
                 {"username": "haeata", "password": "$2b$12$8jinT1wqx3znObyTsNH1fePlXwGNljj.WjvxmPPHZnwHMHKHqn9ma", "salt": "$2b$12$8jinT1wqx3znObyTsNH1fe", "is_admin": 1},
                 {"username": "mariam", "password": '$2b$12$TbwX8/Iu1QzvVU1n6wo5LelLYhiClW5cDep.Lu/5uP18cHb41Qgv.', "salt": '$2b$12$TbwX8/Iu1QzvVU1n6wo5Le', "is_admin": 1},
                 {"username": "roy", "password": '$2b$12$Jg0Q53aVRzdAj4RfVcC8LOGpvafwku1zAmhQ2IaxQ1Afc9lqc54ly', "salt": '$2b$12$Jg0Q53aVRzdAj4RfVcC8LO', "is_admin": 1},
-                {"username": "candiman", "password": '$2b$12$JRl3w.15i0Ung0EKR9kYBO01lPkg0i64cnySB7wHDbBlfhB5hfezu', "salt": '$2b$12$JRl3w.15i0Ung0EKR9kYBO', "is_admin": 1}
+                {"username": "candiman", "password": '$2b$12$JRl3w.15i0Ung0EKR9kYBO01lPkg0i64cnySB7wHDbBlfhB5hfezu', "salt": '$2b$12$JRl3w.15i0Ung0EKR9kYBO', "is_admin": 1},
+                {"username": "chenky", "password": '$2b$12$F4ld//QBbii05H0o4fD5te6Lz0xq11vC9vmGAn8HG1hilBMgIhQQ2', "salt": '$2b$12$F4ld//QBbii05H0o4fD5te', "is_admin": 1}
             ]
             for admin in admins:
                 self.add_user(admin)
@@ -294,4 +295,3 @@ class db_manager:
         return {"status": True, "data": results}
 
 
-    
