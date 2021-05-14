@@ -62,6 +62,7 @@ The code base is restricted to this user by executing `chmod o-rwx info2222_M12B
 
 A cron job is created to automatically pull the latest commit from the master branch every hour. `00 * * * * cd /home/www-data/info2222_M12B1; git pull &>> "/home/www-data/logs/git_pull.log"`. Underlying changes to the python code will still requires restart but any page added or removed will be available automatically.
 
+** NOT IN USE ANYMORE **
 `/etc/systemd/system/jerry.service`
 ```
 [Unit]
@@ -85,4 +86,64 @@ Enable auto startup of service by systemd: `sudo systemctl enable jerry`
 
 Nginx will be automatically started by default.
 
-## uWsgi
+## uWSGI
+`/etc/uswgi.d/jerry.ini`
+```
+[uwsgi]
+socket = /run/uwsgi/jerry.sock
+chmod-socket = 660
+chdir = /var/www/jerry/code
+plugins = python36
+file = run.py
+uid = www-data
+gid = www-data
+vacuum = true
+```
+
+## Database server
+`/etc/systemd/system/jerry_db.service`
+```
+[Unit]
+Description=Database Server for Jerry
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/jerry/database
+ExecStart=/usr/bin/python3 database_server.py
+Restart=on-failure
+RestartSec=10s
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
+```
+
+## Firewall
+### `firewalld` default
+`sudo firewall-cmd --list-all`
+```
+public (active)
+  target: default
+  icmp-block-inversion: no
+  interfaces: eth0
+  sources:
+  services: dhcpv6-client ssh
+  ports:
+  protocols:
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+```
+`sudo firewall-cmd --list-services`
+```
+sudo firewall-cmd --list-services
+```
+
+`sudo firewall-cmd --add-service=https`
+`sudo firewall-cmd --add-service=http`
+`sudo firewall-cmd --runtime-to-permanent`
