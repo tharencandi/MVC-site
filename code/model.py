@@ -433,15 +433,21 @@ def admin_posts(user, session_cookie=None):
 
 
 def del_post(pid, session_cookie=None):
+    print("del_post")
+    print(pid)
+
     session_cookie = validate_cookie(session_cookie)
-    if not session_cookie or not session_cookie[2]:
-        return 
+
+    if not session_cookie:
+        return page_view("error", message="Permission denied hombre", has_session=False, is_admin=False)
+    if not session_cookie[2]:
+        return page_view("error", message="Permission denied hombre", has_session=True, is_admin=False)
     try:
         pid = int(pid)
         params = {"id": pid}
     except ValueError:
-        return
-    db_req("delete_post", params)
+        return page_view("error", message="not a post", has_session=True, is_admin=True)
+    res = db_req("delete_post", params)
 
             
 def ban_user(uid, session_cookie=None):
