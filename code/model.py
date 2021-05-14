@@ -21,10 +21,6 @@ cookies = {}
 global_san = Sanitizer()
 
 def db_req(function, paramaters):
-    print(paramaters)
-    print(function)
-
-
     query = {
         "function": function,
         "params": paramaters,
@@ -65,7 +61,6 @@ def validate_cookie(cookie):
     res = None
     try:
         if cookie in cookies:
-            print("cookie exists")
             birth_time = cookies.get(cookie)[1]
             now = datetime.now()
             tdelta = now - birth_time
@@ -78,8 +73,9 @@ def validate_cookie(cookie):
                 exp_time = now + timedelta(minutes=5)
                 cookies.get(cookie)[1] = exp_time
                 res = cookies.get(cookie)
-    except:
-        print("error")
+    except Exception as e:
+        print("error in validation")
+        print(e)
         return None
 
     return res
@@ -273,8 +269,9 @@ def forum_landing(session_cookie=None):
 
 def forum_post(pid, session_cookie=None):
     # Forum landing post
-
+    print(session_cookie)
     session_cookie = validate_cookie(session_cookie)
+    print(session_cookie)
 
     db_res = db_req("get_post_thread", {"id": pid})
     post = db_res["data"][0]
@@ -300,7 +297,8 @@ def forum_new_post(session_cookie=None):
 
 
 def forum_create_new_post(post, session_cookie=None):
-
+    
+    raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
         return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
@@ -326,24 +324,20 @@ def forum_create_new_post(post, session_cookie=None):
 
     db_req("add_post",  post_dict)
 
-    return forum_page(post["forum"], session_cookie)
+    return forum_page(post["forum"], raw_cookie)
 
 def create_post_reply(post, session_cookie=None):
-
+    raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
     if not session_cookie:
         return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
     
-    print(post)
-    print(post["parent_id"])
-    print(post["answer"])
     parent_post = db_req("get_post", {"id": post["parent_id"]})
     if not parent_post["status"]:
             return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
     else:
         res = parent_post["data"][0]
 
-    print(parent_post)
    
     post_dict = {
         "title": "reply",
@@ -365,7 +359,7 @@ def create_post_reply(post, session_cookie=None):
     if res == False:
         return page_view("error", reason="internal server error", has_session=True, is_admin=session_cookie[2])
 
-    return forum_post(post["parent_id"], session_cookie)
+    return forum_post(post["parent_id"], raw_cookie)
 
     
 #-----------------------------------------------------------------------------
