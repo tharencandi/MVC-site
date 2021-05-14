@@ -110,7 +110,6 @@ class db_manager:
         try:
             response = callback(params)
         except sqlite3.OperationalError as e:
-            print("here")
             print(e)
             response = self.error_response("Database operational error.", params)
         except KeyError:
@@ -146,18 +145,14 @@ class db_manager:
    
     def db_get_request(self, query, to_filter):
         results = self.cur.execute(query, tuple(to_filter)).fetchall()
-        #self.conn.close()
         return results
 
 
-    #details (username, hashed_password, salt)
     def add_user(self, params):
         #check if username exists
         response = None
         try:
             query = "INSERT INTO Users (username, password, salt, is_admin, is_banned) VALUES (?,?,?,?,0)"
-            print("here")
-            print(params['password'])
             self.cur.execute(query, (params['username'], params['password'], params['salt'], params['is_admin']))
 
             self.conn.commit()
@@ -172,13 +167,8 @@ class db_manager:
     
     #details (username, hashed_password)
     def check_credentials(self, params):
-        print("checking creds")
-        print(self.cur.execute("SELECT * FROM Users").fetchall())
         query = "SELECT u.id, password, salt, is_admin, is_banned FROM Users u WHERE u.username=?;"
-        print("here")
-        print(params)
         result = self.cur.execute(query,(params["username"],)).fetchone()
-        print(result)
 
         if result:
             if result["password"] == params["password"]:
@@ -186,21 +176,16 @@ class db_manager:
             else:
                 return {"status": False, "message": "Passwords do not match"}
         
-        print(" correct")
         return {"status": False, "message": "Username does not match"}
 
 
     def delete_user(self, params):
-        print("DELETEING POST with params")
-        print(params)
         query = "DELETE FROM Users u WHERE u.id=?;"
         self.cur.execute(query,(params["id"],))
         self.conn.commit()
         return {"status": True}
 
     def ban_user(self, params):
-        print("bannnnnnnnnnnned userrrrrr")
-        print(params)
         query = "UPDATE Users SET is_banned=? WHERE id=?;"
         self.cur.execute(query, (1, params["id"],))
         self.conn.commit()
@@ -220,15 +205,11 @@ class db_manager:
     def get_user_id(self, params):
         query = """SELECT u.id FROM Users u WHERE u.username=?;"""
         res = self.cur.execute(query, (params["username"], )).fetchone()
-        print("asdasdasdasdasdasdasd: ")
-        print(res)
         return res
 
     def get_salt_by_username(self, params):
         query = """SELECT p.salt FROM Users p WHERE p.username =?;"""
-        print(params)
         results = self.cur.execute(query, (params["username"], )).fetchall()
-        print(results)
         if not results:
             return {"status": False, "data": results}
 
@@ -239,7 +220,6 @@ class db_manager:
     def get_users (self, params):
         query = """Select u.id, username, is_banned FROM Users u;"""
         results = self.cur.execute(query).fetchall()
-        print(results)
         return {"status": True, "data": results}
 
     def get_user(self, params):
@@ -293,7 +273,6 @@ class db_manager:
         return {"status": True}
     
     def is_admin(self, params):
-        print("params")
         query = """SELECT u.is_admin FROM Users u WHERE u.id=?;"""
         results = self.db_get_request(query, (params['user_id']))
         return {"status": True, "data": results}

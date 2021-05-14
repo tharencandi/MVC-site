@@ -273,7 +273,6 @@ def get_forum_landing():
 
 @app.get('/forum_post/<id>')
 def get_forum_post(id):
-    print("hello")
     """
         serves forum static content page
     """
@@ -282,15 +281,12 @@ def get_forum_post(id):
 
 @app.post('/forum_post/<id>')
 def forum_reply(id):
-    print("hello")
-
     request.forms["parent_id"] = id
     session_cookie = safe_get_session(request)
     return model.create_post_reply(session_cookie=session_cookie, post=request.forms)
 
 @app.post('/report_post/<id>')
 def report_post(id):
-    print("REPORTING USER")
     session_cookie = safe_get_session(request)
     return model.report_post(id, session_cookie=session_cookie)
 
@@ -331,7 +327,6 @@ def get_users():
     """
         serves user page
     """
-    print("admin page requested")
     session_cookie = safe_get_session(request)
     return model.admin_users(session_cookie=session_cookie)
 
@@ -343,19 +338,16 @@ def get_posts(uid):
 @app.route('/posts/<pid>', method="POST")
 def del_post(pid):
     session_cookie = safe_get_session(request)
-    print(session_cookie)
     return model.del_post(pid, session_cookie=session_cookie)
 
 @app.route('/users/ban/<uid>', method='POST')
 def ban_user(uid):
-    print("recieved patch request for ban")
     session_cookie = safe_get_session(request)
     return model.ban_user(uid, session_cookie=session_cookie)
 
 
 @app.route('/users/unban/<uid>', method='POST')
 def unban_user(uid):
-    print("recieved patch request for unban")
     session_cookie = safe_get_session(request)
     return model.unban_user(uid, session_cookie=session_cookie)
 

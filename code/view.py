@@ -33,7 +33,6 @@ class View():
 
 
     def load_and_render(self, filename, header="header", tailer="tailer", **kwargs):
-        print(kwargs)
         ''' 
             Loads and renders templates
 
@@ -84,7 +83,6 @@ class View():
         # Construct the head, body and tail separately 
         # global renders will be overidden by k,v from kwargs
 
-        print(kwargs)
         rendered_body = body_template.render(kwargs)
         rendered_head = header_template.render(kwargs)
         rendered_tail = tailer_template.render(kwargs)

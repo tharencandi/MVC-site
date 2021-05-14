@@ -24,10 +24,8 @@ def db_req(function, paramaters):
     query = {
         "function": function,
         "params": paramaters,
-        "auth": "password",      
     }
     HOST, PORT = "localhost", 9999
-    # SOCK_DGRAM is the socket type to use for UDP sockets
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((HOST, PORT))
     sock.sendall(bytes(json.dumps(query), encoding="utf-8"))
@@ -39,11 +37,15 @@ def db_req(function, paramaters):
 
 
 def hash_password(password, salt):
+    #hash once to avoid bcrypt password truncation`
     m = hashlib.sha512()
     m.update(password.encode())
     hashed_password = m.digest()
+
+    #generate salt if none exist
     if salt == None:
         salt = bcrypt.gensalt()
+
     hashed_password = bcrypt.hashpw(hashed_password, salt)
     return hashed_password, salt
 
@@ -55,12 +57,15 @@ def create_cookie(user_id, is_admin = False):
 """Ensures a cookie exists and hasn't expired. If it exists and hasn't expired,
 expiry time is reset to 5 minutes from current time"""
 def validate_cookie(cookie):
+    #no cookie
     if not cookie:
         return None
 
     res = None
     try:
+        # check if cookie exists in the dictionary
         if cookie in cookies:
+            #calculate expiry date 
             birth_time = cookies.get(cookie)[1]
             now = datetime.now()
             tdelta = now - birth_time
@@ -69,10 +74,14 @@ def validate_cookie(cookie):
             # cookie has expired
             if tdelta > delta_threshold:
                 cookies.pop(cookie)
+
+            #cookie is valid
             else:
                 exp_time = now + timedelta(minutes=5)
                 cookies.get(cookie)[1] = exp_time
                 res = cookies.get(cookie)
+
+    #Exception processing cookie
     except Exception as e:
         print("error in validation")
         print(e)
@@ -89,11 +98,15 @@ def index(session_cookie=None):
         index
         Returns the view for the index
     '''
-
+    
+    #validate cookie
     session_cookie = validate_cookie(session_cookie)
+
+    #cookie render front end for logged in user
     if session_cookie:
         return page_view("index", has_session=True, is_admin=session_cookie[2])
-
+    
+    #no session so render for non signedup user
     return page_view("index", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
@@ -106,20 +119,28 @@ def login_form(session_cookie=None):
         Returns the view for the login_form
     '''
 
+    #validate cookie
     session_cookie = validate_cookie(session_cookie)
+
+    #cookie render front end for logged in user
     if session_cookie:
         return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
+
+    #no session so render for non signedup user
     return page_view("login", has_session=False, is_admin=False)
 
 #-----------------------------------------------------------------------------
 def logout(session_cookie=None):
+
+    #invalid path if not logged in
     if not session_cookie:
         return page_view("error", message="You are not logged in.", has_session=False, is_admin=False)
+    
+    # attempt to delete session to logout
     else:
-        print(session_cookie)
-        print(cookies[session_cookie])
         if session_cookie in cookies:
             del cookies[session_cookie]
+
         return page_view("index", has_session=False, is_admin=False)
         
 
@@ -127,10 +148,6 @@ def logout(session_cookie=None):
 # Check the login credential
 def login_check(username, password, session_cookie=None):
 
-    ##########################################
-    ##########################################
-    ##########################################
-    ########            API          #########
     '''
         login_check
         Checks usernames and passwords
@@ -140,32 +157,41 @@ def login_check(username, password, session_cookie=None):
 
         Returns either a view for valid credentials, or a view for invalid credentials
     '''
-
+    
+    #check for session
     session_cookie = validate_cookie(session_cookie)
+
+    # if session already exists don't attempt to log in
     if session_cookie:
         return (page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2]), None)
-
+    
+    # get salt corresponding to username 
     db_res = db_req("get_salt_by_username", {"username": username})
-
+    
+    # if database response is malformed or failed, return error page and stop login
     if not db_res or not "data" in db_res or not db_res["data"]:
         return (page_view("error", message="Incorrect username or password", has_session=False, is_admin=False), None)
     
     salt = db_res["data"][0]["salt"]
-
+    
+    #hash the input password with stored salt
     hashed_password, salt = hash_password(password, salt.encode())
-
+    
+    # get stored hash of password from db
     res = db_req("check_credentials", {"username": username, "password": hashed_password.decode(),})
-
+    
+    # check if password matched
     if res["status"] == False :
-        print("hello")
         err_str = "Incorrect username or password"
         return (page_view("error", message=err_str, has_session=False, is_admin=False), None)
+
+    # check if user is banned
     elif res["is_banned"]:
         return (page_view("error", message="Nah bro your toxic af", has_session=False, is_admin=False), None)
+    # proceed with login. create cookie 
     else:
-
         cookie = create_cookie(res["id"], res['is_admin'])
-     
+        # sanitize username 
         return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=res["is_admin"]), cookie)
  
         
@@ -175,8 +201,10 @@ def signup_form(session_cookie=None):
         signup_form
         Returns the view for the signup_form
     '''
-
+    
     session_cookie = validate_cookie(session_cookie)
+    
+    # already logged in
     if session_cookie:
         return page_view("error", message="You are already signed in.", has_session=True, is_admin=session_cookie[2])
 
@@ -191,29 +219,34 @@ def create_user(username, password, confirm_password, session_cookie=None):
         Returns success page if success,
         error page if failed with reasons defined here or sql.
     '''
+
+    # check if already logged in and fail if so
     session_cookie = validate_cookie(session_cookie)
     if session_cookie:
         return (page_view("error", message="Please logout before creating a user", has_session=True, is_admin=session_cookie[2]), None)
-
+    
+    # check all fields are available
     if username == None or password == None or confirm_password == None:
         return (page_view("error", message="Internal server error", has_session=False, is_admin=False), None)
     
-    ##### Doesn't black list script tags need to fix
+    # check if username has banned characters or phrases. Fail if so
     if global_san.contains_black_list(username):
         return (page_view("error", message="That username is not allowed", has_session=False, is_admin=False), None)
-
+    
+    # check password confirmation passed
     if password != confirm_password:
         return (page_view("error", message="Password does not match!", has_session=False, is_admin=False), None)
 
-    print(password)
+    # hash password and store in database
     hashed_password, salt = hash_password(password=password, salt=None)
     res = db_req("add_user", {'username': username, 'password': hashed_password.decode(), "salt": salt.decode(), "is_admin": 0})
-   
+    
+    # check storage of has succeeded
     if res["status"] == True:
         cookie = create_cookie(res["id"], res["is_admin"]) 
         return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=False), cookie)
+
     else:
-        print(res)
         return (page_view("error", message=global_san.sanitize(res["message"]), has_session=False, is_admin=False), None)
 
     
@@ -269,9 +302,7 @@ def forum_landing(session_cookie=None):
 
 def forum_post(pid, session_cookie=None):
     # Forum landing post
-    print(session_cookie)
     session_cookie = validate_cookie(session_cookie)
-    print(session_cookie)
 
     db_res = db_req("get_post_thread", {"id": pid})
     post = db_res["data"][0]
@@ -305,9 +336,6 @@ def forum_create_new_post(post, session_cookie=None):
 
   
 
-    #post_details :(author_id, forum, title, body, parent_id )
-    print(cookies)
-    print(session_cookie)
     post_dict = {
         "author_id": session_cookie[0],
         "forum": post["forum"],
@@ -382,55 +410,52 @@ def about(session_cookie=None):
 
 def admin_users(session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
+
     if not session_cookie:
-        print("no cookie")
         page_view("error", message="Permission Denied.", has_session=False, is_admin=False)
+
     elif not session_cookie[2]:
-        print("isnt admin")
         page_view("error", message="Permission Denied.", has_session=True, is_admin=False)
+
     else:
         res = db_req("get_users", None)
-        print("ADMIN DATA", res)
-
         return page_view("admin_users", users=res["data"], has_session=True, is_admin=True)
 
 def admin_posts(user, session_cookie=None):
     session_cookie = validate_cookie(session_cookie)
-    print("ADMIN POSTSSSSSS")
+
     if not session_cookie:
         page_view("error", message="You do not have permission to view this resource.", has_session=False, is_admin=False)
+
     if not session_cookie[2]:
         page_view("error", message="You do not have permission to view this resource.", has_session=True, is_admin=False)
 
     res = db_req("get_user", {"id": user})
-    print(res)
     if res:
         res = res["data"][0]
-        print(res)
         username = res["username"]
         posts_res = db_req("get_user_posts", {"id": user})
-        print(posts_res)
+
         if posts_res:
             if posts_res["status"]:
                 posts = posts_res["data"]
                 num_posts = len(posts)
-        else:
-            pass
-    else:
-        page_view("error", message="Cant find ", has_session=True, is_admin=session_cookie[2])
-    
-    
-    
+            else:
+                page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
 
+        else:
+            page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
+
+    else:
+        page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
+    
     return page_view("admin_posts", username=username, num_posts=num_posts, posts=posts, has_session=True, is_admin=session_cookie[2])
 
 
 def del_post(pid, session_cookie=None):
-    print("del_post")
-    print(pid)
     raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
-    print(session_cookie)
+
     if not session_cookie:
         return page_view("error", message="Permission denied hombre", has_session=False, is_admin=False)
     if not session_cookie[2]:
@@ -443,8 +468,6 @@ def del_post(pid, session_cookie=None):
 
     res = db_req("delete_post", params)
     
-    print("rawest of cookies " + raw_cookie)
-    print(session_cookie[0])
     return admin_posts(session_cookie[0], session_cookie=raw_cookie)
 
 
@@ -462,9 +485,9 @@ def report_post(pid, session_cookie=None):
     res = db_req("report_post", params)
 
     res2 =  db_req("get_post", params)
-    print(res2)
     if not res2 or not "status" in res2 or not res2["status"]:
         return page_view("error", message="woops", has_session=True, is_admin=session_cookie[2])
+
     if res2["data"][0]["parent_id"] != -1:
         pid = res2["data"][0]["parent_id"]
 
@@ -475,16 +498,15 @@ def report_post(pid, session_cookie=None):
 
 
 def ban_user(uid, session_cookie=None):
-    print(uid)
-    print("ban user request recieved")
-    print(session_cookie + "the cooooooookie")
     raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
-    print("cookies user: " + str(session_cookie[0]))
+
     if not session_cookie:
         return page_view("error", message="Absolutely not!.", has_session=False, is_admin=False)
+
     if not session_cookie[2]:
         return page_view("error", message="Absolutely not sir.", has_session=True, is_admin=False)
+
     try:
         uid = int(uid)
         params = {"id": uid}
@@ -506,11 +528,12 @@ def ban_user(uid, session_cookie=None):
     return admin_users(session_cookie=raw_cookie)
 
 def unban_user(uid, session_cookie=None):
-    print("unban user request recieved")
     raw_cookie = session_cookie
     session_cookie = validate_cookie(session_cookie)
+
     if not session_cookie:
         return page_view("error", message="Absolutely not!", has_session=False, is_admin=False)
+
     if not session_cookie[2]:
         return page_view("error", message="Absolutely not sir.", has_session=True, is_admin=False)
     try:
@@ -520,7 +543,6 @@ def unban_user(uid, session_cookie=None):
         return page_view("error", message="not a user", has_session=True, is_admin=session_cookie[2])
 
     res = db_req("unban_user", params)
-
 
     return admin_users(session_cookie=raw_cookie)
 
