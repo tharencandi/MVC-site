@@ -5,16 +5,15 @@ from database_manager import db_manager
 
 db = db_manager()
 
-class MyUDPHandler(socketserver.BaseRequestHandler):
+class MyTCPHandler(socketserver.BaseRequestHandler):
     def handle(self):
-        data = self.request[0].strip()
-        socket = self.request[1]
+        data = self.request.recv(2048).strip()
 
         response = db.safe_transaction_wrapper(data)
         
-        socket.sendto(str(response).encode(), self.client_address)
+        self.request.sendall(str(response).encode())
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 9999
-    with socketserver.UDPServer((HOST, PORT), MyUDPHandler) as server:
+    with socketserver.TCPServer((HOST, PORT), MyTCPHandler) as server:
         server.serve_forever()
