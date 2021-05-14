@@ -166,7 +166,7 @@ def login_check(username, password, session_cookie=None):
         return (page_view("error", message=err_str, has_session=False, is_admin=False), None)
     else:
 
-        cookie = create_cookie(res["id"])
+        cookie = create_cookie(res["id"], res['is_admin'])
      
         return (page_view("success", name=global_san.sanitize(username), has_session=False, is_admin=False), cookie)
  
@@ -393,7 +393,7 @@ def admin_users(session_cookie=None):
         page_view("error", message="Permission Denied.", has_session=True, is_admin=False)
     else:
 
-        users = [{"id": 1, "username": "tharen", "num_posts": 9000000}, {"id": 2, "username": "tharen", "num_posts": 9000000}]
+        users = [{"id": 1, "username": "tharen", "num_posts": 9000000, 'is_banned': 0}, {"id": 2, "username": "tharen", "num_posts": 9000000, "is_banned": 1}]
     # "posts": [{"id": 1, "reports": 1000}]},{"username": "tharen", "num_posts": 9000000, "posts": [{"id": 1, "reports": 1000, "title": "bla bla"}]
     
         return page_view("admin_users", users=users, has_session=True, is_admin=True)

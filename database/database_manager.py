@@ -176,7 +176,7 @@ class db_manager:
         print(result)
 
         if result:
-            pritn("wrongggg")
+         
             result = result[0]
             if result["password"] == params["password"]:
                 return {"status": True, "id": result["id"], "is_admin": result["is_admin"]}
