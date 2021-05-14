@@ -49,7 +49,9 @@ class db_manager:
                 "add_user": self.add_user,
                 "check_credentials": self.check_credentials,
                 "delete_user": self.delete_user,
-                "admin_data": self.admin_data,
+                "get_users": self.get_users,
+                "get_user": self.get_user,
+                "get_user_posts": self.get_user_posts,
                 "get_posts": self.get_posts,
                 "get_post": self.get_post, 
                 "delete_post": self.delete_post,
@@ -230,10 +232,23 @@ class db_manager:
             return {"status": True, "data": results}
 
 
-    def admin_data(self):
-        query = """Select p.id, report_count, username FROM Posts p JOIN Users u ON p.author_id = u.id;"""
+    def get_users (self, params):
+        query = """Select u.id, username, is_banned FROM Users u;"""
         results = self.cur.execute(query).fetchall()
+        print(results)
         return {"status": True, "data": results}
+
+    def get_user(self, params):
+        query = """Select u.username, is_banned, is_admin FROM Users u WHERE u.id=?;"""
+        results = self.cur.execute(query, (params["id"], )).fetchall()
+        return {"satus": True, "data": results}
+
+    def get_user_posts(self, params):
+        query = """Select p.id, title, report_count FROM Posts JOIN Users u WHERE author_id=?"""
+        results = self.cur.execute(query, (params["id"], )).fetchall()
+        return {"satus": True, "data": results}
+        
+
 
     """ 
         FORUM STUFF 

@@ -4,7 +4,6 @@
 		<li> 
 		<h2 class="username">{{u["username"]}}</h2>
 		<div class="id">User ID: {{u["id"]}}</div>
-		<div class="num_posts">Number of posts: {{u["num_posts"]}}</div>
 		<h4><a href="/admin/users/{{u['id']}}">See Posts</a></h4>
 		% if u["is_banned"]:
 		<button id="{{u['id']}}"class="unban-btn-user">Unban User</button>
