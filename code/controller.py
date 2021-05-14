@@ -288,6 +288,12 @@ def forum_reply(id):
     session_cookie = safe_get_session(request)
     return model.create_post_reply(session_cookie=session_cookie, post=request.forms)
 
+@app.post('/report_post/<id>')
+def report_post(id):
+    print("REPORTING USER")
+    session_cookie = safe_get_session(request)
+    return model.report_post(id, session_cookie=session_cookie)
+
 #-----------------------------------------------------------------------------
 
 @app.get('/forum_new_post')
@@ -305,6 +311,8 @@ def create_forum_post():
 
     session_cookie = safe_get_session(request)
     return model.forum_create_new_post(session_cookie=session_cookie, post=request.forms)
+
+
 
 #-----------------------------------------------------------------------------
 
