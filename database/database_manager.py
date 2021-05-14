@@ -167,12 +167,14 @@ class db_manager:
         print(result)
 
         if result:
+            pritn("wrongggg")
             result = result[0]
             if result["password"] == params["password"]:
                 return {"status": True, "id": result["id"]}
             else:
                 return {"status": False, "message": "Passwords do not match"}
-
+        
+        print(" correct")
         return {"status": False, "message": "Username does not match"}
 
 
@@ -211,7 +213,11 @@ class db_manager:
         print(params)
         results = self.cur.execute(query, (params["username"], )).fetchall()
         print(results)
-        return {"status": True, "data": results}
+        if not results:
+            return {"status": False, "data": results}
+
+        else:
+            return {"status": True, "data": results}
 
 
     def admin_data(self):

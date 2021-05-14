@@ -323,6 +323,7 @@ def get_users():
     """
         serves user page
     """
+    print("admin page requested")
     session_cookie = safe_get_session(request)
     return model.admin_users(session_cookie=session_cookie)
 
