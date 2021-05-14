@@ -443,7 +443,11 @@ def del_post(pid, session_cookie=None):
         return
     db_req("delete_post", params)
 
-            
+def report_post(id, session_cookie=None):
+    session_cookie = validate_cookie(session_cookie)
+    
+
+
 def ban_user(uid, session_cookie=None):
     print("ban user request recieved")
     session_cookie = validate_cookie(session_cookie)

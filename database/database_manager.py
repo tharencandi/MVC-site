@@ -265,8 +265,8 @@ class db_manager:
         return {"status": True, "data": results}
 
     def delete_post(self, params):
-        query = "DELETE FROM Posts p WHERE p.id=?;"
-        self.cur.execute(query,(params["id"],))
+        query = "DELETE FROM Posts p WHERE p.id=? OR p.parent_id=?;"
+        self.cur.execute(query,(params["id"],params["id"],))
         self.conn.commit()
         return {"status": True}
     

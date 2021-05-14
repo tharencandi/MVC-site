@@ -15,8 +15,12 @@
             </div>
         </header>
             <p class="body">{{post['body']}}</p>
+            <forum, action="/report_post/{{post['id']}}", method="POST">
+                <input class="submit" type="submit" value="report post">
+            </forum>
     </article>
     </div>
+   
 
     
     <div class = reply>
@@ -33,14 +37,20 @@
 
     <div class="answers">
         <h1> 2 Answers</h1>
+        
         %for reply in replies:
+       
         <article class="answer">
+            <forum, action="/report_post/{{reply['id']}}", method="POST">
+            <input class="submit" type="submit" value="report reply">
+        </forum>
             <div class="about">
                  {{reply["username"]}} 
             </div>
             <p class="body">
                 {{reply["body"]}}
             </p>
+        
         </article>
         %end
        
