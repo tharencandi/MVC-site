@@ -15,14 +15,18 @@
             </div>
         </header>
             <p class="body">{{post['body']}}</p>
+            <form action="/report_post/{{post['id']}}" method="post">
+                <input type="submit" name="report" value="report" />
+            </form>
     </article>
     </div>
+   
 
     
     <div class = reply>
         <article class ="answer">
         <p>reply here:</p>
-        <form class="reply_form", action="/forum_post/{{post{'id'}}}", method="POST">
+        <form class="reply_form", action="/forum_post/{{post['id']}}", method="POST">
             <input class="answer_box" type ="text" id="answer" name="answer">
             <input class="submit" type="submit" value="Submit">
         </form>
@@ -32,15 +36,24 @@
 
 
     <div class="answers">
-        <h1> 2 Answers</h1>
+        <h1> {{len(replies)}} answers</h1>
+        
         %for reply in replies:
+       
         <article class="answer">
+            
+            <form action="/report_post/{{reply['id']}}" method="post">
+                <input type="submit" name="report" value="report" />
+            </form>
+            
+            
             <div class="about">
                  {{reply["username"]}} 
             </div>
             <p class="body">
                 {{reply["body"]}}
             </p>
+        
         </article>
         %end
        

@@ -42,6 +42,7 @@ class Sanitizer:
             return False
     
     def sanitize(self, string, only_alpha_num=False):
+        return string
         if not string:
             return None
         if self.contains_black_list(string):
@@ -58,7 +59,3 @@ class Sanitizer:
             string = string.replace(k, self.replace[k])
 
         return string
-
-
-
-
