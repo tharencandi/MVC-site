@@ -11,14 +11,11 @@ import bcrypt
 import hashlib
 import secrets
 from datetime import date, datetime, timedelta
-
 import view
-from sanitizer import Sanitizer
 # Initialise our views, all arguments are defaults for the template
 page_view = view.View()
 
 cookies = {}
-global_san = Sanitizer()
 
 def db_req(function, paramaters):
     query = {
@@ -192,7 +189,7 @@ def login_check(username, password, session_cookie=None):
     else:
         cookie = create_cookie(res["id"], res['is_admin'])
         # sanitize username 
-        return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=res["is_admin"]), cookie)
+        return (page_view("success", name=username, has_session=True, is_admin=res["is_admin"]), cookie)
  
         
 
@@ -230,9 +227,6 @@ def create_user(username, password, confirm_password, session_cookie=None):
         return (page_view("error", message="Internal server error", has_session=False, is_admin=False), None)
     
     # check if username has banned characters or phrases. Fail if so
-    if global_san.contains_black_list(username):
-        return (page_view("error", message="That username is not allowed", has_session=False, is_admin=False), None)
-    
     # check password confirmation passed
     if password != confirm_password:
         return (page_view("error", message="Password does not match!", has_session=False, is_admin=False), None)
@@ -244,16 +238,15 @@ def create_user(username, password, confirm_password, session_cookie=None):
     # check storage of has succeeded
     if res["status"] == True:
         cookie = create_cookie(res["id"], res["is_admin"]) 
-        return (page_view("success", name=global_san.sanitize(username), has_session=True, is_admin=False), cookie)
+        return (page_view("success", name=username, has_session=True, is_admin=False), cookie)
 
     else:
-        return (page_view("error", message=global_san.sanitize(res["message"]), has_session=False, is_admin=False), None)
+        return (page_view("error", message=res["message"], has_session=False, is_admin=False), None)
 
     
 #----------------------------------------------------------------------------
 
 def content_index(cat, session_cookie=None):
-    path = "content"
 
     session_cookie = validate_cookie(session_cookie)
     if session_cookie:
@@ -344,13 +337,18 @@ def forum_create_new_post(post, session_cookie=None):
         "parent_id": -1,
     } 
 
-    if global_san.contains_black_list(post_dict["title"]) or global_san.contains_black_list(post_dict["body"]):
+    if session_cookie:
+        post_dict["title"] = post_dict["title"]
+        post_dict["body"] = post_dict["body"]
+
+        db_req("add_post",  post_dict)
+    elif session_cookie:
         return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
     else:
-        post_dict["title"] = global_san.sanitize(post_dict["title"])
-        post_dict["body"] = global_san.sanitize(post_dict["body"])
+        return page_view("error", message="Sorry, your reply could not be added.", has_session=False, is_admin=False)
 
-    db_req("add_post",  post_dict)
+
+
 
     return forum_page(post["forum"], raw_cookie)
 
@@ -375,17 +373,16 @@ def create_post_reply(post, session_cookie=None):
         "author_id": session_cookie[0],
     }
 
-    if global_san.contains_black_list(post_dict["title"]) or global_san.contains_black_list(post_dict["body"]):
+    if session_cookie:
+        post_dict["title"] = post_dict["title"]
+        post_dict["body"] = post_dict["body"]
+
+        db_req("add_post",  post_dict)
+
+    elif session_cookie:
         return page_view("error", message="Sorry, your reply could not be added.", has_session=True, is_admin=session_cookie[2])
     else:
-        post_dict["title"] = global_san.sanitize(post_dict["title"])
-        post_dict["body"] = global_san.sanitize(post_dict["body"])
-
-
-    res = db_req("add_post", post_dict)
-  
-    if res == False:
-        return page_view("error", reason="internal server error", has_session=True, is_admin=session_cookie[2])
+        return page_view("error", message="Sorry, your reply could not be added.", has_session=False, is_admin=False)
 
     return forum_post(post["parent_id"], raw_cookie)
 

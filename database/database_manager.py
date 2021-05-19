@@ -83,25 +83,29 @@ class db_manager:
         try:
             data = data.decode()
             data = json.loads(data)
-        except ValueError:
+        except ValueError as e:
+                print(e)
                 response = self.error_response("Couldn\'t decode data.")
                 return self.response_builder(response)
 
         try:
             params = data["params"]
-        except ValueError:
+        except ValueError as e:
+            print(e)
             response = self.error_response("No params field.")
             return self.response_builder(response)
 
         try:
             function = data["function"]
-        except KeyError:
+        except KeyError as e:
+            print(e)
             response = self.error_response("No function field.")
             return self.response_builder(response)
 
         try:
             callback = self.actions[function]
-        except KeyError:
+        except KeyError as e:
+            print(e)
             response = self.error_response("No function field.")
             return self.response_builder(response)
 
@@ -112,7 +116,8 @@ class db_manager:
         except sqlite3.OperationalError as e:
             print(e)
             response = self.error_response("Database operational error.", params)
-        except KeyError:
+        except KeyError as e:
+            print(e)
             response = self.error_response("Missing or bad parameter.", params)
 
         return self.response_builder(response)
