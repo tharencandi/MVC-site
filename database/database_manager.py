@@ -239,8 +239,11 @@ class db_manager:
     """
    
     def get_posts(self, params):
-        query = """SELECT p.id, title, body, forum, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE FORUM=? AND p.parent_id= -1;"""
-        results = self.db_get_request(query, (params["forum"],))
+        print(params["gid"])
+        
+        query = """SELECT p.id, title, body, forum, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE FORUM=? AND p.parent_id= -1 AND p.id>? LIMIT 5;"""
+        results = self.db_get_request(query, (params["forum"], params["gid"]))
+        print(results)
         return {"status": True, "data": results}
 
     def get_post(self, params):

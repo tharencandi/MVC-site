@@ -28,6 +28,7 @@ def db_req(function, paramaters):
     HOST, PORT = "localhost", 9999
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((HOST, PORT))
+    print(len(bytes(json.dumps(query), encoding="utf-8")))
     sock.sendall(bytes(json.dumps(query), encoding="utf-8"))
     data = sock.recv(2048)
     if data != None:
@@ -275,9 +276,14 @@ def content(cat, sub_cat, session_cookie=None):
 
 #-----------------------------------------------------------------------------
 
-def forum_page(cat, session_cookie=None):
+def forum_page(cat, gid=None, session_cookie=None):
     path = f"d_forum/{cat}"
-    db_res = db_req("get_posts", {"forum": cat})
+    if not gid:
+        gid = 0
+
+    print("here")
+
+    db_res = db_req("get_posts", {"forum": cat, "gid": gid})
     posts = db_res["data"]
     
     session_cookie = validate_cookie(session_cookie)
@@ -335,7 +341,12 @@ def forum_create_new_post(post, session_cookie=None):
         return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
 
   
-
+    title_len = len(post["title"])
+    print(title_len)
+    body_len = len(post["body"])
+    print(body_len)
+    if (title_len + body_len) > 1000:
+        return page_view("error", message="Sorry your post was to big and won't be added.", has_session=True, is_admin=session_cookie[2])
     post_dict = {
         "author_id": session_cookie[0],
         "forum": post["forum"],
