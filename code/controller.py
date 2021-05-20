@@ -284,8 +284,14 @@ def get_forum_post(id):
     """
         serves forum static content page
     """
+    if "gid" in request.query:
+        gid = request.query["gid"]
+        print(gid)
+    else:
+        print("No gid")
+        gid = 0
     session_cookie = safe_get_session(request)
-    return model.forum_post(id, session_cookie=session_cookie)
+    return model.forum_post(id, gid, session_cookie=session_cookie)
 
 @app.post('/forum_post/<id>')
 def forum_reply(id):
