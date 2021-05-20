@@ -16,5 +16,10 @@
 		</li>
 		% end
 		
+		%if len(users) > 0:
+		<div>{{users[-1]["id"] + 1}}</div>
+	<a href="/admin/users?gid={{users[-1]["id"] + 1}}"><button class=ask_button type="button">Next page</button></a>
+	%end
+		
 	</ul>
 </div>

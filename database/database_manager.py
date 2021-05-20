@@ -218,8 +218,9 @@ class db_manager:
 
 
     def get_users (self, params):
-        query = """Select u.id, username, is_banned FROM Users u;"""
-        results = self.cur.execute(query).fetchall()
+        query = """Select u.id, username, is_banned FROM Users u WHERE u.id>=? LIMIT 10;"""
+        print(params)
+        results = self.cur.execute(query, (params["gid"],)).fetchall()
         return {"status": True, "data": results}
 
     def get_user(self, params):
@@ -228,8 +229,8 @@ class db_manager:
         return {"status": True, "data": results}
 
     def get_user_posts(self, params):
-        query = """Select p.id, parent_id, title, report_count FROM Posts p WHERE author_id=?"""
-        results = self.cur.execute(query, (params["id"], )).fetchall()
+        query = """Select p.id, parent_id, title, report_count FROM Posts p WHERE author_id=? AND p.id>=? LIMIT 15"""
+        results = self.cur.execute(query, (params["id"], params["gid"],)).fetchall()
         return {"status": True, "data": results}
         
 

@@ -335,13 +335,23 @@ def get_users():
     """
         serves user page
     """
+    if "gid" in request.query:
+        gid = request.query["gid"]
+    else:
+        gid = 0
+
     session_cookie = safe_get_session(request)
-    return model.admin_users(session_cookie=session_cookie)
+    print("here")
+    return model.admin_users(gid, session_cookie=session_cookie)
 
 @app.get('/admin/users/<uid>')
 def get_posts(uid):
+    if "gid" in request.query:
+        gid = request.query["gid"]
+    else:
+        gid = 0
     session_cookie = safe_get_session(request)
-    return model.admin_posts(uid, session_cookie=session_cookie)
+    return model.admin_posts(uid, gid, session_cookie=session_cookie)
 
 @app.route('/posts/<pid>', method="POST")
 def del_post(pid):
