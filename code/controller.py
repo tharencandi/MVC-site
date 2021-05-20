@@ -259,9 +259,12 @@ def get_content_example(cat, sub_cat, sub_sub_cat):
 
 @app.get('/forum/<cat>')
 def get_forum_page(cat):
+    print(request.forms.get("gid"))
     if "gid" in request.query:
         gid = request.query["gid"]
+        print(gid)
     else:
+        print("No gid")
         gid = 0
 
     session_cookie = safe_get_session(request)

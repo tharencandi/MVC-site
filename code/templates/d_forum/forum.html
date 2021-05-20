@@ -34,5 +34,9 @@
             <p class="body">{{post["body"]}}</p>
         </article>
         %end
+	%if len(posts) > 0:
+	<a href="/forum/{{forum}}?gid={{posts[0]["id"] + 5}}"><button class=ask_button type="button">Next posts</button></a>
+	%end
+
     </div>
 </main>

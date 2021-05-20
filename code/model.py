@@ -21,6 +21,7 @@ cookies = {}
 global_san = Sanitizer()
 
 def db_req(function, paramaters):
+    MAX = 10000
     query = {
         "function": function,
         "params": paramaters,
@@ -30,7 +31,17 @@ def db_req(function, paramaters):
     sock.connect((HOST, PORT))
     print(len(bytes(json.dumps(query), encoding="utf-8")))
     sock.sendall(bytes(json.dumps(query), encoding="utf-8"))
-    data = sock.recv(2048)
+    msg_in = []
+    bytes_in = 0
+    while bytes_in < MAX:
+        data = sock.recv(2048)
+        if (data == b''):
+            break
+        msg_in.append(data)
+        bytes_in += len(data)
+
+    data = b''.join(msg_in)
+
     if data != None:
         received = json.loads(data.decode())
         return received
@@ -280,11 +291,15 @@ def forum_page(cat, gid=None, session_cookie=None):
     path = f"d_forum/{cat}"
     if not gid:
         gid = 0
+    elif gid.isdigit():
+        gid = gid
+    else:
+        gid = 0
 
-    print("here")
 
     db_res = db_req("get_posts", {"forum": cat, "gid": gid})
     posts = db_res["data"]
+    print(posts)
     
     session_cookie = validate_cookie(session_cookie)
     
