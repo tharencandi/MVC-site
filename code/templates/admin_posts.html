@@ -1,6 +1,6 @@
 <div id=main>
 	<h2 class="username">{{username}}</h2>
-	<div class="num_posts">Number of posts: {{num_posts}}</div>
+	<div class="num_posts">Number of posts shown: {{num_posts}}</div>
 	<ul class="post-list">
 		% for p in posts:
 		<ul id="{{p["id"]}}"class=user-post>
@@ -18,6 +18,10 @@
 			</form>
 		</ul>
 		% end
+
+		%if len(posts) > 0:
+		<a href="/admin/users/{{uid}}?gid={{posts[-1]["id"] + 1}}"><button class=ask_button type="button">Next page</button></a>
+		%end
 	</ul>
 </div>
 

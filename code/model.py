@@ -228,6 +228,10 @@ def create_user(username, password, confirm_password, session_cookie=None):
     # check all fields are available
     if username == None or password == None or confirm_password == None:
         return (page_view("error", message="Internal server error", has_session=False, is_admin=False), None)
+
+    if (len(username) > 100):
+        return (page_view("error", message="That username is too big. Please use less than 80 characters", has_session=False, is_admin=False), None)
+
     
     # check if username has banned characters or phrases. Fail if so
     if global_san.contains_black_list(username):
@@ -408,48 +412,64 @@ def about(session_cookie=None):
     return page_view("about", has_session=False, is_admin=False)
 #-----------------------------------------------------------------------------
 
-def admin_users(session_cookie=None):
+def admin_users(gid = None, session_cookie=None):
+    if not gid:
+        gid = 0
+    elif gid.isdigit():
+        gid = gid
+    else:
+        gid = 0
+
     session_cookie = validate_cookie(session_cookie)
 
     if not session_cookie:
-        page_view("error", message="Permission Denied.", has_session=False, is_admin=False)
+        return page_view("error", message="Permission Denied.", has_session=False, is_admin=False)
 
     elif not session_cookie[2]:
         page_view("error", message="Permission Denied.", has_session=True, is_admin=False)
 
     else:
-        res = db_req("get_users", None)
+        res = db_req("get_users", {"gid": gid})
+        print(gid)
         return page_view("admin_users", users=res["data"], has_session=True, is_admin=True)
 
-def admin_posts(user, session_cookie=None):
+def admin_posts(user, gid = None, session_cookie=None):
+
+    if not gid:
+        gid = 0
+    elif gid.isdigit():
+        gid = gid
+    else:
+        gid = 0
+
     session_cookie = validate_cookie(session_cookie)
 
     if not session_cookie:
-        page_view("error", message="You do not have permission to view this resource.", has_session=False, is_admin=False)
+        return page_view("error", message="You do not have permission to view this resource.", has_session=False, is_admin=False)
 
     if not session_cookie[2]:
-        page_view("error", message="You do not have permission to view this resource.", has_session=True, is_admin=False)
+        return page_view("error", message="You do not have permission to view this resource.", has_session=True, is_admin=False)
 
     res = db_req("get_user", {"id": user})
     if res:
         res = res["data"][0]
         username = res["username"]
-        posts_res = db_req("get_user_posts", {"id": user})
+        posts_res = db_req("get_user_posts", {"id": user, "gid": gid})
 
         if posts_res:
             if posts_res["status"]:
                 posts = posts_res["data"]
                 num_posts = len(posts)
             else:
-                page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
+                return page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
 
         else:
-            page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
+            return page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
 
     else:
-        page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
+        return page_view("error", message="Can't retrieve posts.", has_session=True, is_admin=session_cookie[2])
     
-    return page_view("admin_posts", username=username, num_posts=num_posts, posts=posts, has_session=True, is_admin=session_cookie[2])
+    return page_view("admin_posts", gid=gid, username=username, uid=user, num_posts=num_posts, posts=posts, has_session=True, is_admin=session_cookie[2])
 
 
 def del_post(pid, session_cookie=None):
