@@ -361,7 +361,7 @@ def forum_create_new_post(post, session_cookie=None):
     body_len = len(post["body"])
     print(body_len)
     if (title_len + body_len) > 1000:
-        return page_view("error", message="Sorry your post was to big and won't be added.", has_session=True, is_admin=session_cookie[2])
+        return page_view("error", message="Sorry your post was too big and won't be added.", has_session=True, is_admin=session_cookie[2])
     post_dict = {
         "author_id": session_cookie[0],
         "forum": post["forum"],
