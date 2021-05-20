@@ -21,6 +21,7 @@ cookies = {}
 global_san = Sanitizer()
 
 def db_req(function, paramaters):
+    MAX = 10000
     query = {
         "function": function,
         "params": paramaters,
@@ -28,8 +29,19 @@ def db_req(function, paramaters):
     HOST, PORT = "localhost", 9999
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((HOST, PORT))
+    print(len(bytes(json.dumps(query), encoding="utf-8")))
     sock.sendall(bytes(json.dumps(query), encoding="utf-8"))
-    data = sock.recv(2048)
+    msg_in = []
+    bytes_in = 0
+    while bytes_in < MAX:
+        data = sock.recv(2048)
+        if (data == b''):
+            break
+        msg_in.append(data)
+        bytes_in += len(data)
+
+    data = b''.join(msg_in)
+
     if data != None:
         received = json.loads(data.decode())
         return received
@@ -275,10 +287,19 @@ def content(cat, sub_cat, session_cookie=None):
 
 #-----------------------------------------------------------------------------
 
-def forum_page(cat, session_cookie=None):
+def forum_page(cat, gid=None, session_cookie=None):
     path = f"d_forum/{cat}"
-    db_res = db_req("get_posts", {"forum": cat})
+    if not gid:
+        gid = 0
+    elif gid.isdigit():
+        gid = gid
+    else:
+        gid = 0
+
+
+    db_res = db_req("get_posts", {"forum": cat, "gid": gid})
     posts = db_res["data"]
+    print(posts)
     
     session_cookie = validate_cookie(session_cookie)
     
@@ -335,7 +356,12 @@ def forum_create_new_post(post, session_cookie=None):
         return page_view("error", message="Please log in to post.", has_session=False, is_admin=False)
 
   
-
+    title_len = len(post["title"])
+    print(title_len)
+    body_len = len(post["body"])
+    print(body_len)
+    if (title_len + body_len) > 1000:
+        return page_view("error", message="Sorry your post was too big and won't be added.", has_session=True, is_admin=session_cookie[2])
     post_dict = {
         "author_id": session_cookie[0],
         "forum": post["forum"],

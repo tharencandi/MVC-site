@@ -1,5 +1,5 @@
 <nav class="sidenav">
-    <a class="active" href="general">General</a>
+    <a class="active" href="/forum/general">General</a>
 	<a href="/forum/htww">How The Web Works</a>
 	<a href="/forum/html">HTML</a>
 	<a href="/forum/css">CSS</a>
@@ -34,5 +34,9 @@
             <p class="body">{{post["body"]}}</p>
         </article>
         %end
+	%if len(posts) > 0:
+	<a href="/forum/{{forum}}?gid={{posts[0]["id"] + 5}}"><button class=ask_button type="button">Next page</button></a>
+	%end
+
     </div>
 </main>

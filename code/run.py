@@ -39,7 +39,7 @@ host = 'localhost'
 port = 8080
 
 # Turn this off for production
-debug = True
+debug = False
 
 def run_server():    
     '''
