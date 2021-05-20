@@ -56,6 +56,10 @@
         
         </article>
         %end
+
+	%if len(replies) > 0:
+	<a href="/forum_post/{{post['id']}}?gid={{replies[-1]["id"] + 1}}"><button class=ask_button type="button">See more replies</button></a>
+	%end
        
         
 

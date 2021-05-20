@@ -255,8 +255,8 @@ class db_manager:
         return {"status": True}
     
     def get_post_thread(self, params):
-        query = "SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.id =? OR p.parent_id=?;"
-        results = self.db_get_request(query, (params["id"],params["id"]))
+        query = "SELECT p.id, title, body, author_id, username FROM Posts p JOIN Users u ON p.author_id = u.id WHERE p.parent_id=? AND p.id >= ? LIMIT 5;"
+        results = self.db_get_request(query, (params["id"],params["gid"]))
         return {"status": True, "data": results}
     
     def report_post(self, params):

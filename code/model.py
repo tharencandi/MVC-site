@@ -300,13 +300,21 @@ def forum_landing(session_cookie=None):
 
 #-----------------------------------------------------------------------------
 
-def forum_post(pid, session_cookie=None):
+def forum_post(pid, gid=None, session_cookie=None):
     # Forum landing post
+    if not gid:
+        gid= 0
+    elif gid.isdigit():
+        gid = gid
+    else:
+        gid = 0
+
     session_cookie = validate_cookie(session_cookie)
 
-    db_res = db_req("get_post_thread", {"id": pid})
-    post = db_res["data"][0]
+    db_res = db_req("get_post_thread", {"id": pid, "gid": gid})
     replies = db_res["data"][1:]
+    db_parent_res = db_req("get_post", {"id": pid})
+    post = db_parent_res["data"][0]
 
     if session_cookie:
         return page_view("d_forum/forum_post", post=post, replies=replies, has_session=True, is_admin=session_cookie[2])
@@ -366,6 +374,10 @@ def create_post_reply(post, session_cookie=None):
     else:
         res = parent_post["data"][0]
 
+    body_len = len(post["answer"])
+
+    if (body_len) > 900:
+        return page_view("error", message="Sorry your post was to big and won't be added.", has_session=True, is_admin=session_cookie[2])
    
     post_dict = {
         "title": "reply",
