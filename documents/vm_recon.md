@@ -1,5 +1,5 @@
 # Recon Ops
-## [10.86.229.25](http://10.86.229.25)
+## [10.86.229.25](https://10.86.229.25)
 ### Nmap
 ```
 > nmap -A 10.86.229.25
@@ -87,7 +87,7 @@ No password authentication :(
 
 `root@10.86.227.155: Permission denied (publickey,gssapi-keyex,gssapi-with-mic,keyboard-interactive).`
 
-## [10.86.225.99](http://10.86.225.99)
+## [10.86.225.99](http://10.86.225.99) -> [10.86.226.50](http://10.86.226.50)
 Server dead? Cannot establish SSH, HTTP/HTTPS connection.
 ### Nmap
 ```
